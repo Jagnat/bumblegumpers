@@ -11,9 +11,10 @@ namespace questionmark
 {
 	public class Render
 	{
+		SpriteBatch spriteBatch;
+
 		Texture2D tileSheet;
 
-		SpriteBatch spriteBatch;
 		public Render(Game1 game)
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
@@ -24,12 +25,11 @@ namespace questionmark
 			tileSheet = content.Load<Texture2D>("visual/tilesheet");
 		}
 
-		public void renderGame()
+		public void renderWorld(World world)
 		{
-			spriteBatch.Begin();
-
-			spriteBatch.Draw(tileSheet, new Rectangle(0, 0, 640, 480), Color.White);
-
+			// background
+			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
+			spriteBatch.Draw(tileSheet, new Rectangle(0, 0, 36, 36), new Rectangle(12 * 13, 0, 12, 12), Color.White);
 			spriteBatch.End();
 		}
 	}

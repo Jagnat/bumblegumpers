@@ -6,13 +6,46 @@ using System.Threading.Tasks;
 
 namespace questionmark
 {
+	public enum TileType : ushort
+	{
+		EMPTY = 0,
+		DIRT = 1,
+		BRICK = 2,
+		WOOD = 3,
+		SQUARE = 4
+	}
+
+	[Serializable]
 	public struct Tile
 	{
-
+		public TileType backgroundTile, mainTile, foregroundTile;
+		public byte backgroundIndex, mainIndex, foregroundIndex;
 	}
 
 	public class World
 	{
+		int width, height;
+		Tile[,] tiles;
 
+		public World(int w, int h)
+		{
+			width = w;
+			height = h;
+			tiles = new Tile[width, height];
+
+			initTestWorld();
+		}
+
+		public void initTestWorld()
+		{
+			for (int x = 0; x < tiles.GetLength(0); x++)
+			{
+				for (int y = 0; y < tiles.GetLength(1); y++)
+				{
+					tiles[x, y].backgroundTile = TileType.BRICK;
+					tiles[x, y].backgroundIndex = 4;
+				}
+			}
+		}
 	}
 }

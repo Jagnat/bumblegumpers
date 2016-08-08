@@ -1,17 +1,25 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace questionmark
 {
 	public class Game1 : Game
 	{
+		World world;
+
 		Render renderer;
 
 		GraphicsDeviceManager graphics;
 
 		public Game1()
 		{
+			IsMouseVisible = true;
+			Window.Title = "?????";
+			IsFixedTimeStep = true;
+			TargetElapsedTime = new TimeSpan(166667);
+			
 			graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 640;
 			graphics.PreferredBackBufferHeight = 480;
@@ -21,6 +29,8 @@ namespace questionmark
 		protected override void Initialize()
 		{
 			renderer = new Render(this);
+
+			world = new World(16, 16);
 			base.Initialize();
 		}
 
@@ -46,7 +56,7 @@ namespace questionmark
 		{
 			GraphicsDevice.Clear(Color.Black);
 
-			renderer.renderGame();
+			renderer.renderWorld(world);
 
 			base.Draw(gameTime);
 		}
