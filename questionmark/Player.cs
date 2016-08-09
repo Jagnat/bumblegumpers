@@ -15,5 +15,13 @@ namespace questionmark
 			X = x;
 			Y = y;
 		}
+
+		public void update(InputState input, World world)
+		{
+			if (input.jumpPressed && !world.collides(X, Y - 1))
+			{
+				Y--;
+			}
+		}
 	}
 }

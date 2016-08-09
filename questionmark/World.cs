@@ -38,6 +38,11 @@ namespace questionmark
 			initTestWorld();
 		}
 
+		public bool collides(int x, int y)
+		{
+			return tiles[x, y].mainTile != TileType.EMPTY;
+		}
+
 		public void setBackgroundTile(int x, int y, TileType type, byte index)
 		{
 			tiles[x, y].backgroundTile = type;

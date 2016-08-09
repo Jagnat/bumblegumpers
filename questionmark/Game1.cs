@@ -41,6 +41,7 @@ namespace questionmark
 			renderer = new Render(this);
 
 			world = new World(16, 12);
+			player = new Player(1, 10);
 			pastKeyState = Keyboard.GetState();
 			base.Initialize();
 		}
@@ -61,6 +62,7 @@ namespace questionmark
 				Exit();
 			updateInput();
 
+			player.update(input, world);
 
 			base.Update(gameTime);
 		}
@@ -105,6 +107,7 @@ namespace questionmark
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			renderer.renderWorld(world);
+			renderer.renderPlayer(player);
 
 			base.Draw(gameTime);
 		}

@@ -32,6 +32,7 @@ namespace questionmark
 		const int tilePixels = 12;
 
 		TileRenderInfo[] tileInfo;
+		Rectangle playerRect;
 
 		Texture2D tileSheet;
 
@@ -42,12 +43,15 @@ namespace questionmark
 			device = game.GraphicsDevice;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			setCamPos(new Vector2(8, 6));
-			tileInfo = new TileRenderInfo[16];
+
+			playerRect = new Rectangle(0, 31 * 12, 12, 12);
+
 			setupTileRegions();
 		}
 
 		private void setupTileRegions()
 		{
+			tileInfo = new TileRenderInfo[16];
 			tileInfo[0] = new TileRenderInfo(0, 0, 0);
 			tileInfo[1] = new TileRenderInfo(0, 0, 13);
 			tileInfo[2] = new TileRenderInfo(13, 0, 11);
@@ -97,6 +101,14 @@ namespace questionmark
 					}
 				}
 			}
+			spriteBatch.End();
+		}
+
+		public void renderPlayer(Player player)
+		{
+			float scale = tilePixels * zoom;
+			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, camMatrix);
+			spriteBatch.Draw(tileSheet, new Vector2(player.X * scale, player.Y * scale), playerRect, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, .5f);
 			spriteBatch.End();
 		}
 	}
