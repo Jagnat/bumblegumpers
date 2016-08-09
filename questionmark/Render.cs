@@ -9,14 +9,29 @@ using System.Threading.Tasks;
 
 namespace questionmark
 {
+	public struct TileRenderInfo
+	{
+		public int xOffset, yOffset;
+		public int numSubtiles;
+
+		public TileRenderInfo(int xo, int yo, int nst)
+		{
+			xOffset = xo;
+			yOffset = yo;
+			numSubtiles = nst;
+		}
+	}
+
 	public class Render
 	{
 		SpriteBatch spriteBatch;
 
-		public Vector2 camPos;
-		public float zoom = 3;
+		Matrix camMatrix;
+		public float zoom = 4;
 
-		const int tileSize = 12;
+		const int tilePixels = 12;
+
+		TileRenderInfo[] tileInfo;
 
 		Texture2D tileSheet;
 
@@ -26,6 +41,18 @@ namespace questionmark
 		{
 			device = game.GraphicsDevice;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
+			setCamPos(new Vector2(8, 6));
+			tileInfo = new TileRenderInfo[5];
+			setupTileRegions();
+		}
+
+		private void setupTileRegions()
+		{
+			tileInfo[0] = new TileRenderInfo(0, 0, 0);
+			tileInfo[1] = new TileRenderInfo(0, 0, 13);
+			tileInfo[2] = new TileRenderInfo(13, 0, 11);
+			tileInfo[3] = new TileRenderInfo(24, 0, 8);
+			tileInfo[4] = new TileRenderInfo(0, 1, 12);
 		}
 
 		public void loadGraphics(ContentManager content)
@@ -33,18 +60,42 @@ namespace questionmark
 			tileSheet = content.Load<Texture2D>("visual/tilesheet");
 		}
 
-		float m = 0;
+		public void setCamPos(Vector2 pos)
+		{
+			camMatrix = Matrix.CreateTranslation(new Vector3(-pos * tilePixels * zoom, 0)) * Matrix.CreateTranslation(new Vector3(device.Viewport.Width / 2,
+				device.Viewport.Height / 2, 0));
+		}
+
 		public void renderWorld(World world)
 		{
-			float scale = tileSize * zoom;
-			camPos.X = m * scale;
-			m += 0.01f;
-			Matrix camMatrix = Matrix.CreateTranslation(new Vector3(-camPos, 0)) * Matrix.CreateTranslation(new Vector3(device.Viewport.Width / 2,
-				device.Viewport.Height / 2, 0));
-			// background
-			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camMatrix);
-			spriteBatch.Draw(tileSheet, new Vector2(0f * scale, 0f * scale), new Rectangle(12 * 12, 0, 12, 12), Color.White, 0, new Vector2(0, 0), zoom, SpriteEffects.None, 0);
-			spriteBatch.Draw(tileSheet, new Vector2(1f * scale, 1f * scale), new Rectangle(12 * 14, 0, 12, 12), Color.White, 0, new Vector2(0, 0), zoom, SpriteEffects.None, 0);
+			float scale = tilePixels * zoom;
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, camMatrix);
+			for (int x = 0; x < world.width; ++x)
+			{
+				for (int y = 0; y < world.height; ++y)
+				{
+					Tile current = world.tiles[x, y];
+					if (current.backgroundTile != TileType.EMPTY)
+					{
+						TileRenderInfo info = tileInfo[(int)current.backgroundTile];
+						Rectangle src = new Rectangle((info.xOffset + current.backgroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0);
+					}
+					if (current.mainTile != TileType.EMPTY)
+					{
+						TileRenderInfo info = tileInfo[(int)current.mainTile];
+						Rectangle src = new Rectangle((info.xOffset + current.mainIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0);
+					}
+					if (current.foregroundTile != TileType.EMPTY)
+					{
+						TileRenderInfo info = tileInfo[(int)current.foregroundTile];
+						Rectangle src = new Rectangle((info.xOffset + current.foregroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0);
+					}
+				}
+			}
 			spriteBatch.End();
 		}
 	}

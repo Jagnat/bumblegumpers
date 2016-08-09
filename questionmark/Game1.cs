@@ -30,7 +30,7 @@ namespace questionmark
 		{
 			renderer = new Render(this);
 
-			world = new World(16, 16);
+			world = new World(16, 12);
 			base.Initialize();
 		}
 
@@ -54,7 +54,7 @@ namespace questionmark
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.Black);
+			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			renderer.renderWorld(world);
 

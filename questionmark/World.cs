@@ -24,8 +24,8 @@ namespace questionmark
 
 	public class World
 	{
-		int width, height;
-		Tile[,] tiles;
+		public int width, height;
+		public Tile[,] tiles;
 
 		public World(int w, int h)
 		{
@@ -38,9 +38,9 @@ namespace questionmark
 
 		public void initTestWorld()
 		{
-			for (int x = 0; x < tiles.GetLength(0); x++)
+			for (int x = 0; x < width; x++)
 			{
-				for (int y = 0; y < tiles.GetLength(1); y++)
+				for (int y = 0; y < height; y++)
 				{
 					tiles[x, y].backgroundTile = TileType.BRICK;
 					tiles[x, y].backgroundIndex = 4;
