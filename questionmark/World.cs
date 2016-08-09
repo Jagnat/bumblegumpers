@@ -18,6 +18,7 @@ namespace questionmark
 	[Serializable]
 	public struct Tile
 	{
+		public bool collidable;
 		public TileType backgroundTile, mainTile, foregroundTile;
 		public byte backgroundIndex, mainIndex, foregroundIndex;
 	}
