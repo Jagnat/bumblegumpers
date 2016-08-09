@@ -21,8 +21,8 @@ namespace questionmark
 			TargetElapsedTime = new TimeSpan(166667);
 			
 			graphics = new GraphicsDeviceManager(this);
-			graphics.PreferredBackBufferWidth = 640;
-			graphics.PreferredBackBufferHeight = 480;
+			graphics.PreferredBackBufferWidth = 768;
+			graphics.PreferredBackBufferHeight = 576;
 			Content.RootDirectory = "Content";
 		}
 

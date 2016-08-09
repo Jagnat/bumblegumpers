@@ -13,10 +13,18 @@ namespace questionmark
 	{
 		SpriteBatch spriteBatch;
 
+		public Vector2 camPos;
+		public float zoom = 3;
+
+		const int tileSize = 12;
+
 		Texture2D tileSheet;
+
+		GraphicsDevice device;
 
 		public Render(Game1 game)
 		{
+			device = game.GraphicsDevice;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 		}
 
@@ -25,11 +33,18 @@ namespace questionmark
 			tileSheet = content.Load<Texture2D>("visual/tilesheet");
 		}
 
+		float m = 0;
 		public void renderWorld(World world)
 		{
+			float scale = tileSize * zoom;
+			camPos.X = m * scale;
+			m += 0.01f;
+			Matrix camMatrix = Matrix.CreateTranslation(new Vector3(-camPos, 0)) * Matrix.CreateTranslation(new Vector3(device.Viewport.Width / 2,
+				device.Viewport.Height / 2, 0));
 			// background
-			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
-			spriteBatch.Draw(tileSheet, new Rectangle(0, 0, 36, 36), new Rectangle(12 * 13, 0, 12, 12), Color.White);
+			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camMatrix);
+			spriteBatch.Draw(tileSheet, new Vector2(0f * scale, 0f * scale), new Rectangle(12 * 12, 0, 12, 12), Color.White, 0, new Vector2(0, 0), zoom, SpriteEffects.None, 0);
+			spriteBatch.Draw(tileSheet, new Vector2(1f * scale, 1f * scale), new Rectangle(12 * 14, 0, 12, 12), Color.White, 0, new Vector2(0, 0), zoom, SpriteEffects.None, 0);
 			spriteBatch.End();
 		}
 	}
