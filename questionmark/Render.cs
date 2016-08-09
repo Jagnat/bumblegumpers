@@ -42,7 +42,7 @@ namespace questionmark
 			device = game.GraphicsDevice;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			setCamPos(new Vector2(8, 6));
-			tileInfo = new TileRenderInfo[5];
+			tileInfo = new TileRenderInfo[16];
 			setupTileRegions();
 		}
 
@@ -53,6 +53,7 @@ namespace questionmark
 			tileInfo[2] = new TileRenderInfo(13, 0, 11);
 			tileInfo[3] = new TileRenderInfo(24, 0, 8);
 			tileInfo[4] = new TileRenderInfo(0, 1, 12);
+			tileInfo[5] = new TileRenderInfo(12, 1, 9);
 		}
 
 		public void loadGraphics(ContentManager content)
@@ -80,13 +81,13 @@ namespace questionmark
 					{
 						TileRenderInfo info = tileInfo[(int)current.backgroundTile];
 						Rectangle src = new Rectangle((info.xOffset + current.backgroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 1);
 					}
 					if (current.mainTile != TileType.EMPTY)
 					{
 						TileRenderInfo info = tileInfo[(int)current.mainTile];
 						Rectangle src = new Rectangle((info.xOffset + current.mainIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, .5f);
 					}
 					if (current.foregroundTile != TileType.EMPTY)
 					{
