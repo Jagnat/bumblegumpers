@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace questionmark
+namespace bumblegumpers
 {
 	public struct TileRenderInfo
 	{

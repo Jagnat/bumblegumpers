@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "questionmark", "questionmark\questionmark.csproj", "{5D8A4A89-18B6-45D6-83E3-6F55DC1FF7C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bumblegumpers", "bumblegumpers\bumblegumpers.csproj", "{5D8A4A89-18B6-45D6-83E3-6F55DC1FF7C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

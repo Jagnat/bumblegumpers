@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace questionmark
+namespace bumblegumpers
 {
 	public struct InputState
 	{

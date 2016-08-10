@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace questionmark
+namespace bumblegumpers
 {
 	/// <summary>
 	/// The main class.

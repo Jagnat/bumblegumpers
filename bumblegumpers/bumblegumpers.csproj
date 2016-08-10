@@ -9,7 +9,7 @@
     <ProjectGuid>{5D8A4A89-18B6-45D6-83E3-6F55DC1FF7C7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>questionmark</RootNamespace>
+    <RootNamespace>bumblegumpers</RootNamespace>
     <AssemblyName>qqqqq</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
