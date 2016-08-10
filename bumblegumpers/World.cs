@@ -53,6 +53,11 @@ namespace bumblegumpers
 			return tiles[x, y].mainTile != TileType.EMPTY;
 		}
 
+		public TileCollision col(int x, int y)
+		{
+			return collision[x, y];
+		}
+
 		public void setBackgroundTile(int x, int y, TileType type, byte index)
 		{
 			tiles[x, y].backgroundTile = type;
@@ -96,6 +101,14 @@ namespace bumblegumpers
 			setMainTile(9, 10, TileType.SQUARE, 1);
 			setMainTile(9, 9, TileType.SQUARE, 1);
 			setMainTile(9, 8, TileType.SQUARE, 0);
+
+			setBackgroundTile(9, 6, TileType.LADDER, 0);
+			setBackgroundTile(9, 5, TileType.LADDER, 0);
+			setBackgroundTile(9, 4, TileType.LADDER, 1);
+
+			setMainTile(8, 4, TileType.WOOD, 4);
+			setMainTile(7, 4, TileType.WOOD, 4);
+			setMainTile(6, 4, TileType.WOOD, 4);
 
 			setMainTile(11, 8, TileType.DIRT, 9);
 			setMainTile(12, 8, TileType.DIRT, 3);
