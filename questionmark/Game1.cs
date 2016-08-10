@@ -7,7 +7,7 @@ namespace questionmark
 {
 	public struct InputState
 	{
-		public bool leftPressed, rightPressed, jumpPressed, attackPressed, usePressed, shieldPressed;
+		public bool leftPressed, rightPressed, upPressed, downPressed, attackPressed, usePressed, shieldPressed;
 	}
 
 	public class Game1 : Game
@@ -17,7 +17,7 @@ namespace questionmark
 
 		Render renderer;
 
-		KeyboardState pastKeyState;
+		KeyboardState pastKeyState, currentKeyState;
 
 		GraphicsDeviceManager graphics;
 
@@ -67,38 +67,25 @@ namespace questionmark
 			base.Update(gameTime);
 		}
 
+		void updateKey(Keys key, out bool val)
+		{
+			if (currentKeyState.IsKeyDown(key) && pastKeyState.IsKeyUp(key))
+				val = true;
+			else
+				val = false;
+		}
+
 		void updateInput()
 		{
-			KeyboardState currentKeyState = Keyboard.GetState();
-			if (currentKeyState.IsKeyDown(Keys.Left) && pastKeyState.IsKeyUp(Keys.Left))
-				input.leftPressed = true;
-			else
-				input.leftPressed = false;
+			currentKeyState = Keyboard.GetState();
+			updateKey(Keys.Left, out input.leftPressed);
+			updateKey(Keys.Right, out input.rightPressed);
+			updateKey(Keys.Up, out input.upPressed);
+			updateKey(Keys.Down, out input.downPressed);
+			updateKey(Keys.Z, out input.attackPressed);
+			updateKey(Keys.X, out input.usePressed);
+			updateKey(Keys.C, out input.shieldPressed);
 
-			if (currentKeyState.IsKeyDown(Keys.Right) && pastKeyState.IsKeyUp(Keys.Right))
-				input.rightPressed = true;
-			else
-				input.rightPressed = false;
-
-			if (currentKeyState.IsKeyDown(Keys.Up) && pastKeyState.IsKeyUp(Keys.Up))
-				input.jumpPressed = true;
-			else
-				input.jumpPressed = false;
-
-			if (currentKeyState.IsKeyDown(Keys.Z) && pastKeyState.IsKeyUp(Keys.Z))
-				input.attackPressed = true;
-			else
-				input.attackPressed = false;
-
-			if (currentKeyState.IsKeyDown(Keys.X) && pastKeyState.IsKeyUp(Keys.X))
-				input.usePressed = true;
-			else
-				input.usePressed = false;
-
-			if (currentKeyState.IsKeyDown(Keys.C) && pastKeyState.IsKeyUp(Keys.C))
-				input.shieldPressed = true;
-			else
-				input.shieldPressed = false;
 			pastKeyState = currentKeyState;
 		}
 

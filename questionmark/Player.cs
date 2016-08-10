@@ -30,7 +30,7 @@ namespace questionmark
 			{
 				// Left or right or jump
 				canMove = true;
-				if (input.jumpPressed && !world.collides(X, Y - 1))
+				if (input.upPressed && !world.collides(X, Y - 1))
 					Y--;
 				else if (input.leftPressed && !input.rightPressed && !world.collides(X - 1, Y))
 					X--;
@@ -40,7 +40,7 @@ namespace questionmark
 			else if (canMove)
 			{
 				// Left or right movement
-				if (input.jumpPressed)
+				if (input.upPressed)
 				{
 					canMove = false;
 				}
