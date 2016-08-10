@@ -13,13 +13,21 @@ namespace questionmark
 		BRICK = 2,
 		WOOD = 3,
 		SQUARE = 4,
-		GRASS = 5
+		GRASS = 5,
+		LADDER = 6,
+	}
+
+	public enum TileCollision : byte
+	{
+		EMPTY = 0,
+		SOLID = 1,
+		LADDER = 2,
+		CORNER = 3
 	}
 
 	[Serializable]
 	public struct Tile
 	{
-		public bool collidable;
 		public TileType backgroundTile, mainTile, foregroundTile;
 		public byte backgroundIndex, mainIndex, foregroundIndex;
 	}
@@ -28,12 +36,14 @@ namespace questionmark
 	{
 		public int width, height;
 		public Tile[,] tiles;
+		public TileCollision[,] collision;
 
 		public World(int w, int h)
 		{
 			width = w;
 			height = h;
 			tiles = new Tile[width, height];
+			collision = new TileCollision[width, height];
 
 			initTestWorld();
 		}
@@ -47,12 +57,16 @@ namespace questionmark
 		{
 			tiles[x, y].backgroundTile = type;
 			tiles[x, y].backgroundIndex = index;
+			if (type == TileType.LADDER)
+				collision[x, y] = TileCollision.LADDER;
 		}
 
 		public void setMainTile(int x, int y, TileType type, byte index)
 		{
 			tiles[x, y].mainTile = type;
 			tiles[x, y].mainIndex = index;
+			if (type != TileType.EMPTY)
+				collision[x, y] = TileCollision.SOLID;
 		}
 
 		public void setForegroundTile(int x, int y, TileType type, byte index)
@@ -94,6 +108,10 @@ namespace questionmark
 			setForegroundTile(11, 9, TileType.GRASS, 6);
 			setForegroundTile(12, 9, TileType.GRASS, 8);
 			setForegroundTile(13, 9, TileType.GRASS, 7);
+
+			setBackgroundTile(14, 10, TileType.LADDER, 0);
+			setBackgroundTile(14, 9, TileType.LADDER, 0);
+			setBackgroundTile(14, 8, TileType.LADDER, 2);
 		}
 	}
 }

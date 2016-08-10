@@ -58,6 +58,7 @@ namespace questionmark
 			tileInfo[3] = new TileRenderInfo(24, 0, 8);
 			tileInfo[4] = new TileRenderInfo(0, 1, 12);
 			tileInfo[5] = new TileRenderInfo(12, 1, 9);
+			tileInfo[6] = new TileRenderInfo(21, 1, 4);
 		}
 
 		public void loadGraphics(ContentManager content)

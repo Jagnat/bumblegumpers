@@ -25,6 +25,7 @@ namespace questionmark
 				onGround = true;
 			else
 				onGround = false;
+
 			if (onGround)
 			{
 				// Left or right or jump
