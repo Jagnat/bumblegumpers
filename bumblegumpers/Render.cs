@@ -72,11 +72,20 @@ namespace bumblegumpers
 				device.Viewport.Height / 2, 0));
 		}
 
+		public void startRender()
+		{
+			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, camMatrix);
+		}
+
+		public void endRender()
+		{
+			spriteBatch.End();
+		}
+
 		public void renderWorld(World world)
 		{
 			float scale = tilePixels * zoom;
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, camMatrix);
 			for (int x = 0; x < world.width; ++x)
 			{
 				for (int y = 0; y < world.height; ++y)
@@ -102,15 +111,12 @@ namespace bumblegumpers
 					}
 				}
 			}
-			spriteBatch.End();
 		}
 
 		public void renderPlayer(Player player)
 		{
 			float scale = tilePixels * zoom;
-			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, camMatrix);
 			spriteBatch.Draw(tileSheet, new Vector2(player.X * scale, player.Y * scale), playerRect, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, .5f);
-			spriteBatch.End();
 		}
 	}
 }

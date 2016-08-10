@@ -92,9 +92,10 @@ namespace bumblegumpers
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
-
+			renderer.startRender();
 			renderer.renderWorld(world);
 			renderer.renderPlayer(player);
+			renderer.endRender();
 
 			base.Draw(gameTime);
 		}
