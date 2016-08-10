@@ -68,7 +68,7 @@ namespace bumblegumpers
 			{
 				TileCollision at = world.collision[X, Y];
 				TileCollision under = world.collision[X, Y + 1];
-				if (under  == TileCollision.LADDER || under == TileCollision.SOLID)
+				if (under == TileCollision.LADDER || under == TileCollision.SOLID || at == TileCollision.LADDER)
 					break;
 				Y++;
 			}

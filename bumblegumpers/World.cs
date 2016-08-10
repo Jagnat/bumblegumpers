@@ -102,7 +102,6 @@ namespace bumblegumpers
 			setMainTile(9, 9, TileType.SQUARE, 1);
 			setMainTile(9, 8, TileType.SQUARE, 0);
 
-			setBackgroundTile(9, 6, TileType.LADDER, 0);
 			setBackgroundTile(9, 5, TileType.LADDER, 0);
 			setBackgroundTile(9, 4, TileType.LADDER, 1);
 
