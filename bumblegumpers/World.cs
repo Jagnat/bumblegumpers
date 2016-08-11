@@ -22,7 +22,8 @@ namespace bumblegumpers
 		EMPTY = 0,
 		SOLID = 1,
 		LADDER = 2,
-		CORNER = 3
+		CORNER = 3,
+		PLATFORM
 	}
 
 	[Serializable]
@@ -103,7 +104,7 @@ namespace bumblegumpers
 			setMainTile(9, 8, TileType.SQUARE, 0);
 
 			setBackgroundTile(9, 5, TileType.LADDER, 0);
-			setBackgroundTile(9, 4, TileType.LADDER, 1);
+			setBackgroundTile(9, 4, TileType.LADDER, 2);
 
 			setMainTile(8, 4, TileType.WOOD, 4);
 			setMainTile(7, 4, TileType.WOOD, 4);

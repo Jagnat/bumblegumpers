@@ -27,6 +27,7 @@ namespace bumblegumpers
 		SpriteBatch spriteBatch;
 
 		Matrix camMatrix;
+		Vector2 camPos;
 		public float zoom = 4;
 
 		const int tilePixels = 12;
@@ -35,6 +36,7 @@ namespace bumblegumpers
 		Rectangle playerRect;
 
 		Texture2D tileSheet;
+		SpriteFont font;
 
 		GraphicsDevice device;
 
@@ -64,12 +66,19 @@ namespace bumblegumpers
 		public void loadGraphics(ContentManager content)
 		{
 			tileSheet = content.Load<Texture2D>("visual/tilesheet");
+			font = content.Load<SpriteFont>("questrial");
+		}
+
+		public void refreshCamera()
+		{
+			camMatrix = Matrix.CreateTranslation(new Vector3(-camPos * tilePixels * zoom, 0)) * Matrix.CreateTranslation(new Vector3(device.Viewport.Width / 2,
+				device.Viewport.Height / 2, 0));
 		}
 
 		public void setCamPos(Vector2 pos)
 		{
-			camMatrix = Matrix.CreateTranslation(new Vector3(-pos * tilePixels * zoom, 0)) * Matrix.CreateTranslation(new Vector3(device.Viewport.Width / 2,
-				device.Viewport.Height / 2, 0));
+			camPos = pos;
+			refreshCamera();
 		}
 
 		public void startRender()
@@ -95,19 +104,19 @@ namespace bumblegumpers
 					{
 						TileRenderInfo info = tileInfo[(int)current.backgroundTile];
 						Rectangle src = new Rectangle((info.xOffset + current.backgroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 1);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0.6f);
 					}
 					if (current.mainTile != TileType.EMPTY)
 					{
 						TileRenderInfo info = tileInfo[(int)current.mainTile];
 						Rectangle src = new Rectangle((info.xOffset + current.mainIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, .5f);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0.5f);
 					}
 					if (current.foregroundTile != TileType.EMPTY)
 					{
 						TileRenderInfo info = tileInfo[(int)current.foregroundTile];
 						Rectangle src = new Rectangle((info.xOffset + current.foregroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0.4f);
 					}
 				}
 			}
@@ -117,6 +126,28 @@ namespace bumblegumpers
 		{
 			float scale = tilePixels * zoom;
 			spriteBatch.Draw(tileSheet, new Vector2(player.X * scale, player.Y * scale), playerRect, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, .5f);
+		}
+
+		// DEBUG RENDERING FUNCTIONS
+
+		public void startDebugRender()
+		{
+			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, null);
+		}
+
+		public void endDebugRender()
+		{
+			spriteBatch.End();
+		}
+
+		public void renderDebugRect(Rectangle rect, Color color)
+		{
+
+		}
+
+		public void renderDebugText(int x, int y,String s)
+		{
+			spriteBatch.DrawString(font, s, new Vector2(x, y), Color.Black);
 		}
 	}
 }

@@ -25,3 +25,9 @@
 /processorParam:TextureFormat=Color
 /build:visual/tilesheet.png
 
+#begin questrial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:questrial.spritefont
+

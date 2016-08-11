@@ -23,6 +23,8 @@ namespace bumblegumpers
 
 		InputState input;
 
+		bool inEditor = false;
+
 		public Game1()
 		{
 			IsMouseVisible = true;
@@ -33,6 +35,7 @@ namespace bumblegumpers
 			graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 768;
 			graphics.PreferredBackBufferHeight = 576;
+			graphics.ApplyChanges();
 			Content.RootDirectory = "Content";
 		}
 
@@ -62,8 +65,31 @@ namespace bumblegumpers
 				Exit();
 			updateInput();
 
-			player.update(input, world);
+			bool toggleEdit;
+			updateKey(Keys.E, out toggleEdit);
+			if (toggleEdit)
+			{
+				inEditor = !inEditor;
+				if (inEditor)
+				{
+					graphics.PreferredBackBufferWidth = 1400;
+					graphics.PreferredBackBufferHeight = 900;
+					graphics.ApplyChanges();
+					renderer.refreshCamera();
+				}
+				else
+				{
+					graphics.PreferredBackBufferWidth = 768;
+					graphics.PreferredBackBufferHeight = 576;
+					graphics.ApplyChanges();
+					renderer.refreshCamera();
+				}
+			}
 
+			if (!inEditor)
+				player.update(input, world);
+
+			pastKeyState = currentKeyState;
 			base.Update(gameTime);
 		}
 
@@ -85,8 +111,6 @@ namespace bumblegumpers
 			updateKey(Keys.Z, out input.attackPressed);
 			updateKey(Keys.X, out input.usePressed);
 			updateKey(Keys.C, out input.shieldPressed);
-
-			pastKeyState = currentKeyState;
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -96,6 +120,10 @@ namespace bumblegumpers
 			renderer.renderWorld(world);
 			renderer.renderPlayer(player);
 			renderer.endRender();
+
+			renderer.startDebugRender();
+			renderer.renderDebugText(100, 100, "This is a test");
+			renderer.endDebugRender();
 
 			base.Draw(gameTime);
 		}

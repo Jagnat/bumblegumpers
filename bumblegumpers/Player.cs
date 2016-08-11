@@ -127,13 +127,13 @@ namespace bumblegumpers
 							fall(world);
 						else if (doLeftRight(input, world))
 							state = PlayerState.AIRWALKING;
+						updateState(world);
 
 					}
 					break;
 				default:
 					break;
 			}
-			Console.WriteLine(state.ToString());
 		}
 	}
 }
