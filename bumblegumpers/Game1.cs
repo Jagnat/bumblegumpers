@@ -8,6 +8,8 @@ namespace bumblegumpers
 	public struct InputState
 	{
 		public bool leftPressed, rightPressed, upPressed, downPressed, attackPressed, usePressed, shieldPressed;
+		public KeyboardState currentKeyboard, pastKeyboard;
+		public MouseState currentMouse, pastMouse;
 	}
 
 	public class Game1 : Game
@@ -17,11 +19,11 @@ namespace bumblegumpers
 
 		Render renderer;
 
-		KeyboardState pastKeyState, currentKeyState;
-
 		GraphicsDeviceManager graphics;
 
 		InputState input;
+
+		Editor editor;
 
 		bool inEditor = false;
 
@@ -43,9 +45,12 @@ namespace bumblegumpers
 		{
 			renderer = new Render(this);
 
+			editor = new Editor();
+
 			world = new World(16, 12);
 			player = new Player(1, 10);
-			pastKeyState = Keyboard.GetState();
+			input.pastKeyboard = Keyboard.GetState();
+			input.pastMouse = Mouse.GetState();
 			base.Initialize();
 		}
 
@@ -89,13 +94,14 @@ namespace bumblegumpers
 			if (!inEditor)
 				player.update(input, world);
 
-			pastKeyState = currentKeyState;
+			input.pastMouse = input.currentMouse;
+			input.pastKeyboard = input.currentKeyboard;
 			base.Update(gameTime);
 		}
 
 		void updateKey(Keys key, out bool val)
 		{
-			if (currentKeyState.IsKeyDown(key) && pastKeyState.IsKeyUp(key))
+			if (input.currentKeyboard.IsKeyDown(key) && input.pastKeyboard.IsKeyUp(key))
 				val = true;
 			else
 				val = false;
@@ -103,7 +109,8 @@ namespace bumblegumpers
 
 		void updateInput()
 		{
-			currentKeyState = Keyboard.GetState();
+			input.currentMouse = Mouse.GetState();
+			input.currentKeyboard = Keyboard.GetState();
 			updateKey(Keys.Left, out input.leftPressed);
 			updateKey(Keys.Right, out input.rightPressed);
 			updateKey(Keys.Up, out input.upPressed);
@@ -115,15 +122,14 @@ namespace bumblegumpers
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.DarkSlateGray);
 			renderer.startRender();
 			renderer.renderWorld(world);
 			renderer.renderPlayer(player);
 			renderer.endRender();
 
-			renderer.startDebugRender();
-			renderer.renderDebugText(100, 100, "This is a test");
-			renderer.endDebugRender();
+			if (inEditor)
+				editor.renderEditor(renderer);
 
 			base.Draw(gameTime);
 		}

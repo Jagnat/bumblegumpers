@@ -53,6 +53,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Editor.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

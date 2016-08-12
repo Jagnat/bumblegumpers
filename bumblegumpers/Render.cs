@@ -36,6 +36,7 @@ namespace bumblegumpers
 		Rectangle playerRect;
 
 		Texture2D tileSheet;
+		Texture2D whiteTex;
 		SpriteFont font;
 
 		GraphicsDevice device;
@@ -67,6 +68,8 @@ namespace bumblegumpers
 		{
 			tileSheet = content.Load<Texture2D>("visual/tilesheet");
 			font = content.Load<SpriteFont>("questrial");
+			whiteTex = new Texture2D(device, 1, 1);
+			whiteTex.SetData(new[] { Color.White });
 		}
 
 		public void refreshCamera()
@@ -142,12 +145,19 @@ namespace bumblegumpers
 
 		public void renderDebugRect(Rectangle rect, Color color)
 		{
-
+			//spriteBatch
+			Rectangle? cR = new Rectangle(0, 0, 1, 1);
+			spriteBatch.Draw(whiteTex, rect, cR, color, 0, Vector2.Zero, SpriteEffects.None, 0.1f);
 		}
 
-		public void renderDebugText(int x, int y,String s)
+		public void renderDebugText(int x, int y, Color c, String s)
 		{
-			spriteBatch.DrawString(font, s, new Vector2(x, y), Color.Black);
+			spriteBatch.DrawString(font, new StringBuilder(s), new Vector2(x, y), c, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+		}
+
+		public void renderDebugTile(Rectangle dest, TileType type, byte index)
+		{
+
 		}
 	}
 }
