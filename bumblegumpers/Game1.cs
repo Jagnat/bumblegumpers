@@ -134,7 +134,7 @@ namespace bumblegumpers
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.DarkGray);
+			GraphicsDevice.Clear(Color.Black);
 			renderer.startRender();
 			renderer.renderWorld(world);
 			renderer.renderPlayer(player);

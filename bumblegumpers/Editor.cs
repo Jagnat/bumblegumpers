@@ -23,22 +23,47 @@ namespace bumblegumpers
 			COLLISION
 		}
 
-		public struct PanelState
+		public class BlockPanel
 		{
 			public bool open;
-			public int height;
 			public string title;
+			public int height;
+			public int numTileTypes;
+			public int numCollisionTypes;
+			public int numTileRows;
+			public int numCollisionRows;
 
-			public PanelState(bool open, int height, string title)
+			public bool showCollision = false;
+
+			public BlockPanel(bool open)
 			{
 				this.open = open;
-				this.height = height;
-				this.title = title;
+				numTileTypes = Enum.GetNames(typeof(TileType)).Length;
+				numCollisionTypes = Enum.GetNames(typeof(TileCollision)).Length;
+
+				numTileRows = (int)Math.Ceiling((float)numTileTypes / 6.0f);
+				numCollisionRows = (int)Math.Ceiling((float)numCollisionTypes / 6.0f);
+				setMode(false);
+			}
+
+			public void setMode(bool showCollision)
+			{
+				if (showCollision)
+				{
+					title = "Collision";
+					height = numCollisionRows * 57 + 21;
+				}
+				else
+				{
+					title = "Blocks";
+					// 36n + 21(n+1)
+					height = numTileRows * 57 + 21;
+				}
 			}
 		}
 
-		ModeSelect modeSelectState = ModeSelect.MAIN;
-		PanelState blockPanelState = new PanelState(true, 60, "Blocks");
+		ModeSelect modeSelect = ModeSelect.MAIN;
+		BlockPanel blockPanel = new BlockPanel(true);
 
 		int offs = 0;
 
@@ -81,22 +106,49 @@ namespace bumblegumpers
 		public void renderPanel1(Render renderer)
 		{
 			renderer.renderDebugRect(new Rectangle(0, offs, panelWidth, 24), Color.Violet, 0.8f);
-			renderer.renderDebugText(panelWidth / 2, offs + 12, Color.White, 0.7f, blockPanelState.title, true, true);
+			renderer.renderDebugText(panelWidth / 2, offs + 12, Color.Black, 0.7f, blockPanel.title, true, true);
 			offs += 24;
 
-			if (blockPanelState.open)
+			if (blockPanel.open)
 			{
-				renderer.renderDebugRect(new Rectangle(0, offs, panelWidth, blockPanelState.height), new Color(Color.DarkSlateBlue, 0.8f), 0.8f);
+				renderer.renderDebugRect(new Rectangle(0, offs, panelWidth, blockPanel.height), new Color(Color.DarkSlateBlue, 0.8f), 0.8f);
 
-				renderer.renderDebugRect(new Rectangle(12 + 0 * 48, offs + 12, 36, 36), Color.HotPink, 0.7f);
-				renderer.renderDebugText(12 + 18, offs + 12 + 18, Color.Black, 0.6f, "E", true, true);
-				renderer.renderDebugTile(new Rectangle(12 + 1 * 48, offs + 12, 36, 36), TileType.DIRT, 0, 0.7f);
-				renderer.renderDebugTile(new Rectangle(12 + 2 * 48, offs + 12, 36, 36), TileType.BRICK, 0, 0.7f);
-				renderer.renderDebugTile(new Rectangle(12 + 3 * 48, offs + 12, 36, 36), TileType.WOOD, 0, 0.7f);
-				renderer.renderDebugTile(new Rectangle(12 + 4 * 48, offs + 12, 36, 36), TileType.SQUARE, 0, 0.7f);
-				renderer.renderDebugTile(new Rectangle(12 + 5 * 48, offs + 12, 36, 36), TileType.GRASS, 0, 0.7f);
-				renderer.renderDebugTile(new Rectangle(12 + 6 * 48, offs + 12, 36, 36), TileType.LADDER, 0, 0.7f);
+				int s = 21;
+				int p = s + 36;
+
+				offs += s;
+
+				if (blockPanel.showCollision)
+				{
+
+				}
+				else
+				{
+					for (int c = 0; c < blockPanel.numTileRows; ++c)
+					{
+						for (int r = 0; r < 6; ++r)
+						{
+							if (c * 6 + r + 1 > blockPanel.numTileTypes)
+								break;
+							TileType t = (TileType)(c * 6 + r);
+							if (t == TileType.EMPTY)
+							{
+								renderer.renderDebugRect(new Rectangle(s + r * p, offs, 36, 36), Color.HotPink, 0.7f);
+								renderer.renderDebugText(s + 18, offs + 18, Color.Black, 0.6f, "E", true, true);
+							}
+							else
+								renderer.renderDebugTile(new Rectangle(s + r * p, offs, 36, 36), t, 0, 0.7f);
+						}
+						offs += p;
+					}
+					offs += s;
+				}
 			}
+		}
+
+		public void renderInteractables(Render renderer)
+		{
+
 		}
 
 		public void renderModeSelect(Render renderer)
@@ -104,10 +156,10 @@ namespace bumblegumpers
 			Color s = Color.Red;
 			Color n = new Color(Color.White, 0.7f);
 			offs += 10;
-			renderer.renderDebugRect(new Rectangle(1 * 72 - 10, offs, 20, 20), modeSelectState == ModeSelect.BACKGROUND ? s : n, 0.8f);
-			renderer.renderDebugRect(new Rectangle(2 * 72 - 10, offs, 20, 20), modeSelectState == ModeSelect.MAIN ? s : n, 0.8f);
-			renderer.renderDebugRect(new Rectangle(3 * 72 - 10, offs, 20, 20), modeSelectState == ModeSelect.FOREGROUND ? s : n, 0.8f);
-			renderer.renderDebugRect(new Rectangle(4 * 72 - 10, offs, 20, 20), modeSelectState == ModeSelect.COLLISION ? s : n, 0.8f);
+			renderer.renderDebugRect(new Rectangle(1 * 72 - 10, offs, 20, 20), modeSelect == ModeSelect.BACKGROUND ? s : n, 0.8f);
+			renderer.renderDebugRect(new Rectangle(2 * 72 - 10, offs, 20, 20), modeSelect == ModeSelect.MAIN ? s : n, 0.8f);
+			renderer.renderDebugRect(new Rectangle(3 * 72 - 10, offs, 20, 20), modeSelect == ModeSelect.FOREGROUND ? s : n, 0.8f);
+			renderer.renderDebugRect(new Rectangle(4 * 72 - 10, offs, 20, 20), modeSelect == ModeSelect.COLLISION ? s : n, 0.8f);
 			offs += 20;
 
 			renderer.renderDebugText(1 * 72, offs, Color.White, 0.0f, "B", true);
