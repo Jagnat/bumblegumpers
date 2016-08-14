@@ -51,6 +51,9 @@ namespace bumblegumpers
 			player = new Player(1, 10);
 			input.pastKeyboard = Keyboard.GetState();
 			input.pastMouse = Mouse.GetState();
+
+
+			this.Window.ClientSizeChanged += new EventHandler<EventArgs>(WindowResize);
 			base.Initialize();
 		}
 
@@ -62,6 +65,13 @@ namespace bumblegumpers
 		protected override void UnloadContent()
 		{
 			
+		}
+
+		void WindowResize(object sender, EventArgs e)
+		{
+			if (inEditor)
+				editor.resize(this.Window.ClientBounds);
+			renderer.refreshCamera();
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -80,6 +90,7 @@ namespace bumblegumpers
 					graphics.PreferredBackBufferWidth = 1400;
 					graphics.PreferredBackBufferHeight = 900;
 					graphics.ApplyChanges();
+					Window.AllowUserResizing = true;
 					renderer.refreshCamera();
 				}
 				else
@@ -87,6 +98,7 @@ namespace bumblegumpers
 					graphics.PreferredBackBufferWidth = 768;
 					graphics.PreferredBackBufferHeight = 576;
 					graphics.ApplyChanges();
+					Window.AllowUserResizing = false;
 					renderer.refreshCamera();
 				}
 			}
@@ -122,7 +134,7 @@ namespace bumblegumpers
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.DarkSlateGray);
+			GraphicsDevice.Clear(Color.DarkGray);
 			renderer.startRender();
 			renderer.renderWorld(world);
 			renderer.renderPlayer(player);

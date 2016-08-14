@@ -39,7 +39,7 @@ namespace bumblegumpers
 		Texture2D whiteTex;
 		SpriteFont font;
 
-		GraphicsDevice device;
+		public GraphicsDevice device;
 
 		public Render(Game1 game)
 		{
@@ -143,21 +143,26 @@ namespace bumblegumpers
 			spriteBatch.End();
 		}
 
-		public void renderDebugRect(Rectangle rect, Color color)
+		public void renderDebugRect(Rectangle rect, Color color, float depth)
 		{
 			//spriteBatch
 			Rectangle? cR = new Rectangle(0, 0, 1, 1);
-			spriteBatch.Draw(whiteTex, rect, cR, color, 0, Vector2.Zero, SpriteEffects.None, 0.1f);
+			spriteBatch.Draw(whiteTex, rect, cR, color, 0, Vector2.Zero, SpriteEffects.None, depth);
 		}
 
-		public void renderDebugText(int x, int y, Color c, String s)
+		public void renderDebugText(int x, int y, Color c, float depth, String s, bool centerX = false, bool centerY = false)
 		{
-			spriteBatch.DrawString(font, new StringBuilder(s), new Vector2(x, y), c, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+			Vector2 b = font.MeasureString(s);
+			Vector2 p = new Vector2(centerX ? x - b.X / 2 : x, centerY ? y - b.Y / 2 : y);
+			spriteBatch.DrawString(font, new StringBuilder(s), p, c, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
 		}
 
-		public void renderDebugTile(Rectangle dest, TileType type, byte index)
+		public void renderDebugTile(Rectangle dest, TileType type, byte index, float depth)
 		{
-
+			TileRenderInfo info = tileInfo[(int)type];
+			Rectangle src = new Rectangle((info.xOffset + index) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
+			renderDebugRect(dest, Color.Black, depth + 0.01f);
+			spriteBatch.Draw(tileSheet, dest, src, Color.White, 0, Vector2.Zero, SpriteEffects.None, depth);
 		}
 	}
 }

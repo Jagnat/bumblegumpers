@@ -23,7 +23,7 @@ namespace bumblegumpers
 		SOLID = 1,
 		LADDER = 2,
 		CORNER = 3,
-		PLATFORM
+		PLATFORM = 4
 	}
 
 	[Serializable]
