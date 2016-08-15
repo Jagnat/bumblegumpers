@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,58 +24,30 @@ namespace bumblegumpers
 			COLLISION
 		}
 
-		public class BlockPanel
-		{
-			public bool open;
-			public string title;
-			public int height;
-			public int numTileTypes;
-			public int numCollisionTypes;
-			public int numTileRows;
-			public int numCollisionRows;
-
-			public bool showCollision = false;
-
-			public BlockPanel(bool open)
-			{
-				this.open = open;
-				numTileTypes = Enum.GetNames(typeof(TileType)).Length;
-				numCollisionTypes = Enum.GetNames(typeof(TileCollision)).Length;
-
-				numTileRows = (int)Math.Ceiling((float)numTileTypes / 6.0f);
-				numCollisionRows = (int)Math.Ceiling((float)numCollisionTypes / 6.0f);
-				setMode(false);
-			}
-
-			public void setMode(bool showCollision)
-			{
-				if (showCollision)
-				{
-					title = "Collision";
-					height = numCollisionRows * 57 + 21;
-				}
-				else
-				{
-					title = "Blocks";
-					// 36n + 21(n+1)
-					height = numTileRows * 57 + 21;
-				}
-			}
-		}
-
 		ModeSelect modeSelect = ModeSelect.MAIN;
 		BlockPanel blockPanel = new BlockPanel(true);
 
 		int offs = 0;
 
-		public Editor()
-		{
+		Render renderer;
+		World world;
 
+		public Editor(Render renderer)
+		{
+			this.renderer = renderer;
 		}
 
-		public void updateEditor(InputState input)
+		public void setWorld(World world)
 		{
-			
+			this.world = world;
+		}
+
+		public void update(InputState input)
+		{
+			if (input.currentMouse.LeftButton == ButtonState.Released)
+			{
+				
+			}
 		}
 
 		public void resize(Rectangle bounds)
@@ -82,8 +55,12 @@ namespace bumblegumpers
 			this.bounds = bounds;
 		}
 
-		public void renderEditor(Render renderer)
+		public void renderEditor()
 		{
+			renderer.startRender();
+			renderer.renderWorld(world);
+			renderer.endRender();
+
 			renderer.startDebugRender();
 
 			// background rectangle
@@ -93,17 +70,18 @@ namespace bumblegumpers
 			renderer.renderDebugRect(new Rectangle(panelWidth, 0, scrollWidth, bounds.Height), new Color(Color.Gray, .8f), 1.0f);
 
 			offs = 0;
-			renderModeSelect(renderer);
+			renderModeSelect();
 
-			offs += 10;
-			renderPanel1(renderer);
+			offs += 12;
+			renderPanel1();
 
-			offs += 10;
+			offs += 12;
+			renderPanel2();
 
 			renderer.endDebugRender();
 		}
 
-		public void renderPanel1(Render renderer)
+		public void renderPanel1()
 		{
 			renderer.renderDebugRect(new Rectangle(0, offs, panelWidth, 24), Color.Violet, 0.8f);
 			renderer.renderDebugText(panelWidth / 2, offs + 12, Color.Black, 0.7f, blockPanel.title, true, true);
@@ -141,17 +119,18 @@ namespace bumblegumpers
 						}
 						offs += p;
 					}
-					offs += s;
 				}
 			}
 		}
 
-		public void renderInteractables(Render renderer)
+		public void renderPanel2()
 		{
-
+			renderer.renderDebugRect(new Rectangle(0, offs, panelWidth, 24), Color.Violet, 0.8f);
+			renderer.renderDebugText(panelWidth / 2, offs + 12, Color.Black, 0.7f, "Interactables", true, true);
+			offs += 24;
 		}
 
-		public void renderModeSelect(Render renderer)
+		public void renderModeSelect()
 		{
 			Color s = Color.Red;
 			Color n = new Color(Color.White, 0.7f);
@@ -168,6 +147,45 @@ namespace bumblegumpers
 			renderer.renderDebugText(4 * 72, offs, Color.White, 0.0f, "C", true);
 
 			offs += 20;
+		}
+	}
+
+	public class BlockPanel
+	{
+		public bool open;
+		public string title;
+		public int height;
+		public int numTileTypes;
+		public int numCollisionTypes;
+		public int numTileRows;
+		public int numCollisionRows;
+
+		public bool showCollision = false;
+
+		public BlockPanel(bool open)
+		{
+			this.open = open;
+			numTileTypes = Enum.GetNames(typeof(TileType)).Length;
+			numCollisionTypes = Enum.GetNames(typeof(TileCollision)).Length;
+
+			numTileRows = (int)Math.Ceiling((float)numTileTypes / 6.0f);
+			numCollisionRows = (int)Math.Ceiling((float)numCollisionTypes / 6.0f);
+			setMode(false);
+		}
+
+		public void setMode(bool showCollision)
+		{
+			if (showCollision)
+			{
+				title = "Collision";
+				height = numCollisionRows * 57 + 21;
+			}
+			else
+			{
+				title = "Blocks";
+				// 36n + 21(n+1)
+				height = numTileRows * 57 + 21;
+			}
 		}
 	}
 }

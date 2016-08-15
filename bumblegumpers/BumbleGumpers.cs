@@ -12,7 +12,7 @@ namespace bumblegumpers
 		public MouseState currentMouse, pastMouse;
 	}
 
-	public class Game1 : Game
+	public class BumbleGumpers : Game
 	{
 		Player player;
 		World world;
@@ -27,7 +27,7 @@ namespace bumblegumpers
 
 		bool inEditor = false;
 
-		public Game1()
+		public BumbleGumpers()
 		{
 			IsMouseVisible = true;
 			Window.Title = "?????";
@@ -45,13 +45,13 @@ namespace bumblegumpers
 		{
 			renderer = new Render(this);
 
-			editor = new Editor();
+			editor = new Editor(renderer);
 
 			world = new World(16, 12);
+			editor.setWorld(world);
 			player = new Player(1, 10);
 			input.pastKeyboard = Keyboard.GetState();
 			input.pastMouse = Mouse.GetState();
-
 
 			this.Window.ClientSizeChanged += new EventHandler<EventArgs>(WindowResize);
 			base.Initialize();
@@ -105,6 +105,8 @@ namespace bumblegumpers
 
 			if (!inEditor)
 				player.update(input, world);
+			else
+				editor.update(input);
 
 			input.pastMouse = input.currentMouse;
 			input.pastKeyboard = input.currentKeyboard;
@@ -119,6 +121,23 @@ namespace bumblegumpers
 				val = false;
 		}
 
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.Clear(Color.Black);
+
+			if (inEditor)
+				editor.renderEditor();
+			else
+			{
+				renderer.startRender();
+				renderer.renderWorld(world);
+				renderer.renderPlayer(player);
+				renderer.endRender();
+			}
+
+			base.Draw(gameTime);
+		}
+
 		void updateInput()
 		{
 			input.currentMouse = Mouse.GetState();
@@ -130,20 +149,6 @@ namespace bumblegumpers
 			updateKey(Keys.Z, out input.attackPressed);
 			updateKey(Keys.X, out input.usePressed);
 			updateKey(Keys.C, out input.shieldPressed);
-		}
-
-		protected override void Draw(GameTime gameTime)
-		{
-			GraphicsDevice.Clear(Color.Black);
-			renderer.startRender();
-			renderer.renderWorld(world);
-			renderer.renderPlayer(player);
-			renderer.endRender();
-
-			if (inEditor)
-				editor.renderEditor(renderer);
-
-			base.Draw(gameTime);
 		}
 	}
 }

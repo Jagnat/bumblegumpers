@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bumblegumpers
 {
-	public enum TileType : ushort
+	public enum TileType : byte
 	{
 		EMPTY = 0,
 		DIRT = 1,
@@ -26,7 +26,6 @@ namespace bumblegumpers
 		PLATFORM = 4
 	}
 
-	[Serializable]
 	public struct Tile
 	{
 		public TileType backgroundTile, mainTile, foregroundTile;

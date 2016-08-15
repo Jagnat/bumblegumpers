@@ -41,7 +41,7 @@ namespace bumblegumpers
 
 		public GraphicsDevice device;
 
-		public Render(Game1 game)
+		public Render(BumbleGumpers game)
 		{
 			device = game.GraphicsDevice;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
@@ -86,7 +86,7 @@ namespace bumblegumpers
 
 		public void startRender()
 		{
-			spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, camMatrix);
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, camMatrix);
 		}
 
 		public void endRender()
@@ -94,7 +94,7 @@ namespace bumblegumpers
 			spriteBatch.End();
 		}
 
-		public void renderWorld(World world)
+		public void renderWorld(World world, float bOpacity = 1, float mOpacity = 1, float fOpacity = 1)
 		{
 			float scale = tilePixels * zoom;
 
@@ -107,19 +107,19 @@ namespace bumblegumpers
 					{
 						TileRenderInfo info = tileInfo[(int)current.backgroundTile];
 						Rectangle src = new Rectangle((info.xOffset + current.backgroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0.6f);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, new Color(Color.White, bOpacity), 0, Vector2.Zero, zoom, SpriteEffects.None, 0.6f);
 					}
 					if (current.mainTile != TileType.EMPTY)
 					{
 						TileRenderInfo info = tileInfo[(int)current.mainTile];
 						Rectangle src = new Rectangle((info.xOffset + current.mainIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0.5f);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, new Color(Color.White, mOpacity), 0, Vector2.Zero, zoom, SpriteEffects.None, 0.5f);
 					}
 					if (current.foregroundTile != TileType.EMPTY)
 					{
 						TileRenderInfo info = tileInfo[(int)current.foregroundTile];
 						Rectangle src = new Rectangle((info.xOffset + current.foregroundIndex) * tilePixels, info.yOffset * tilePixels, tilePixels, tilePixels);
-						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, Color.White, 0, Vector2.Zero, zoom, SpriteEffects.None, 0.4f);
+						spriteBatch.Draw(tileSheet, new Vector2(x * scale, y * scale), src, new Color(Color.White, fOpacity), 0, Vector2.Zero, zoom, SpriteEffects.None, 0.4f);
 					}
 				}
 			}
