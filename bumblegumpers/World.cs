@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,17 +7,6 @@ using System.Threading.Tasks;
 
 namespace bumblegumpers
 {
-	public enum TileType : byte
-	{
-		EMPTY = 0,
-		DIRT = 1,
-		BRICK = 2,
-		WOOD = 3,
-		SQUARE = 4,
-		GRASS = 5,
-		LADDER = 6,
-	}
-
 	public enum TileCollision : byte
 	{
 		EMPTY = 0,
@@ -26,31 +16,44 @@ namespace bumblegumpers
 		PLATFORM = 4
 	}
 
-	public struct Tile
+	public class TileType
 	{
-		public TileType backgroundTile, mainTile, foregroundTile;
-		public byte backgroundIndex, mainIndex, foregroundIndex;
+		static Dictionary<ushort, TileType> tileGroups;
+		private static int numIds = 0;
+		string name;
+		int num;
+		Rectangle[] regions;
+
+		public TileType(string name, int num)
+		{
+			this.name = name;
+			// construct regions;
+		}
+
+		public static void initTileInfo()
+		{
+			tileGroups = new Dictionary<ushort, TileType>();
+		}
 	}
 
 	public class World
 	{
 		public int width, height;
-		public Tile[,] tiles;
+		public ushort[,] bTiles;
+		public ushort[,] mTiles;
+		public ushort[,] fTiles;
 		public TileCollision[,] collision;
 
 		public World(int w, int h)
 		{
 			width = w;
 			height = h;
-			tiles = new Tile[width, height];
+			bTiles = new ushort[width, height];
+			mTiles = new ushort[width, height];
+			fTiles = new ushort[width, height];
 			collision = new TileCollision[width, height];
 
 			initTestWorld();
-		}
-
-		public bool collides(int x, int y)
-		{
-			return tiles[x, y].mainTile != TileType.EMPTY;
 		}
 
 		public TileCollision col(int x, int y)
@@ -58,31 +61,24 @@ namespace bumblegumpers
 			return collision[x, y];
 		}
 
-		public void setBackgroundTile(int x, int y, TileType type, byte index)
+		public void setBackgroundTile(int x, int y, ushort tile)
 		{
-			tiles[x, y].backgroundTile = type;
-			tiles[x, y].backgroundIndex = index;
-			if (type == TileType.LADDER)
-				collision[x, y] = TileCollision.LADDER;
+			bTiles[x, y] = tile;
 		}
 
-		public void setMainTile(int x, int y, TileType type, byte index)
+		public void setMainTile(int x, int y, ushort tile)
 		{
-			tiles[x, y].mainTile = type;
-			tiles[x, y].mainIndex = index;
-			if (type != TileType.EMPTY)
-				collision[x, y] = TileCollision.SOLID;
+			mTiles[x, y] = tile;
 		}
 
-		public void setForegroundTile(int x, int y, TileType type, byte index)
+		public void setForegroundTile(int x, int y, ushort tile)
 		{
-			tiles[x, y].foregroundTile = type;
-			tiles[x, y].foregroundIndex = index;
+			fTiles[x, y] = tile;
 		}
 
 		public void initTestWorld()
 		{
-			for (int x = 0; x < width; x++)
+			/*for (int x = 0; x < width; x++)
 			{
 				for (int y = 0; y < height; y++)
 				{
@@ -123,7 +119,7 @@ namespace bumblegumpers
 
 			setBackgroundTile(14, 10, TileType.LADDER, 0);
 			setBackgroundTile(14, 9, TileType.LADDER, 0);
-			setBackgroundTile(14, 8, TileType.LADDER, 2);
+			setBackgroundTile(14, 8, TileType.LADDER, 2);*/
 		}
 	}
 }
