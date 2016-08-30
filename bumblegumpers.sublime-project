@@ -1,0 +1,65 @@
+{
+	"folders":
+	[
+		{
+			"path": "/"
+		}
+	],
+	"build_systems":
+	[
+		{
+			"name": "BG Build",
+			"cmd":["build.bat"],
+			"shell": true,
+			"working_dir": "$project_path\\win",
+			"linux":
+			{
+				"cmd":["./build.sh"],
+				"working_dir": "$project_path/linux"
+			},
+			"variants":
+			[
+				{
+					"name": "Run",
+					"cmd":
+					[
+						"start",
+						"bumblegumpers.exe"
+					],
+					"shell": true,
+					"working_dir": "$project_path\\win",
+					"linux":
+					{
+						"cmd":["konsole --workdir $project_path/linux -e $project_path/linux/bumblegumpers"],
+						"working_dir": "$project_path/linux"
+					}
+				},
+				{
+					"name": "Clean",
+					"cmd":["clean.bat"],
+					"shell": true,
+					"working_dir": "$project_path\\win",
+					"linux":
+					{
+						"cmd":["./clean.sh"],
+						"working_dir": "$project_path/linux"
+					}
+				},
+				{
+					"name": "Debug",
+					"cmd":
+					[
+						"debug.bat"
+					],
+					"shell": true,
+					"working_dir": "$project_path\\win",
+					"linux":
+					{
+
+					}
+				}
+			],
+			"working_dir": "$project_path\\win"
+		}
+	]
+}

@@ -1,0 +1,5 @@
+INFO: Completed uniform location checks!
+INFO: Completed framebuffer initialization!
+INFO: Successfully initialized renderer!
+INFO: Resized window to W:0, H:0
+INFO: Successfully initialized engine!

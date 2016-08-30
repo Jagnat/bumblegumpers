@@ -1,0 +1,1156 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"GL_TEX",
+				"GL_TEXTURE_2D"
+			],
+			[
+				"Buf",
+				"BufferPool"
+			],
+			[
+				"tile",
+				"getTileAt"
+			],
+			[
+				"sweep",
+				"sweepMoving"
+			],
+			[
+				"min",
+				"minkowskiDiff"
+			],
+			[
+				"CAM",
+				"CAMERA_MODE_GAME"
+			],
+			[
+				"Vet",
+				"VertexBuffer"
+			],
+			[
+				"Vec",
+				"Vec2_Dot"
+			],
+			[
+				"frame",
+				"framebufferTexture"
+			],
+			[
+				"GL_COL",
+				"GL_COLOR_BUFFER_BIT"
+			],
+			[
+				"program",
+				"framebufferProgramId"
+			],
+			[
+				"rse",
+				"resizeRenderer"
+			],
+			[
+				"came",
+				"cameraLoc"
+			],
+			[
+				"targ",
+				"targetUpdateDelta"
+			],
+			[
+				"Black",
+				"CRGB::Black"
+			],
+			[
+				"LightGr",
+				"CRGB::LightGrey"
+			],
+			[
+				"Gray",
+				"CRGB::DarkGray"
+			],
+			[
+				"indices",
+				"num_indices"
+			],
+			[
+				"view",
+				"view_loc"
+			],
+			[
+				"uniform",
+				"uniform_locs"
+			],
+			[
+				"progra",
+				"program_pre_id"
+			],
+			[
+				"chunk",
+				"chunk_get"
+			],
+			[
+				"projec",
+				"projection_loc"
+			],
+			[
+				"cam",
+				"cam_pos"
+			],
+			[
+				"spec",
+				"get_specular"
+			],
+			[
+				"num",
+				"num_indices"
+			],
+			[
+				"del",
+				"delay_test"
+			],
+			[
+				"reso",
+				"post_reso_loc"
+			],
+			[
+				"frag",
+				"frag_coord"
+			],
+			[
+				"w",
+				"render_width"
+			],
+			[
+				"post",
+				"program_post_id"
+			],
+			[
+				"vbo_",
+				"vbo_fbo_id"
+			],
+			[
+				"fbo_",
+				"fbo_tex_loc"
+			],
+			[
+				"fbo",
+				"fbo_verts"
+			],
+			[
+				"vbo",
+				"vbo_fbo_id"
+			],
+			[
+				"player",
+				"player_cam_current"
+			],
+			[
+				"mouse",
+				"mouse_delta_y"
+			],
+			[
+				"mose",
+				"mouse_delta_y"
+			],
+			[
+				"INPUT",
+				"INPUT_PULLUP"
+			],
+			[
+				"ela",
+				"elapsed_ms"
+			],
+			[
+				"window_",
+				"window_height"
+			],
+			[
+				"wino",
+				"window_width"
+			],
+			[
+				"addd",
+				"added_v"
+			],
+			[
+				"mouse_",
+				"mouse_event_happened"
+			],
+			[
+				"set_ver",
+				"set_vert_col"
+			],
+			[
+				"set_",
+				"set_vert_col"
+			],
+			[
+				"Mat4_Pers",
+				"Mat4_PerspectiveOffCenter"
+			],
+			[
+				"col",
+				"col3"
+			],
+			[
+				"viewport",
+				"viewport_w"
+			],
+			[
+				"matri",
+				"mvp_matrix_loc"
+			],
+			[
+				"viewp",
+				"viewport_w"
+			],
+			[
+				"CreatePer",
+				"CreatePerspectiveOffCenter"
+			],
+			[
+				"_p",
+				"_pool_id_at"
+			],
+			[
+				"_",
+				"_pool_id_at"
+			],
+			[
+				"progr",
+				"shader_program"
+			],
+			[
+				"flap",
+				"flapOpen"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/bg.cpp",
+			"settings":
+			{
+				"buffer_size": 4551,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg_render.cpp",
+			"settings":
+			{
+				"buffer_size": 11220,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg_render.h",
+			"settings":
+			{
+				"buffer_size": 1877,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg.h",
+			"settings":
+			{
+				"buffer_size": 690,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/game.cpp",
+			"settings":
+			{
+				"buffer_size": 8252,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/game_assets.h",
+			"settings":
+			{
+				"buffer_size": 524,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/game_assets.cpp",
+			"settings":
+			{
+				"buffer_size": 2984,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/game.h",
+			"settings":
+			{
+				"buffer_size": 1314,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "BG Build",
+	"command_palette":
+	{
+		"height": 104.0,
+		"selected_items":
+		[
+			[
+				"clean",
+				"Build: Clean"
+			],
+			[
+				"debug",
+				"Build: Debug"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"debu",
+				"Build: Debug"
+			],
+			[
+				"package",
+				"Package Control: Remove Package"
+			],
+			[
+				"add",
+				"Package Control: Add Repository"
+			],
+			[
+				"deb",
+				"Build: Debug"
+			],
+			[
+				"sspltx",
+				"Set Syntax: Plain Text"
+			],
+			[
+				"build:buil",
+				"Build: Build"
+			],
+			[
+				"commit",
+				"Git: Commit"
+			],
+			[
+				"package control:ins",
+				"Package Control: Install Package"
+			],
+			[
+				"d",
+				"Build: Debug"
+			],
+			[
+				"clen",
+				"Build: Clean"
+			],
+			[
+				"clea",
+				"Build: Clean"
+			],
+			[
+				"de",
+				"Build: Debug"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"add re",
+				"Package Control: Add Repository"
+			],
+			[
+				"p",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"package control: Install Package",
+				"Package Control: Install Package"
+			],
+			[
+				"package control",
+				"Package Control: List Packages"
+			],
+			[
+				"build debu",
+				"Build: Debug"
+			],
+			[
+				"buld clean",
+				"Build: Clean"
+			]
+		],
+		"width": 480.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Jagannath/Documents/Programming/bg/src/game_render.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/questrial.h",
+		"/C/Users/Jagannath/Desktop/font.fnt",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/res/font-bake.c",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/res/test.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/game.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/res/output.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/game_render.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/res/fragment.glsl",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/stb_image_write.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/font-bake.c",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/primitives.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/primitives.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg//src/bg_render.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg//src/game_render.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/bg_render.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/bg_render.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg//src/bg_render_bak.h",
+		"/C/Users/Jagannath/Documents/Programming/bg//src/bg_render_bak.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bg//src/bg_render.h",
+		"/C/Users/Jagannath/Documents/Programming/_old/bintosource/bintosource.c",
+		"/C/Users/Jagannath/Documents/Programming/_old/bintosource/test.c",
+		"/src/bg_util.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/src/bg_util.h",
+		"/C/Users/Jagannath/Documents/Programming/bg/bumblegumpers.sublime-project",
+		"/C/Users/Jagannath/Documents/Programming/bg/win/build.bat",
+		"/C/Users/Jagannath/Documents/Programming/bg/linux/clean.sh",
+		"/C/Users/Jagannath/Documents/Programming/bg/linux/build.sh",
+		"/C/Users/Jagannath/Documents/Programming/bg/win/debug.bat",
+		"/C/Users/Jagannath/Desktop/dark.reg",
+		"/C/Users/Jagannath/Desktop/HC.reg",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/feather_funcs.h",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/feather_data.h",
+		"/C/Users/Jagannath/Documents/Programming/adventur/win/build.bat",
+		"/C/Users/Jagannath/Documents/Programming/game/src/game_logic.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/win/build2.bat",
+		"/C/Users/Jagannath/Documents/Programming/feather/feather.sublime-project",
+		"/C/Users/Jagannath/Documents/Programming/game/src/game_logic.h",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/User/C++.sublime-settings",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/User/C.sublime-settings",
+		"/C/Program Files (x86)/Steam/steamapps/common/Starbound/giraffe_storage/starbound.config",
+		"/C/Users/Jagannath/Documents/Programming/feather/win/build.bat",
+		"/C/Program Files (x86)/Steam/steamapps/common/Starbound/doc/OPENSOURCE.md",
+		"/C/Users/Jagannath/Documents/Programming/game/win/build2.bat",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/feather.cpp",
+		"/C/Users/Jagannath/Documents/Programming/game/src/game.cpp",
+		"/C/Users/Jagannath/Documents/Programming/game/src/game_render.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/stb_truetype.h",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/feather_buffer.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/feather_gl.cpp",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/krom.tmTheme",
+		"/C/Users/Jagannath/Documents/My Games/Sid Meier's Civilization 5/config.ini",
+		"/src/feather_data.h",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/game.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/game_assets.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/game_render.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/old_snippets.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/primitives.cpp",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/primitives.h",
+		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/physics.c",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/game_assets.h",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/game_render.h",
+		"/C/Users/Jagannath/Documents/Programming/feather/src/game.h",
+		"/C/Users/Jagannath/Documents/Programming/Misc/stbtt_test.c",
+		"/C/Users/Jagannath/Documents/Programming/feather/tasks.txt",
+		"/H/dir/setup.bat",
+		"/G/dir/setup.bat",
+		"/C/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/vcvars32.bat",
+		"/G/Programming/adventur/win/build.bat",
+		"/G/config.txt",
+		"/D/Ableton Live 9 Suite v9.6.1 WIN[FINAL]/Ableton.Live.Suite.v9.6.1.x64.WIN/Patch/Ableton Live 9 Patch [io]/Ableton Live 9 Patch [io]/io.nfo",
+		"/D/Ableton Live 9 Suite 9.0.2 (Win 32 bit-io) [ChingLiu]/ChingLiu.Install.Notes.nfo",
+		"/D/Ableton Live 9 Suite v9.6.1 WIN[FINAL]/Torrent downloaded from Demonoid.ooo.txt",
+		"/D/lucysback/contacts/contacts_20160116160405.vcf",
+		"/C/Users/Jagannath/Documents/Programming/game/win/log.txt",
+		"/C/Users/Jagannath/AppData/Roaming/.minecraft/assets/indexes/1.10.json",
+		"/C/Users/Jagannath/Documents/Programming/rpi/blink/src/main.s",
+		"/C/Users/Jagannath/Documents/Arduino/led_matrix/led_matrix.ino",
+		"/C/Users/Jagannath/Documents/Programming/rpi/blink/Makefile",
+		"/C/Users/Jagannath/Documents/Programming/rpi/blink/kernel.ld",
+		"/C/Users/Jagannath/Documents/Programming/rpi/template/Makefile",
+		"/C/Users/Jagannath/Documents/Programming/rpi/blink/main.s",
+		"/C/Users/Jagannath/Documents/Programming/rpi/template/kernel.ld",
+		"/C/Users/Jagannath/Documents/Programming/demotest/main.c",
+		"/C/Users/Jagannath/Documents/Programming/game/src/res/vertex.glsl",
+		"/C/Users/Jagannath/Documents/Programming/game/src/game_assets.cpp",
+		"/G/Programming/robotc/morrowind.c",
+		"/G/Programming/robotc/music.c",
+		"/G/Programming/robotc/platformer.c",
+		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_data.h",
+		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_funcs.h",
+		"/C/Users/Jagannath/Documents/Programming/game/src/stb_truetype.h",
+		"/src/old_snippets.cpp",
+		"/C/Users/Jagannath/Documents/Programming/game/src/primitives.h",
+		"/C/Users/Jagannath/Documents/Programming/game/src/log.cpp",
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/C/Users/Jagannath/Documents/Programming/worldgen/jstb_image_write.h",
+		"/C/Users/Jagannath/Documents/Programming/Misc/stb_image_write.h",
+		"/C/Users/Jagannath/Documents/Programming/game/src/res/fragment.glsl",
+		"/C/Users/Jagannath/Documents/Programming/game/src/res/fbFragment.glsl",
+		"/C/Users/Jagannath/Documents/Programming/game/src/res/fbVertex.glsl",
+		"/C/Users/Jagannath/Downloads/trunk/readme.txt",
+		"/C/Users/Jagannath/Documents/Programming/game/src/stb_image.h",
+		"/C/Users/Jagannath/Documents/Programming/game/src/temp_render_code.cpp",
+		"/src/game_util.h",
+		"/C/Users/Jagannath/Documents/Programming/game/src/game_util.h",
+		"/G/Programming/game/src/temp_render_code.cpp",
+		"/E/Programming/obbg-master/src/stb_gl.h",
+		"/E/Programming/obbg-master/src/texture_loader.cpp",
+		"/E/Programming/obbg-master/src/glext.h",
+		"/E/Programming/obbg-master/src/win32/SDL_windows_main.c",
+		"/E/Programming/obbg-master/src/stb_leakcheck_sdl.h",
+		"/E/Programming/game/game_asset.h",
+		"/G/Programming/robotc/tetris/tetris_slave1.c",
+		"/G/Programming/game/src/game_render.cpp",
+		"/G/Programming/game/src/shaders/fragment.glsl",
+		"/G/Programming/game/src/shaders/vertex.glsl",
+		"/C/Users/Jagannath/Documents/Programming/_old/Brainz/src/main.cpp",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/C++/C++.tmLanguage",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/C++/C.tmLanguage",
+		"/G/dir/Sublime Text 2.0.2/Data/Packages/C++/C.tmLanguage",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/beauti.YAML-tmTheme",
+		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/Jagi Theme Blue.tmTheme",
+		"/C/Windows/Logs/CBS/CBS.log",
+		"/C/Users/Jagannath/Documents/Programming/game/src/util.h",
+		"/C/Users/Jagannath/Documents/Programming/game/src/primitives.cpp",
+		"/C/Users/Jagannath/Documents/Programming/_old/CGame/src/t_platformer.cpp",
+		"/C/Users/Jagannath/Documents/Programming/_old/CGame/src/cgame.cpp"
+	],
+	"find":
+	{
+		"height": 102.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"",
+			"$project",
+			"<project>",
+			"\"<project>",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"256",
+			"1ded0138-47ce-435e-84ef-9ec1f439b749",
+			"PAINT",
+			"paint",
+			"SwapBuffers",
+			"KEY",
+			"key",
+			"Feather",
+			"key",
+			"music",
+			"creative3",
+			"creative",
+			"player",
+			"addSprite",
+			"glClearC",
+			"ft",
+			"scale",
+			"scalefor",
+			"stb",
+			"iboId",
+			"shaders",
+			"glGenTextures",
+			"glActi",
+			"beginRend",
+			"checkCo",
+			"m2to1",
+			"view",
+			"translate",
+			"player",
+			"64",
+			"proj",
+			"projU",
+			"render",
+			"init",
+			"glBindVer",
+			"Ortho",
+			"ortho",
+			"lerp",
+			"glew",
+			"device",
+			"Win32ProcessPending",
+			"string",
+			"bracket",
+			"brackets",
+			"comment",
+			"while ",
+			"wndclassa",
+			"WNDCLASSA",
+			"win32_state",
+			"add",
+			"x",
+			"(rand() < (RAND_MAX / 100))\n					ch",
+			"mesh",
+			"Mat4",
+			"mat4",
+			"Mat4",
+			"matrix_view",
+			"post_reso",
+			"renderstate->",
+			"Platform",
+			"platform_api",
+			"Platform",
+			"program_post_id",
+			":\n",
+			"sizeof",
+			"mv",
+			"g)",
+			"r)",
+			"24",
+			"disable",
+			"enable",
+			"#define far",
+			"near",
+			"key",
+			"control",
+			"square",
+			"if",
+			"rad game",
+			"BOTTOM",
+			"7",
+			"3",
+			"14",
+			"8",
+			"5",
+			"15",
+			"16",
+			"5",
+			"y",
+			"x",
+			"oldMax",
+			"oldRange",
+			"#define*DECLSPEC",
+			"DECLSPEC",
+			"SDL_Window",
+			"!=",
+			"void",
+			"END_OF_MAIN",
+			"timer_init",
+			"init_managers",
+			"init_basic_stuff",
+			"include",
+			"video",
+			"include"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"a5c004b4-2d4b-494e-bf01-45fc492522c7",
+			"xor_x",
+			"",
+			"postprocess_prog_id",
+			"&mv",
+			"r)",
+			"g)",
+			"36",
+			"on_up",
+			"on_down",
+			"control",
+			"key",
+			"MIDDLE",
+			"-5",
+			"-9",
+			"2",
+			"-4",
+			"-7",
+			"3",
+			"14",
+			"6",
+			"pY",
+			"pX",
+			"t",
+			"old_max",
+			"old_range"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/bg.cpp",
+					"settings":
+					{
+						"buffer_size": 4551,
+						"regions":
+						{
+							"bookmarks":
+							{
+								"flags": 144,
+								"icon": "bookmark",
+								"regions":
+								[
+								],
+								"scope": "bookmarks"
+							}
+						},
+						"selection":
+						[
+							[
+								636,
+								636
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 463.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/bg_render.cpp",
+					"settings":
+					{
+						"buffer_size": 11220,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								79,
+								79
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 571.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/bg_render.h",
+					"settings":
+					{
+						"buffer_size": 1877,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1868,
+								1868
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1586.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "src/bg.h",
+					"settings":
+					{
+						"buffer_size": 690,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								354,
+								360
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 110.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/game.cpp",
+					"settings":
+					{
+						"buffer_size": 8252,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7127,
+								7127
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5353.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/game_assets.h",
+					"settings":
+					{
+						"buffer_size": 524,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								78,
+								78
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/game_assets.cpp",
+					"settings":
+					{
+						"buffer_size": 2984,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2666,
+								2673
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/game.h",
+					"settings":
+					{
+						"buffer_size": 1314,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								397,
+								397
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 75.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.547536231884,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.aaa_package_dev":
+	{
+		"height": 139.0
+	},
+	"output.build|C:\\Program Files (x86)\\Arduino\\libraries\\Albert_Adafruit_PCD8544|1440041757.8":
+	{
+		"height": 283.0
+	},
+	"output.build|C:\\Program Files (x86)\\Arduino\\libraries\\Albert_Adafruit_PCD8544|1440046652.93":
+	{
+		"height": 277.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\joy_test|1439257483.88":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\lcd_test2|1440041412.39":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\lcd_test2|1440041503.86":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\lcd_test2|1440041523.3":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\lcd_test2|1440041559.54":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\lcd_test2|1440041623.08":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\lcd_test2|1440041743.97":
+	{
+		"height": 94.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439860797.34":
+	{
+		"height": 396.0
+	},
+	"output.build|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439861147.63":
+	{
+		"height": 94.0
+	},
+	"output.exec":
+	{
+		"height": 181.0
+	},
+	"output.git":
+	{
+		"height": 94.0
+	},
+	"output.package_dev":
+	{
+		"height": 101.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\joy_test|1439257517.49":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\joy_test|1439257549.76":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456544077.7":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456544134.03":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456544147.08":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456544219.66":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456544248.21":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456545098.5":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\led_matrix|1456545164.1":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439860834.58":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439860868.76":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439860886.9":
+	{
+		"height": 450.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439860928.66":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439861008.85":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439861089.9":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439861096.65":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439861104.61":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Arduino\\sketch_aug17a|1439861161.37":
+	{
+		"height": 94.0
+	},
+	"output.upload|C:\\Users\\Jagannath\\Documents\\Programming\\Adventur\\src|1439861134.74":
+	{
+		"height": 94.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"debug.",
+				"win/debug.bat"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/C/Users/Jagannath/Documents/Programming/game/game.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 195.0,
+	"status_bar_visible": true
+}
