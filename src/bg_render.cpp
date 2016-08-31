@@ -36,8 +36,11 @@ void initRenderer(Renderer *r, int w, int h)
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		// glBlendEquation(GL_FUNC_ADD);
+		// glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
+		glDepthMask(GL_TRUE);
 		glDepthFunc(GL_LEQUAL);
 
 		renderer->programId = createProgram("res/vertex.glsl", "res/fragment.glsl");

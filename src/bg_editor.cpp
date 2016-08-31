@@ -3,7 +3,7 @@
 Editor *editor;
 
 #define ECOLOR_MAIN 0x6e8b9fCC
-#define ECOLOR_SCROLL_BG 0x26262600
+#define ECOLOR_SCROLL_BG 0x262626CC
 #define ECOLOR_SCROLL_THUMB 0xC93EF0FF
 
 #define DEPTH_BLAYER 0.49f
@@ -51,7 +51,7 @@ void editorDrawGrid(int w, int h)
 {
 	// draw grid
 	setZ(DEPTH_GRID);
-	setAlpha(0.2f);
+	setColor(WithAlpha(COLOR_WHITE, 0.2f));
 	for (int x = 0; x <= w; ++x)
 		addSprite(CreateRect(x - .02f, 0, .04f, h));
 	for (int y = 0; y <= h; ++y)
@@ -65,19 +65,24 @@ void editorDrawEditMode()
 
 void editorDrawScrollbar()
 {
-	// setColor(ECOLOR_SCROLL_BG);
-	setColor(WithAlpha(COLOR_RED, 0.1f));
+	setZ(DEPTH_GUI_BG);
+	setColor(ECOLOR_SCROLL_BG);
 	addSprite(CreateRect(252, 0, 16, editor->height));
 	setZ(DEPTH_GUI_OVERLAY);
 	setColor(ECOLOR_SCROLL_THUMB);
 	addSprite(CreateRect(252, 0, 16, 64));
-
-	setZ(DEPTH_GUI_BG);
 }
 
 void editorRender(double interval)
 {
-	// SCREEN SPACE COLOR
+	setCamPos(Vec2_Lerp(editor->camPrev, editor->camPos, interval));
+
+	beginSpriteBatch(0, CAM_GAME);
+	{
+		editorDrawGrid(editor->world->width, editor->world->height);
+	}
+	endSpriteBatch();
+
 	beginSpriteBatch(0, CAM_SCREEN);
 	{
 		// background
@@ -85,29 +90,6 @@ void editorRender(double interval)
 		setZ(DEPTH_GUI_BG);
 		addSprite(CreateRect(0, 0, 252, editor->height));
 		editorDrawScrollbar();
-	}
-	endSpriteBatch();
-
-	// SCREEN SPACE TILES
-	beginSpriteBatch(1, CAM_SCREEN);
-	{
-
-	}
-	endSpriteBatch();
-
-	// SCREEN SPACE TEXT
-	beginSpriteBatch(2, CAM_SCREEN);
-	{
-
-	}
-	endSpriteBatch();
-
-	setCamPos(Vec2_Lerp(editor->camPrev, editor->camPos, interval));
-
-	// WORLD SPACE COLOR
-	beginSpriteBatch(0, CAM_GAME);
-	{
-		editorDrawGrid(editor->world->width, editor->world->height);
 	}
 	endSpriteBatch();
 }
