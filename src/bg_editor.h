@@ -4,12 +4,12 @@
 
 #include "bg_world.h"
 
-enum EditMode
+enum EditMode : uint8
 {
-	MODE_BACKGROUND,
-	MODE_MAIN,
-	MODE_FOREGROUND,
-	MODE_COLLISION
+	MODE_BACKGROUND = 0,
+	MODE_MAIN = 1,
+	MODE_FOREGROUND = 2,
+	MODE_COLLISION = 3
 };
 
 static const char blockName[] = "Blocks";

@@ -1,5 +1,4 @@
 INFO: render sized to 768x576
 INFO: init'd renderer
 INFO: platform init'd
-INFO: Set editor mode to true!
-INFO: render sized to 1400x900
+INFO: Loading world testworld.bgw, 16x12

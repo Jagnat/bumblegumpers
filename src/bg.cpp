@@ -191,54 +191,6 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 	}
 }
 
-void renderDebugCollision(World *world, float z)
-{
-	// draw collision
-	setZ(z);
-	for (int x = 0; x < world->width; ++x)
-	{
-		for (int y = 0; y < world->height; ++y)
-		{
-			TileCollision c = getCollision(world, x, y);
-			switch(c)
-			{
-				case TC_SOLID:
-				{
-					setColor(0x77889980);
-					addSprite(CreateRect(x, y, 1, 1));
-				}
-				break;
-				case TC_LADDER:
-				{
-					setColor(0xB969B980);
-					addSprite(CreateRect(x + .1f, y, 0.1f, 1));
-					addSprite(CreateRect(x + 0.8, y, 0.1f, 1));
-				}
-				break;
-				case TC_CORNER:
-				{
-					setColor(0xB9696980);
-					addSprite(CreateRect(x, y, .2f, .2f));
-					addSprite(CreateRect(x + .8f, y, .2f, .2f));
-					addSprite(CreateRect(x, y + .8f, .2f, .2f));
-					addSprite(CreateRect(x + .8f, y + .8f, .2f, .2f));
-				}
-				break;
-				case TC_PLATFORM:
-				{
-					setColor(0x69B96980);
-					addSprite(CreateRect(x, y + .7f, 1, .3f));
-				}
-				break;
-				case TC_EMPTY:
-				default:
-				break;
-			}
-		}
-	}
-
-}
-
 void render(double interval)
 {
 	World *world = &game->world;

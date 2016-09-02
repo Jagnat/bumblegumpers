@@ -111,8 +111,8 @@ uint16 getF(World *world, int x, int y)
 
 void createTestWorld(World *world)
 {
-	// loadWorld(world, "testworld.bgw");
-	createWorld(world, 16, 12);
+	loadWorld(world, "testworld.bgw");
+	/*createWorld(world, 16, 12);
 
 	for (int x = 0; x < world->width; x++)
 	{
@@ -144,5 +144,5 @@ void createTestWorld(World *world)
 	setCollision(world, 14, 10, TC_PLATFORM);
 	setCollision(world, 13, 10, TC_CORNER);
 
-	//saveWorld(world, "testworld.bgw");*/
+	saveWorld(world, "testworld.bgw");*/
 }

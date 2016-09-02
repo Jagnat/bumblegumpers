@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"DEPTH",
+				"DEPTH_CLAYER"
+			],
+			[
+				"DE",
+				"DEPTH_BLAYER"
+			],
+			[
+				"ECOLO",
+				"ECOLOR_SCROLL_BG"
+			],
+			[
 				"GL_TEX",
 				"GL_TEXTURE_2D"
 			],
@@ -235,7 +247,23 @@
 			"file": "src/bg.cpp",
 			"settings":
 			{
-				"buffer_size": 4551,
+				"buffer_size": 9233,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg_editor.cpp",
+			"settings":
+			{
+				"buffer_size": 3916,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg_world.cpp",
+			"settings":
+			{
+				"buffer_size": 4179,
 				"line_ending": "Windows"
 			}
 		},
@@ -243,15 +271,23 @@
 			"file": "src/bg_render.cpp",
 			"settings":
 			{
-				"buffer_size": 11220,
+				"buffer_size": 12051,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/bg_render.h",
+			"file": "src/bg_world.h",
 			"settings":
 			{
-				"buffer_size": 1877,
+				"buffer_size": 882,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg_editor.h",
+			"settings":
+			{
+				"buffer_size": 789,
 				"line_ending": "Windows"
 			}
 		},
@@ -259,39 +295,15 @@
 			"file": "src/bg.h",
 			"settings":
 			{
-				"buffer_size": 690,
+				"buffer_size": 1015,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/game.cpp",
+			"file": "src/bg_render.h",
 			"settings":
 			{
-				"buffer_size": 8252,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/game_assets.h",
-			"settings":
-			{
-				"buffer_size": 524,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/game_assets.cpp",
-			"settings":
-			{
-				"buffer_size": 2984,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/game.h",
-			"settings":
-			{
-				"buffer_size": 1314,
+				"buffer_size": 2062,
 				"line_ending": "Windows"
 			}
 		}
@@ -412,6 +424,16 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/res/fragment.glsl",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/res/vertex.glsl",
+		"/C/Users/Jagannath/Documents/Programming/libraries/stb-master/stb_tilemap_editor.h",
+		"/C/Users/Jagannath/Documents/Programming/jsn/jsn_spritebatch.h",
+		"/C/Users/Jagannath/Documents/Programming/bitconvert/bitconvert.go",
+		"/C/Users/Jagannath/Documents/Programming/jn_xm/main.c",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/game.h",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/game_assets.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/game_assets.h",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/game.cpp",
 		"/C/Users/Jagannath/Documents/Programming/bg/src/game_render.cpp",
 		"/C/Users/Jagannath/Documents/Programming/bg/src/questrial.h",
 		"/C/Users/Jagannath/Desktop/font.fnt",
@@ -529,17 +551,7 @@
 		"/G/Programming/game/src/game_render.cpp",
 		"/G/Programming/game/src/shaders/fragment.glsl",
 		"/G/Programming/game/src/shaders/vertex.glsl",
-		"/C/Users/Jagannath/Documents/Programming/_old/Brainz/src/main.cpp",
-		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/C++/C++.tmLanguage",
-		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/C++/C.tmLanguage",
-		"/G/dir/Sublime Text 2.0.2/Data/Packages/C++/C.tmLanguage",
-		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/beauti.YAML-tmTheme",
-		"/C/Users/Jagannath/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/Jagi Theme Blue.tmTheme",
-		"/C/Windows/Logs/CBS/CBS.log",
-		"/C/Users/Jagannath/Documents/Programming/game/src/util.h",
-		"/C/Users/Jagannath/Documents/Programming/game/src/primitives.cpp",
-		"/C/Users/Jagannath/Documents/Programming/_old/CGame/src/t_platformer.cpp",
-		"/C/Users/Jagannath/Documents/Programming/_old/CGame/src/cgame.cpp"
+		"/C/Users/Jagannath/Documents/Programming/_old/Brainz/src/main.cpp"
 	],
 	"find":
 	{
@@ -708,7 +720,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -716,24 +728,15 @@
 					"file": "src/bg.cpp",
 					"settings":
 					{
-						"buffer_size": 4551,
+						"buffer_size": 9233,
 						"regions":
 						{
-							"bookmarks":
-							{
-								"flags": 144,
-								"icon": "bookmark",
-								"regions":
-								[
-								],
-								"scope": "bookmarks"
-							}
 						},
 						"selection":
 						[
 							[
-								636,
-								636
+								4321,
+								4321
 							]
 						],
 						"settings":
@@ -742,25 +745,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 463.0,
+						"translation.y": 3348.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "src/bg_render.cpp",
+					"file": "src/bg_editor.cpp",
 					"settings":
 					{
-						"buffer_size": 11220,
+						"buffer_size": 3916,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								79,
-								79
+								2701,
+								2701
 							]
 						],
 						"settings":
@@ -769,25 +772,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 571.0,
+						"translation.y": 1897.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "src/bg_render.h",
+					"file": "src/bg_world.cpp",
 					"settings":
 					{
-						"buffer_size": 1877,
+						"buffer_size": 4179,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1868,
-								1868
+								927,
+								927
 							]
 						],
 						"settings":
@@ -796,7 +799,34 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1586.0,
+						"translation.y": 461.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/bg_render.cpp",
+					"settings":
+					{
+						"buffer_size": 12051,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4066,
+								4066
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2372.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -808,45 +838,19 @@
 			"sheets":
 			[
 				{
-					"buffer": 3,
-					"file": "src/bg.h",
-					"settings":
-					{
-						"buffer_size": 690,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								354,
-								360
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 110.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
 					"buffer": 4,
-					"file": "src/game.cpp",
+					"file": "src/bg_world.h",
 					"settings":
 					{
-						"buffer_size": 8252,
+						"buffer_size": 882,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7127,
-								7127
+								247,
+								247
 							]
 						],
 						"settings":
@@ -855,25 +859,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5353.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "src/game_assets.h",
+					"file": "src/bg_editor.h",
 					"settings":
 					{
-						"buffer_size": 524,
+						"buffer_size": 789,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								78,
-								78
+								337,
+								337
 							]
 						],
 						"settings":
@@ -889,18 +893,18 @@
 				},
 				{
 					"buffer": 6,
-					"file": "src/game_assets.cpp",
+					"file": "src/bg.h",
 					"settings":
 					{
-						"buffer_size": 2984,
+						"buffer_size": 1015,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2666,
-								2673
+								0,
+								0
 							]
 						],
 						"settings":
@@ -909,25 +913,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 110.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "src/game.h",
+					"file": "src/bg_render.h",
 					"settings":
 					{
-						"buffer_size": 1314,
+						"buffer_size": 2062,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								397,
-								397
+								1832,
+								1832
 							]
 						],
 						"settings":
@@ -936,7 +940,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 75.0,
+						"translation.y": 322.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

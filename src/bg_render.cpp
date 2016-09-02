@@ -152,8 +152,10 @@ void resizeRenderer(int w, int h)
 
 void beginRender()
 {
-	glClearColor(0.094f, 0.098f, 0.129f, 1.f);
+	// glClearColor(0.094f, 0.098f, 0.129f, 1.f);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 }
 
 void endRender()
