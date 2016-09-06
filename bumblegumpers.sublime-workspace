@@ -4,8 +4,16 @@
 		"selected_items":
 		[
 			[
+				"editorDraw",
+				"editorDrawEditMode"
+			],
+			[
+				"ECOLOR",
+				"ECOLOR_EM_SEL"
+			],
+			[
 				"DEPTH",
-				"DEPTH_CLAYER"
+				"DEPTH_GUI_OVERLAY"
 			],
 			[
 				"DE",
@@ -255,7 +263,7 @@
 			"file": "src/bg_editor.cpp",
 			"settings":
 			{
-				"buffer_size": 3916,
+				"buffer_size": 4262,
 				"line_ending": "Windows"
 			}
 		},
@@ -720,7 +728,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -755,15 +763,15 @@
 					"file": "src/bg_editor.cpp",
 					"settings":
 					{
-						"buffer_size": 3916,
+						"buffer_size": 4262,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2701,
-								2701
+								3105,
+								3105
 							]
 						],
 						"settings":
@@ -772,7 +780,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1897.0,
+						"translation.y": 2215.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -789,8 +797,8 @@
 						"selection":
 						[
 							[
-								927,
-								927
+								1175,
+								1175
 							]
 						],
 						"settings":
@@ -834,7 +842,7 @@
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{

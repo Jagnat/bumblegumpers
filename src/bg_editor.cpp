@@ -5,6 +5,8 @@ Editor *editor;
 #define ECOLOR_MAIN 0xBCC8CCCC
 #define ECOLOR_SCROLL_BG 0x262626CC
 #define ECOLOR_SCROLL_THUMB 0xEDEDEDFF
+#define ECOLOR_EM_DESEL 0xFFFFFFFF
+#define ECOLOR_EM_SEL 0x222222FF
 
 #define DEPTH_BLAYER 0.49f
 #define DEPTH_MLAYER 0.50f
@@ -20,19 +22,35 @@ Editor *editor;
 void editorInit(Editor *e)
 {
 	editor = e;
+	editor->panelW = 252;
 	editor->camPos = CreateVec(0, 0);
 	editor->editMode = MODE_COLLISION;
 }
 
 void editorResize(int w, int h)
 {
-	editor->width = w;
-	editor->height = h;
+	editor->screenW = w;
+	editor->screenH = h;
 }
 
 void editorSetWorld(World *world)
 {
 	editor->world = world;
+}
+
+void editorClickPanel(int x, int y)
+{
+	
+}
+
+void editorClickScroll(int y)
+{
+
+}
+
+void editorClickWorld(int x, int y)
+{
+
 }
 
 void editorUpdate(Input *input)
@@ -46,6 +64,18 @@ void editorUpdate(Input *input)
 		editor->camPos.y += 0.1f;
 	if (input->down.down)
 		editor->camPos.y -= 0.1f;
+
+	if (input->leftMouse.released)
+	{
+		int x = input->mouseX, y = input->mouseY;
+
+		if (x <= editor->panelW)
+			editorClickPanel(x, y);
+		else if (x > editor->panelW && x <= editor->panelW + editor->scrollW)
+			editorClickScroll(y);
+		else
+			editorClickWorld(x, y);
+	}
 }
 
 void editorDrawGrid(int w, int h)
@@ -147,17 +177,24 @@ void editorDrawCollision(World *world)
 
 void editorDrawEditMode()
 {
-
+	int h = editor->screenH;
+	setZ(DEPTH_GUI_OVERLAY);
+	setColor(ECOLOR_EM_DESEL);
+	addSprite(CreateRect(40, h - 40, 20, 20));
+	addSprite(CreateRect(90, h - 40, 20, 20));
+	addSprite(CreateRect(140, h - 40, 20, 20));
+	setColor(ECOLOR_EM_SEL);
+	addSprite(CreateRect(190, h - 40, 20, 20));
 }
 
 void editorDrawScrollbar()
 {
 	setZ(DEPTH_GUI_BG);
 	setColor(ECOLOR_SCROLL_BG);
-	addSprite(CreateRect(252, 0, 16, editor->height));
+	addSprite(CreateRect(editor->panelW, 0, editor->scrollW, editor->screenH));
 	setZ(DEPTH_GUI_OVERLAY);
 	setColor(ECOLOR_SCROLL_THUMB);
-	addSprite(CreateRect(252, 0, 16, 64));
+	addSprite(CreateRect(editor->panelW, 0, editor->scrollW, 64));
 }
 
 void editorRender(double interval)
@@ -183,8 +220,9 @@ void editorRender(double interval)
 		// background
 		setColor(ECOLOR_MAIN);
 		setZ(DEPTH_GUI_BG);
-		addSprite(CreateRect(0, 0, 252, editor->height));
+		addSprite(CreateRect(0, 0, editor->panelW, editor->screenH));
 		editorDrawScrollbar();
+		editorDrawEditMode();
 	}
 	endSpriteBatch();
 }

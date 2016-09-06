@@ -354,6 +354,8 @@ void handleEvents()
 					{
 						resizeRenderer(e.window.data1,
 							e.window.data2);
+						platform->width = e.window.data1;
+						platform->height = e.window.data2;
 					}
 					break;
 				}

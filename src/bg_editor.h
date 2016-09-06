@@ -12,12 +12,17 @@ enum EditMode : uint8
 	MODE_COLLISION = 3
 };
 
+struct ModePanel
+{
+	
+};
+
 static const char blockName[] = "Blocks";
 static const char collisionName[] = "Collision";
 struct BlockPanel
 {
 	bool extended;
-	bool showCollision;
+	bool showCollision; 
 
 	int height;
 };
@@ -27,7 +32,10 @@ struct Editor
 	World *world;
 	Vec2 camPrev;
 	Vec2 camPos;
-	int width, height;
+	int screenW, screenH;
+
+	int panelW;
+	int scrollW;
 
 	EditMode editMode;
 	uint16 editId;
