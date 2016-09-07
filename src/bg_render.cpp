@@ -145,7 +145,7 @@ void resizeRenderer(int w, int h)
 	float scale = renderer->tilePixels * renderer->zoom;
 	renderer->projMatrix = Mat4_Ortho(-(float)w / scale / 2, (float)w / scale / 2,
 		-(float)h / scale / 2, (float)h / scale / 2, -1, 1);
-	renderer->screenMatrix = Mat4_Ortho(0, w, 0, h, -1, 1);
+	renderer->screenMatrix = Mat4_Ortho(0, w, h, 0, -1, 1);
 
 	log_info("render sized to %ux%u", w, h);
 }

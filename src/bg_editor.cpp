@@ -40,7 +40,7 @@ void editorSetWorld(World *world)
 
 void editorClickPanel(int x, int y)
 {
-	
+
 }
 
 void editorClickScroll(int y)
@@ -50,6 +50,26 @@ void editorClickScroll(int y)
 
 void editorClickWorld(int x, int y)
 {
+	Mat4 mV = renderer->viewMatrix;
+	Mat4 mP = renderer->projMatrix;
+
+	log_info("s to w - x:%d, y:%d", x, y);
+
+	Mat4 inv = Mat4_Identity();
+	bool s = Mat4_Invert((mP * mV), &inv);
+
+	if (s)
+	{
+		float xT = (float)x / (float)editor->screenW;
+		float yT = (float)y / (float)editor->screenH;
+		xT = (xT * 2) - 1;
+		yT = -((yT * 2) - 1);
+		Vec4 ssP = CreateVec(xT, yT, 1, 1);
+		Vec4 res = Vec4_MMult(ssP, inv);
+		log_info("succeeded, x:%.3f, y:%.3f, w:%.3f", res.x, res.y, res.w);
+	}
+	else
+		log_info("inverse failed");
 
 }
 
@@ -180,11 +200,11 @@ void editorDrawEditMode()
 	int h = editor->screenH;
 	setZ(DEPTH_GUI_OVERLAY);
 	setColor(ECOLOR_EM_DESEL);
-	addSprite(CreateRect(40, h - 40, 20, 20));
-	addSprite(CreateRect(90, h - 40, 20, 20));
-	addSprite(CreateRect(140, h - 40, 20, 20));
+	addSprite(CreateRect(40, 40, 20, 20));
+	addSprite(CreateRect(90, 40, 20, 20));
+	addSprite(CreateRect(140, 40, 20, 20));
 	setColor(ECOLOR_EM_SEL);
-	addSprite(CreateRect(190, h - 40, 20, 20));
+	addSprite(CreateRect(190, 40, 20, 20));
 }
 
 void editorDrawScrollbar()

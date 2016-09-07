@@ -342,7 +342,7 @@ void handleEvents()
 			case SDL_MOUSEMOTION:
 			{
 				in->mouseX = e.motion.x;
-				in->mouseY = platform->height - (e.motion.y + 1);
+				in->mouseY = e.motion.y;
 			}
 			break;
 			case SDL_WINDOWEVENT:

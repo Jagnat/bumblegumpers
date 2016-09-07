@@ -136,10 +136,23 @@ Vec3 Vec3_Lerp(Vec3 v1, Vec3 v2, float x);
 Vec3 operator+(Vec3 v1, Vec3 v2);
 Vec3 operator-(Vec3 v1, Vec3 v2);
 
+
+inline Vec4 CreateVec(float x, float y, float z, float w)
+{
+	Vec4 v = {x, y, z, w};
+	return v;
+}
+inline Vec4 CreateVec(Vec3 vo, float w)
+{
+	Vec4 v = {vo.x, vo.y, vo.z, w};
+	return v;
+}
 Vec4 Vec4_Normalize(Vec4 v);
 float Vec4_Dot(Vec4 v1, Vec4 v2);
 Vec4 operator+(Vec4 v1, Vec4 v2);
 Vec4 operator-(Vec4 v1, Vec4 v2);
+Vec4 Vec4_MMult(Vec4 v, Mat4 m);
+
 
 Mat4 operator*(Mat4 a, Mat4 b);
 Mat4 Mat4_Ortho(float l, float r, float b, float t, float n, float f);
