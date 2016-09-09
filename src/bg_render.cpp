@@ -1,7 +1,9 @@
 #include "bg_render.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "thirdparty/stb_image.h"
+
+#include "thirdparty/imgui.h"
 
 struct GlyphData
 {
@@ -58,6 +60,8 @@ void initRenderer(Renderer *r, int w, int h)
 		initSpritebatch();
 		initTextures();
 
+		imguiInit();
+
 		resizeRenderer(w, h);
 
 		renderer->initialized = true;
@@ -97,7 +101,6 @@ void initTextures()
 	white->width = 2;
 	white->height = 2;
 	white->bytesPerPixel = 4;
-	white->allocated = true;
 	loadTexture(white);
 
 	Texture *tilesheet = &renderer->textures[1];
@@ -108,7 +111,6 @@ void initTextures()
 		log_error("Failed to load tilesheet!");
 		return;
 	}
-	tilesheet->allocated = true;
 	loadTexture(tilesheet);
 
 	Texture *font = &renderer->textures[2];
@@ -119,7 +121,6 @@ void initTextures()
 		&fbpp, 0);
 	assert(fbpp == 1);
 	font->pixels = (uint8*)calloc(1, font->width * font->height * 4 * sizeof(uint8));
-	font->allocated = true;
 	assert(font->pixels);
 
 	for (int x = 0; x < font->width; ++x)
@@ -146,6 +147,8 @@ void resizeRenderer(int w, int h)
 	renderer->projMatrix = Mat4_Ortho(-(float)w / scale / 2, (float)w / scale / 2,
 		-(float)h / scale / 2, (float)h / scale / 2, -1, 1);
 	renderer->screenMatrix = Mat4_Ortho(0, w, h, 0, -1, 1);
+
+	imguiResize(w, h);
 
 	log_info("render sized to %ux%u", w, h);
 }
@@ -442,4 +445,109 @@ char *loadShaderCode(const char *filepath)
 	fread(text, 1, size, fp);
 	text[size] = 0;
 	return text;
+}
+
+// ImGui code
+static void imguiRenderCallback(ImDrawData *data)
+{
+	ImGuiIO *io = &ImGui::GetIO();
+
+	glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_SCISSOR_TEST);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+	glUseProgram(0);
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, io->DisplaySize.x, io->DisplaySize.y, 0, -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	#define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
+	for (int n = 0; n < data->CmdListsCount; ++n)
+	{
+		ImDrawList *cmdList = data->CmdLists[n];
+		ImDrawVert *vBuffer = cmdList->VtxBuffer.Data;
+		ImDrawIdx *iBuffer = cmdList->IdxBuffer.Data;
+		glVertexPointer(2, GL_FLOAT, sizeof(ImDrawVert), (void*)((char*)vBuffer + OFFSETOF(ImDrawVert, pos)));
+		glTexCoordPointer(2, GL_FLOAT, sizeof(ImDrawVert), (void*)((char*)vBuffer + OFFSETOF(ImDrawVert, uv)));
+		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(ImDrawVert), (void*)((char*)vBuffer + OFFSETOF(ImDrawVert, col)));
+
+		for (int i = 0; i < cmdList->CmdBuffer.Size; ++i)
+		{
+			ImDrawCmd *pcmd = &cmdList->CmdBuffer[i];
+			if (pcmd->UserCallback)
+			{
+				pcmd->UserCallback(cmdList, pcmd);
+			}
+			else
+			{
+				uint tId;
+				if (pcmd->TextureId == 0)
+					tId = 0;
+				else
+					tId = *((uint*)pcmd->TextureId);
+				glBindTexture(GL_TEXTURE_2D, ((Texture*)(pcmd->TextureId))->glId);
+				glScissor((int)pcmd->ClipRect.x, (int)(io->DisplaySize.y - pcmd->ClipRect.w),
+					(int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+				glDrawElements(GL_TRIANGLES, pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, iBuffer);
+			}
+			iBuffer += pcmd->ElemCount;
+		}
+
+	}
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glPopAttrib();
+
+	glUseProgram(renderer->programId);
+}
+
+void imguiInit()
+{
+	ImGuiIO *io = &ImGui::GetIO();
+
+	io->RenderDrawListsFn = imguiRenderCallback;
+}
+
+void imguiResize(int w, int h)
+{
+	ImGuiIO *io = &ImGui::GetIO();
+	io->DisplaySize = ImVec2(w, h);
+
+	Texture *imfnt = &renderer->textures[3];
+	io->Fonts->GetTexDataAsRGBA32(&imfnt->pixels,
+		&imfnt->width, &imfnt->height);	
+	loadTexture(imfnt);
+	io->Fonts->TexID = (void*)&imfnt->glId;
+}
+
+void imguiInput(Input *input)
+{
+	ImGuiIO *io = &ImGui::GetIO();
+	io->MousePos = ImVec2(input->mouseX, input->mouseY);
+	io->MouseDown[0] = input->leftMouse.down;
+	io->MouseDown[1] = input->rightMouse.down;
+	io->MouseDown[2] = input->middleMouse.down;
+	ImGui::NewFrame();
+}
+
+void imguiRender()
+{
+	ImGui::Render();
 }

@@ -37,7 +37,6 @@ enum CameraMode
 
 struct Texture
 {
-	bool allocated;
 	uint glId;
 	int width, height;
 	int bytesPerPixel;
@@ -126,5 +125,12 @@ void addSprite(Rect quad, Rect tex);
 void addSprite(Rect quad);
 void addText(Vec2 pos, bool centerX, bool centerY, const char *text, ...);
 Vec2 getTextBounds(const char *text);
+
+struct Input;
+
+void imguiInit();
+void imguiResize(int w, int h);
+void imguiInput(Input *input);
+void imguiRender();
 
 #endif
