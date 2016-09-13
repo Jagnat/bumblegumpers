@@ -15,7 +15,7 @@
 #include "primitives.h"
 #include "bg_render.h"
 #include "bg_world.h"
-// #include "bg_editor.h"
+#include "bg_editor.h"
 
 #include "thirdparty/imgui.h"
 
@@ -135,6 +135,8 @@ void updatePlayer(Input *input, Player *player, World *world)
 	}
 }
 
+void renderLayer(int w, int h, uint16 *layer, float z, float opacity);
+
 void update()
 {
 	if (game->input.toggleEdit.pressed)
@@ -146,8 +148,8 @@ void update()
 			SDL_SetWindowSize(platform->window, 1400, 900);
 			SDL_SetWindowPosition(platform->window,
 				SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-			// editorSetWorld(&game->world);
-			// editorResize(1400, 900);
+			editorSetWorld(&game->world);
+			editorResize(1400, 900);
 		}
 		else
 		{
@@ -162,18 +164,9 @@ void update()
 		updatePlayer(&game->input, &game->player, &game->world);
 	else
 	{
-		beginRender();
-		glClearColor(1, 1, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		imguiInput(&game->input);
-
-		ImGui::ShowTestWindow();
-
-
-		imguiRender();
-		endRender();
+		// No rendering happens in render
+		editorUpdate(&game->input);
 		SDL_GL_SwapWindow(platform->window);
-		// editorUpdate(&game->input);
 	}
 
 	// reset player input
@@ -199,6 +192,8 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 			if (t == 0)
 				continue;
 			t--;
+			if (t >= 32 * 32)
+				continue;
 			Rect texPos = CreateRect((t % 32) * tileRegion, (t / 32) * tileRegion,
 				tileRegion, tileRegion);
 			addSprite(CreateRect(x, y, 1, 1), texPos);
@@ -391,7 +386,7 @@ void initPlatform()
 	platform = (Platform*)calloc(1, sizeof(Platform));
 	game = &platform->game;
 
-	platform->targetUpdateDelta = 1000.L / 120.L;
+	platform->targetUpdateDelta = 1000.L / 60.L;
 	platform->targetRenderDelta = 1000.L / 60.L;
 	platform->running = true;
 	platform->width = 768;
@@ -421,7 +416,7 @@ void initPlatform()
 	initRenderer(&platform->renderer, platform->width, platform->height);
 
 
-	// editorInit(&platform->editor);
+	editorInit(&platform->editor);
 	log_info("platform init'd");
 }
 
@@ -429,7 +424,7 @@ void initPlatform()
 #include "primitives.cpp"
 #include "bg_render.cpp"
 #include "bg_world.cpp"
-// #include "bg_editor.cpp"
+#include "bg_editor.cpp"
 
 #include "thirdparty/imgui.cpp"
 #include "thirdparty/imgui_draw.cpp"

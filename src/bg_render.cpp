@@ -523,18 +523,18 @@ void imguiInit()
 	ImGuiIO *io = &ImGui::GetIO();
 
 	io->RenderDrawListsFn = imguiRenderCallback;
-}
-
-void imguiResize(int w, int h)
-{
-	ImGuiIO *io = &ImGui::GetIO();
-	io->DisplaySize = ImVec2(w, h);
 
 	Texture *imfnt = &renderer->textures[3];
 	io->Fonts->GetTexDataAsRGBA32(&imfnt->pixels,
 		&imfnt->width, &imfnt->height);	
 	loadTexture(imfnt);
 	io->Fonts->TexID = (void*)&imfnt->glId;
+}
+
+void imguiResize(int w, int h)
+{
+	ImGuiIO *io = &ImGui::GetIO();
+	io->DisplaySize = ImVec2(w, h);
 }
 
 void imguiInput(Input *input)

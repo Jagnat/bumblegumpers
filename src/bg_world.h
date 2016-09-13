@@ -11,6 +11,8 @@ enum TileCollision : uint8
 	TC_PLATFORM = 4
 };
 
+#define NUM_TILES 64
+
 struct World
 {
 	uint width, height;
