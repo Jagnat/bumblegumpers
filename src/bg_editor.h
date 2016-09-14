@@ -19,6 +19,7 @@ struct Editor
 {
 	World *world;
 	Vec2 camPos;
+	Vec2 cursorPos;
 
 	EditMode editMode;
 	char *editText;
@@ -33,6 +34,7 @@ void editorInit(Editor *e);
 void editorSetWorld(World *world);
 
 void editorUpdate(Input *input);
+void editorRender();
 void editorResize(int w, int h);
 
 #endif // _BG_EDITOR_H_

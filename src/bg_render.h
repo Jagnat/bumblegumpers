@@ -125,6 +125,8 @@ void addSprite(Rect quad, Rect tex);
 void addSprite(Rect quad);
 void addText(Vec2 pos, bool centerX, bool centerY, const char *text, ...);
 Vec2 getTextBounds(const char *text);
+Rect getTileRect(uint16 id);
+Rect getPlayerRect();
 
 struct Input;
 

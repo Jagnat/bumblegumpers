@@ -164,9 +164,7 @@ void update()
 		updatePlayer(&game->input, &game->player, &game->world);
 	else
 	{
-		// No rendering happens in render
 		editorUpdate(&game->input);
-		SDL_GL_SwapWindow(platform->window);
 	}
 
 	// reset player input
@@ -176,8 +174,6 @@ void update()
 		game->input.buttons[i].released = false;
 	}
 }
-
-const float tileRegion = 1.f / 32.f;
 
 void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 {
@@ -191,11 +187,9 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 			uint16 t = layer[y * w + x];
 			if (t == 0)
 				continue;
-			t--;
-			if (t >= 32 * 32)
+			if (t > 32 * 32)
 				continue;
-			Rect texPos = CreateRect((t % 32) * tileRegion, (t / 32) * tileRegion,
-				tileRegion, tileRegion);
+			Rect texPos = getTileRect(t);
 			addSprite(CreateRect(x, y, 1, 1), texPos);
 		}
 	}
@@ -208,8 +202,8 @@ void render(double interval)
 
 	if (game->inEditor)
 	{
-		// editorRender(interval);
-
+		editorRender();
+		SDL_GL_SwapWindow(platform->window);
 	}
 	else
 	{
@@ -220,7 +214,7 @@ void render(double interval)
 			renderLayer(world->width, world->height, world->mTiles, 0.50f, 1.f);
 			renderLayer(world->width, world->height, world->fTiles, 0.51f, 1.f);
 			addSprite(CreateRect(game->player.x, game->player.y, 1, 1),
-				CreateRect(0, 31 * tileRegion, tileRegion, tileRegion));
+				getPlayerRect());
 		}
 		endSpriteBatch();
 		endRender();

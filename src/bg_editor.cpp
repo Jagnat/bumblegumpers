@@ -24,7 +24,6 @@ void editorInit(Editor *e)
 static void editorDrawLayer(uint16 *layer, int w, int h, float z = 0.5f)
 {
 	setZ(z);
-	const float tr = 1.f / 32.f;
 	for (int x = 0; x < w; x++)
 	{
 		for (int y = 0; y < h; ++y)
@@ -32,8 +31,7 @@ static void editorDrawLayer(uint16 *layer, int w, int h, float z = 0.5f)
 			uint16 t = layer[y * w + x];
 			if (t == 0)
 				continue;
-			t--;
-			Rect texPos = CreateRect((t % 32) * tr, (t / 32) * tr, tr, tr);
+			Rect texPos = getTileRect(t);
 			addSprite(CreateRect(x, y, 1, 1), texPos);
 		}
 	}
@@ -120,7 +118,6 @@ void editorDrawCollisionMap(World *world)
 
 void editorUpdate(Input *input)
 {
-	beginRender();
 
 	World *world = editor->world;
 
@@ -143,12 +140,19 @@ void editorUpdate(Input *input)
 	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(.5, .5, .7, 1);
 	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(.7, .7, 1, 1);
 
-	ImGuiWindowFlags f = 0;
-
 	// ImGui::ShowTestWindow();
 
 	ImGui::Begin("Editor");
 	EditMode pastMode = editor->editMode;
+
+	ImGui::Text("World controls");
+	if (ImGui::Button("Save As"))
+	{
+		saveWorld(editor->world, "savedworld.wld");
+	}
+	ImGui::SameLine();
+	ImGui::Button("Load"); ImGui::SameLine();
+	ImGui::Button("Resize");
 
 	ImGui::Text("Edit Mode");
 	ImGui::RadioButton("background", (int*)&editor->editMode, (int)MODE_BACKGROUND);
@@ -184,28 +188,28 @@ void editorUpdate(Input *input)
 					if (i >= NUM_TILES + 1)
 						break;
 					ImVec2 po = ImVec2(p.x + xo * 34, p.y + yo);
-					const float tR = 1.f / 32.f;
-					ImVec2 uvo = ImVec2((i % 32) * tR, (i / 32) * tR);
+					Rect uv = getTileRect(i);
 
 					if (i == 0)
 						dl->AddRectFilled(po, ImVec2(po.x + 24, po.y + 24), ImU32(0xec877cFF));
 					else
 						dl->AddImage((void*)&renderer->textures[1].glId, po, ImVec2(po.x + 24, po.y + 24),
-							uvo, ImVec2(uvo.x + tR, uvo.y + tR));
+							ImVec2(uv.x, uv.y), ImVec2(uv.x + uv.w, uv.y + uv.h));
 					i++;
 
 					if (xo > numColumns)
-						numColumns = xo + 1;
+						numColumns = xo;
 				}
 				numRows++;
 				yo += 34;
 			}
+			numColumns++;
 			ImGui::InvisibleButton("sButn", ImVec2(w, numRows * 34 + 10));
 			if (ImGui::IsItemClicked())
 			{
 				ImVec2 mPos = ImVec2(input->mouseX - p.x, input->mouseY - p.y);
 				mPos.y -= 10;
-				// log_info("nc: %d nr: %d", numColumns, numRows);	
+				log_info("nc: %d nr: %d", numColumns, numRows);	
 				log_info("x:%.3f, y:%.3f", mPos.x, mPos.y);
 
 				int xO = (int)floor(mPos.x) / 34;
@@ -228,10 +232,8 @@ void editorUpdate(Input *input)
 
 	if (ImGui::CollapsingHeader("Test"))
 	{
-
+		ImGui::Button("This is a test");
 	}
-
-	ImGui::End();
 
 	float cS = .2f;
 	if (input->left.down)
@@ -244,6 +246,14 @@ void editorUpdate(Input *input)
 		editor->camPos.y -= cS;
 	setCamPos(editor->camPos);
 
+	Vec4 res = {-20000, -20000};
+
+	ImVec2 winMin = ImGui::GetWindowPos();
+	ImVec2 bnds = ImGui::GetWindowSize();
+	ImVec2 winMax = ImVec2(bnds.x + winMin.x + 200, bnds.y + winMin.y + 200);
+
+	ImGui::End();
+
 	if (!ImGui::IsMouseHoveringAnyWindow())
 	{
 		float mx = input->mouseX;
@@ -254,7 +264,6 @@ void editorUpdate(Input *input)
 		Mat4 inv = Mat4_Identity();
 		bool s = Mat4_Invert((mP * mV), &inv);
 
-		Vec4 res = {-20000, -20000};
 		if (s)
 		{
 			float xT = (float)mx / (float)editor->screenW;
@@ -270,29 +279,9 @@ void editorUpdate(Input *input)
 		else
 			log_info("inverse failed");
 
-
-		if (res.x < world->width && res.x > 0 &&
-			res.y < world->height && res.y > 0)
-		{
-			// draw preview
-			if (editor->editMode == MODE_COLLISION || editor->editId == 0)
-			{
-				beginSpriteBatch(0, CAM_GAME);
-				setZ(0.8f);
-				editorDrawCollision(world, floor(res.x), floor(res.y), (TileCollision)editor->editId);
-				endSpriteBatch();
-			}
-			else
-			{
-				beginSpriteBatch(1, CAM_GAME);
-				setZ(0.8f);
-				const float tr = 1.f / 32.f;
-				Rect texPos = CreateRect((editor->editId % 32) * tr, (editor->editId / 32) * tr, tr, tr);
-				addSprite(CreateRect(floor(res.x), floor(res.y), 1, 1), texPos);
-				endSpriteBatch();
-			}
-
-			if (input->leftMouse.down)
+			if (input->leftMouse.down &&
+				res.x < world->width && res.x > 0 &&
+				res.y < world->height && res.y > 0)
 			{
 				if (editor->editMode == MODE_COLLISION)
 				{
@@ -304,6 +293,35 @@ void editorUpdate(Input *input)
 					(arr[editor->editMode])[(int)floor(res.y) * world->width + (int)floor(res.x)] = editor->editId;
 				}
 			}
+	}
+	editor->cursorPos = CreateVec(res.x, res.y);
+}
+
+void editorRender()
+{
+	World *world = editor->world;
+	
+	beginRender();
+
+	Vec2 cp = editor->cursorPos;
+	if (cp.x < world->width && cp.x > 0 &&
+		cp.y < world->height && cp.y > 0)
+	{
+		// draw preview
+		if (editor->editMode == MODE_COLLISION || editor->editId == 0)
+		{
+			beginSpriteBatch(0, CAM_GAME);
+			setZ(0.8f);
+			editorDrawCollision(world, floor(cp.x), floor(cp.y), (TileCollision)editor->editId);
+			endSpriteBatch();
+		}
+		else
+		{
+			beginSpriteBatch(1, CAM_GAME);
+			setZ(0.8f);
+			Rect texPos = getTileRect(editor->editId);
+			addSprite(CreateRect(floor(cp.x), floor(cp.y), 1, 1), texPos);
+			endSpriteBatch();
 		}
 	}
 
@@ -329,210 +347,3 @@ void editorUpdate(Input *input)
 	imguiRender();
 	endRender();
 }
-
-/*void editorInit(Editor *e)
-{
-	editor = e;
-	editor->panelW = 252;
-	editor->camPos = CreateVec(0, 0);
-	editor->editMode = MODE_COLLISION;
-}
-
-void editorClickWorld(int x, int y)
-{
-	Mat4 mV = renderer->viewMatrix;
-	Mat4 mP = renderer->projMatrix;
-
-	log_info("s to w - x:%d, y:%d", x, y);
-
-	Mat4 inv = Mat4_Identity();
-	bool s = Mat4_Invert((mP * mV), &inv);
-
-	if (s)
-	{
-		float xT = (float)x / (float)editor->screenW;
-		float yT = (float)y / (float)editor->screenH;
-		xT = (xT * 2) - 1;
-		yT = -((yT * 2) - 1);
-		Vec4 ssP = CreateVec(xT, yT, 1, 1);
-		Vec4 res = Vec4_MMult(ssP, inv);
-		log_info("succeeded, x:%.3f, y:%.3f, w:%.3f", res.x, res.y, res.w);
-	}
-	else
-		log_info("inverse failed");
-
-}
-
-void editorUpdate(Input *input)
-{
-	editor->camPrev = editor->camPos;
-	if (input->left.down)
-		editor->camPos.x -= 0.1f;
-	if (input->right.down)
-		editor->camPos.x += 0.1f;
-	if (input->up.down)
-		editor->camPos.y += 0.1f;
-	if (input->down.down)
-		editor->camPos.y -= 0.1f;
-
-	if (input->leftMouse.released)
-	{
-		int x = input->mouseX, y = input->mouseY;
-
-		if (x <= editor->panelW)
-			editorClickPanel(x, y);
-		else if (x > editor->panelW && x <= editor->panelW + editor->scrollW)
-			editorClickScroll(y);
-		else
-			editorClickWorld(x, y);
-	}
-}
-
-void editorDrawGrid(int w, int h)
-{
-	// draw grid
-	setZ(DEPTH_GRID);
-	setColor(WithAlpha(COLOR_WHITE, 0.2f));
-	for (int x = 0; x <= w; ++x)
-		addSprite(CreateRect(x - .02f, 0, .04f, h));
-	for (int y = 0; y <= h; ++y)
-		addSprite(CreateRect(0, y - .02f, w, .04f));
-}
-
-static void editorChooseTileColor(int index)
-{
-	if (editor->editMode > index)
-		setColor(0xCCCCCCAA);
-	else if (editor->editMode < index)
-		setColor(0x444444AA);
-	else
-		setColor(0xFFFFFFFF);
-}
-
-static void editorDrawLayer(uint16 *layer, int w, int h)
-{
-	const float tr = 1.f / 32.f;
-	for (int x = 0; x < w; x++)
-	{
-		for (int y = 0; y < h; ++y)
-		{
-			uint16 t = layer[y * w + x];
-			if (t == 0)
-				continue;
-			t--;
-			Rect texPos = CreateRect((t % 32) * tr, (t / 32) * tr, tr, tr);
-			addSprite(CreateRect(x, y, 1, 1), texPos);
-		}
-	}
-}
-
-void editorDrawTiles(World *world)
-{
-	editorChooseTileColor(0);
-	setZ(DEPTH_BLAYER);
-	editorDrawLayer(world->bTiles, world->width, world->height);
-	editorChooseTileColor(1);
-	setZ(DEPTH_MLAYER);
-	editorDrawLayer(world->mTiles, world->width, world->height);
-	editorChooseTileColor(2);
-	setZ(DEPTH_FLAYER);
-	editorDrawLayer(world->fTiles, world->width, world->height);
-}
-
-void editorDrawCollision(World *world)
-{
-	setZ(DEPTH_CLAYER);
-	for (int x = 0; x < world->width; ++x)
-	{
-		for (int y = 0; y < world->height; ++y)
-		{
-			TileCollision c = getCollision(world, x, y);
-			switch(c)
-			{
-				case TC_SOLID:
-				{
-					setColor(0x77889980);
-					addSprite(CreateRect(x, y, 1, 1));
-				}
-				break;
-				case TC_LADDER:
-				{
-					setColor(0x69F9F980);
-					addSprite(CreateRect(x + .1f, y, 0.1f, 1));
-					addSprite(CreateRect(x + 0.8, y, 0.1f, 1));
-				}
-				break;
-				case TC_CORNER:
-				{
-					setColor(0xB9696980);
-					addSprite(CreateRect(x, y, .2f, .2f));
-					addSprite(CreateRect(x + .8f, y, .2f, .2f));
-					addSprite(CreateRect(x, y + .8f, .2f, .2f));
-					addSprite(CreateRect(x + .8f, y + .8f, .2f, .2f));
-				}
-				break;
-				case TC_PLATFORM:
-				{
-					setColor(0x69B96980);
-					addSprite(CreateRect(x, y + .7f, 1, .3f));
-				}
-				break;
-				case TC_EMPTY:
-				default:
-				break;
-			}
-		}
-	}
-}
-
-void editorDrawEditMode()
-{
-	int h = editor->screenH;
-	setZ(DEPTH_GUI_OVERLAY);
-	setColor(ECOLOR_EM_DESEL);
-	addSprite(CreateRect(40, 40, 20, 20));
-	addSprite(CreateRect(90, 40, 20, 20));
-	addSprite(CreateRect(140, 40, 20, 20));
-	setColor(ECOLOR_EM_SEL);
-	addSprite(CreateRect(190, 40, 20, 20));
-}
-
-void editorDrawScrollbar()
-{
-	setZ(DEPTH_GUI_BG);
-	setColor(ECOLOR_SCROLL_BG);
-	addSprite(CreateRect(editor->panelW, 0, editor->scrollW, editor->screenH));
-	setZ(DEPTH_GUI_OVERLAY);
-	setColor(ECOLOR_SCROLL_THUMB);
-	addSprite(CreateRect(editor->panelW, 0, editor->scrollW, 64));
-}
-
-void editorRender(double interval)
-{
-	setCamPos(Vec2_Lerp(editor->camPrev, editor->camPos, interval));
-
-	beginSpriteBatch(1, CAM_GAME);
-	{
-		editorDrawTiles(editor->world);
-	}
-	endSpriteBatch();
-
-	beginSpriteBatch(0, CAM_GAME);
-	{
-		if (editor->editMode == MODE_COLLISION)
-			editorDrawCollision(editor->world);
-		editorDrawGrid(editor->world->width, editor->world->height);
-	}
-	endSpriteBatch();
-
-	beginSpriteBatch(0, CAM_SCREEN);
-	{
-		// background
-		setColor(ECOLOR_MAIN);
-		setZ(DEPTH_GUI_BG);
-		addSprite(CreateRect(0, 0, editor->panelW, editor->screenH));
-		editorDrawScrollbar();
-		editorDrawEditMode();
-	}
-	endSpriteBatch();
-}*/

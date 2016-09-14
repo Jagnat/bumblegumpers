@@ -5,10 +5,52 @@ void createWorld(World *world, int w, int h)
 	assert(world != 0);
 	world->width = w;
 	world->height = h;
+	// TODO: Make this be one combined allocation
 	world->collision = (TileCollision*)calloc(1, w * h * sizeof(TileCollision));
 	world->bTiles = (uint16*)calloc(1, w * h * sizeof(uint16));
 	world->mTiles = (uint16*)calloc(1, w * h * sizeof(uint16));
 	world->fTiles = (uint16*)calloc(1, w * h * sizeof(uint16));
+}
+
+int resizeWorldRight(World *wld, int amt)
+{
+	int w = wld->width + amt;
+	int h = wld->height;
+	if (w <= 0)
+		return 1;
+
+	uint8 *tmp = (uint8*)calloc(1, (w * h * sizeof(TileCollision)) +
+		(3 * w * h * sizeof(uint16)));
+
+	TileCollision *tC = (TileCollision*)tmp;
+	uint16 *bt = (uint16*)&tmp[w * h * sizeof(TileCollision)];
+	uint16 *mt = &bt[w * h];
+	uint16 *ft = &mt[w * h];
+
+
+
+	return 0;
+}
+
+void resizeWorldLeft(World *wld, int amt)
+{
+
+}
+
+void resizeWorldUp(World *wld, int amt)
+{
+
+}
+
+void resizeWorldDown(World *wld, int amt)
+{
+
+}
+
+bool validateWorldFile()
+{
+	
+	return true;
 }
 
 bool loadWorld(World *world, const char *filename)

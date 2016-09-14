@@ -313,6 +313,22 @@ void addSprite(Rect quad, Rect tex)
 
 void addSprite(Rect quad) { addSprite(quad, CreateRect(0, 0, 1, 1)); }
 
+static const int numTilesInTexture = 32;
+static const float tileRegion = 1.f / (int)numTilesInTexture;
+
+Rect getTileRect(uint16 id)
+{
+	return CreateRect(((id - 1) % numTilesInTexture) * tileRegion,
+		((id - 1) / numTilesInTexture) * tileRegion,
+		tileRegion,
+		tileRegion);
+}
+
+Rect getPlayerRect()
+{
+	return CreateRect(0, 31 * tileRegion, tileRegion, tileRegion);
+}
+
 int getCharIndex(char c)
 {
 	if (c > 31 && c < 127)

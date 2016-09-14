@@ -1,0 +1,19 @@
+world file format
+
+Sections begin with a single byte section type id followed by
+uint16 specifying the section's length, not including id and length
+
+Section 1: Header
+uint16: World's width
+uint16: World's height
+uint16: Player's x coordinate spawn point
+uint16: Player's y coordinate spawn point
+
+Section 2: Interleaved collision / texture data
+uint8: TileCollision type
+uint16: Background id
+uint16: Main id
+Uint16: Foreground id
+
+Section 3: Dynamic tile groups
+
