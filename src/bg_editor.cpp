@@ -151,7 +151,11 @@ void editorUpdate(Input *input)
 		saveWorld(editor->world, "savedworld.wld");
 	}
 	ImGui::SameLine();
-	ImGui::Button("Load"); ImGui::SameLine();
+	if (ImGui::Button("Load"))
+	{
+		resizeWorldLR(editor->world, 2, 2);
+	}
+	ImGui::SameLine();
 	ImGui::Button("Resize");
 
 	ImGui::Text("Edit Mode");

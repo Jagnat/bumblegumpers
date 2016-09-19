@@ -13,14 +13,6 @@ enum TileCollision : uint8
 
 #define NUM_TILES 64
 
-struct Tile
-{
-	TileCollision tc;
-	uint16 bt;
-	uint16 mt;
-	uint16 ft;
-};
-
 struct World
 {
 	uint width, height;
@@ -35,6 +27,8 @@ void createTestWorld(World *world);
 
 bool loadWorld(World *world, const char *filename);
 void saveWorld(World *world, const char *filename);
+
+int resizeWorldLR(World *wld, int leftAmt, int rightAmt);
 
 void setCollision(World *world, int x, int y, TileCollision col);
 TileCollision getCollision(World *world, int x, int y);

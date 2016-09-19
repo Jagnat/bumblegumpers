@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"mouse",
+				"leftMouse"
+			],
+			[
+				"mode",
+				"editMode"
+			],
+			[
+				"editorChoose",
+				"editorChooseTileColor"
+			],
+			[
 				"OFF",
 				"OFFSETOF"
 			],
@@ -176,10 +188,6 @@
 				"player_cam_current"
 			],
 			[
-				"mouse",
-				"mouse_delta_y"
-			],
-			[
 				"mose",
 				"mouse_delta_y"
 			],
@@ -284,6 +292,30 @@
 			}
 		},
 		{
+			"file": "src/bg_world.cpp",
+			"settings":
+			{
+				"buffer_size": 5195,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "doc/world_file_format.txt",
+			"settings":
+			{
+				"buffer_size": 465,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/thirdparty/imgui_demo.cpp",
+			"settings":
+			{
+				"buffer_size": 119932,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/thirdparty/imgui.cpp",
 			"settings":
 			{
@@ -292,21 +324,18 @@
 			}
 		},
 		{
-			"contents": "#include \"bg_world.h\"\n\nvoid createWorld(World *world, int w, int h)\n{\n	assert(world != 0);\n	world->width = w;\n	world->height = h;\n	uint8 *tmp = (uint8*)calloc(1, w * h * sizeof(TileCollision) +\n		3 * w * h * sizeof(uint16));\n	world->collision = (TileCollision*)tmp;\n	world->bTiles = (uint16*)&tmp[w * h * sizeof(TileCollision)];\n	world->mTiles = &world->bTiles[w * h];\n	world->fTiles = &world->mTiles[w * h];\n}\n\nint resizeWorldLR(World *wld, int leftAmt, int rightAmt)\n{\n	if (!wld->collision || !wld->bTiles || !wld->mTiles || !wld->fTiles)\n		return 1;\n	int w = wld->width + leftAmt + rightAmt;\n	int h = wld->height;\n	if (w <= 0)\n		return 1;\n\n	uint8 *tmp = (uint8*)calloc(1, (w * h * sizeof(TileCollision)) +\n		(3 * w * h * sizeof(uint16)));\n\n	TileCollision *tC = (TileCollision*)tmp;\n	uint16 *bt = (uint16*)&tmp[w * h * sizeof(TileCollision)];\n	uint16 *mt = &bt[w * h];\n	uint16 *ft = &mt[w * h];\n\n	for (int y = 0; y < h; ++y)\n	{\n\n	}\n\n	return 0;\n}\n\nvoid resizeWorldUp(World *wld, int amt)\n{\n\n}\n\nvoid resizeWorldDown(World *wld, int amt)\n{\n\n}\n\nbool validateWorldFile()\n{\n	\n	return true;\n}\n\nbool loadWorld(World *world, const char *filename)\n{\n	FILE *wf = fopen(filename, \"rb\");\n	if (!wf)\n	{\n		log_warning(\"Wasn't able to open worldfile: %s!\", filename);\n		return false;\n	}\n\n	fread(&world->width, sizeof(uint), 1, wf);\n	fread(&world->height, sizeof(uint), 1, wf);\n	log_info(\"Loading world %s, %dx%d\", filename, world->width, world->height);\n\n	createWorld(world, world->width, world->height);\n\n	fread(world->collision, sizeof(TileCollision) * world->width * world->height, 1, wf);\n\n	fread(world->bTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fread(world->mTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fread(world->fTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fclose(wf);\n	return true;\n}\n\nvoid saveWorld(World *world, const char *filename)\n{\n	assert(world);\n	FILE *wf = fopen(filename, \"wb\");\n	if (!wf)\n	{\n		log_warning(\"Wasn't able to create world file: %s!\", filename);\n		return;\n	}\n\n	fwrite(&world->width, sizeof(uint), 1, wf);\n	fwrite(&world->height, sizeof(uint), 1, wf);\n	\n	fwrite(world->collision, sizeof(TileCollision) * world->width * world->height, 1, wf);\n	log_info(\"sizeof(tilecollision): %d\", sizeof(TileCollision));\n\n	fwrite(world->bTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fwrite(world->mTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fwrite(world->fTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fclose(wf);\n}\n\nvoid setCollision(World *world, int x, int y, TileCollision col)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->collision[y * world->width + x] = col;\n}\n\nTileCollision getCollision(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return TC_SOLID;\n	return world->collision[y * world->width + x];\n}\n\nvoid setB(World *world, int x, int y, uint16 val)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->bTiles[y * world->width + x] = val;\n}\nvoid setM(World *world, int x, int y, uint16 val)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->mTiles[y * world->width + x] = val;\n}\nvoid setF(World *world, int x, int y, uint16 val)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->fTiles[y * world->width + x] = val;\n}\n\nuint16 getB(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return 0;\n	return world->bTiles[y * world->width + x];\n}\nuint16 getM(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return 0;\n	return world->mTiles[y * world->width + x];\n}\nuint16 getF(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return 0;\n	return world->fTiles[y * world->width + x];\n}\n\nvoid createTestWorld(World *world)\n{\n	loadWorld(world, \"testworld.bgw\");\n	/*createWorld(world, 16, 12);\n\n	for (int x = 0; x < world->width; x++)\n	{\n		for (int y = 0; y < world->height; y++)\n		{\n			setCollision(world, 0, y, TC_SOLID);\n			setCollision(world, x, 0, TC_SOLID);\n			setCollision(world, world->width - 1, y, TC_SOLID);\n			setCollision(world, x, world->height - 1, TC_SOLID);\n		}\n	}\n\n	setCollision(world, 3, 1, TC_SOLID);\n\n	setCollision(world, 7, 1, TC_SOLID);\n	setCollision(world, 8, 2, TC_SOLID);\n	setCollision(world, 9, 3, TC_SOLID);\n	for (int i = 0; i < 3; ++i)\n	{\n		setCollision(world, 11 + i, 3, TC_SOLID);\n		setCollision(world, 6 + i, 7, TC_SOLID);\n	}\n\n	for (int i = 0; i < 3; ++i)\n		setCollision(world, 14, 1 + i, TC_LADDER);\n	setCollision(world, 9, 6, TC_LADDER);\n	setCollision(world, 9, 7, TC_LADDER);\n\n	setCollision(world, 14, 10, TC_PLATFORM);\n	setCollision(world, 13, 10, TC_CORNER);\n\n	saveWorld(world, \"testworld.bgw\");*/\n}\n",
-			"file": "src/bg_world.cpp",
-			"file_size": 5050,
-			"file_write_time": 131185360073623528,
+			"file": "src/thirdparty/stb_image.h",
 			"settings":
 			{
-				"buffer_size": 4874,
+				"buffer_size": 232790,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "win/build.bat",
+			"file": "src/bg_editor.h",
 			"settings":
 			{
-				"buffer_size": 252,
+				"buffer_size": 696,
 				"line_ending": "Windows"
 			}
 		},
@@ -319,18 +348,18 @@
 			}
 		},
 		{
-			"file": "src/bg.h",
-			"settings":
-			{
-				"buffer_size": 1015,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/bg_render.h",
 			"settings":
 			{
 				"buffer_size": 2213,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/bg_world.h",
+			"settings":
+			{
+				"buffer_size": 977,
 				"line_ending": "Windows"
 			}
 		}
@@ -338,13 +367,9 @@
 	"build_system": "BG Build",
 	"command_palette":
 	{
-		"height": 104.0,
+		"height": 58.0,
 		"selected_items":
 		[
-			[
-				"install",
-				"Package Control: Install Package"
-			],
 			[
 				"debug",
 				"Build: Debug"
@@ -352,6 +377,10 @@
 			[
 				"clean",
 				"Build: Clean"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
 			],
 			[
 				"debu",
@@ -451,13 +480,16 @@
 	},
 	"file_history":
 	[
+		"/G/Programming/bumblegumpers/src/bg_util.h",
+		"/C/Users/Jagannath/Music/Playlists/Uyama Hiroto.wpl",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/stuff/world_file_format.txt",
 		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/main.cpp",
-		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/imgui_demo.cpp",
-		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.h",
 		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.cpp",
-		"/C/Users/Jagannath/Documents/Programming/greg-master/src/greg.cpp",
-		"/C/Users/Jagannath/Documents/Programming/greg-master/README.md",
-		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/thirdparty/imgui_draw.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/thirdparty/imgui_demo.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/win/imgui.ini",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/thirdparty/imgui.cpp",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/bg.h",
+		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.h",
 		"/C/Users/Jagannath/Documents/Programming/Misc/goulder.html",
 		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/bg_debug_render.h",
 		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/bg_debug_render.cpp",
@@ -575,10 +607,7 @@
 		"/G/Programming/robotc/morrowind.c",
 		"/G/Programming/robotc/music.c",
 		"/G/Programming/robotc/platformer.c",
-		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_data.h",
-		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_funcs.h",
-		"/C/Users/Jagannath/Documents/Programming/game/src/stb_truetype.h",
-		"/src/old_snippets.cpp"
+		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_data.h"
 	],
 	"find":
 	{
@@ -601,7 +630,21 @@
 		"case_sensitive": true,
 		"find_history":
 		[
-			"Begin",
+			"ImGuiIO",
+			"Popups",
+			"();\n",
+			"ImGuiIO",
+			"Input",
+			"32.f",
+			"winMin",
+			"GetWindow",
+			"ImGuiCol",
+			"ImDrawList",
+			"ImGuiCol",
+			"center",
+			"ImGuiCol",
+			"ImGuiStyle",
+			"ImGuiWindowFlags_",
 			"ImTextureID",
 			"ImDrawIdx",
 			"ImFontAtlas",
@@ -714,8 +757,7 @@
 			"init_managers",
 			"init_basic_stuff",
 			"include",
-			"video",
-			"include"
+			"video"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -723,7 +765,6 @@
 		"regex": false,
 		"replace_history":
 		[
-			"_WIN32",
 			"a5c004b4-2d4b-494e-bf01-45fc492522c7",
 			"xor_x",
 			"",
@@ -760,7 +801,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -769,223 +810,6 @@
 					"settings":
 					{
 						"buffer_size": 9490,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1417,
-								1419
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/bg_editor.cpp",
-					"settings":
-					{
-						"buffer_size": 8701,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								775,
-								775
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/bg_render.cpp",
-					"settings":
-					{
-						"buffer_size": 17415,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1960,
-								1965
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 7716.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/thirdparty/imgui.cpp",
-					"settings":
-					{
-						"buffer_size": 428252,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								231153,
-								231153
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 70233.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/bg_world.cpp",
-					"settings":
-					{
-						"buffer_size": 4874,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								993,
-								993
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "win/build.bat",
-					"settings":
-					{
-						"buffer_size": 252,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								252,
-								252
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Batch File/Batch File.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/thirdparty/imgui.h",
-					"settings":
-					{
-						"buffer_size": 122864,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								113612,
-								113618
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 17815.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/bg.h",
-					"settings":
-					{
-						"buffer_size": 1015,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								144,
-								144
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/bg_render.h",
-					"settings":
-					{
-						"buffer_size": 2213,
 						"regions":
 						{
 						},
@@ -1002,7 +826,313 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 255.0,
+						"translation.y": 2560.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/bg_editor.cpp",
+					"settings":
+					{
+						"buffer_size": 8701,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1948.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/bg_render.cpp",
+					"settings":
+					{
+						"buffer_size": 17415,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 7373.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/bg_world.cpp",
+					"settings":
+					{
+						"buffer_size": 5195,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 845.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "doc/world_file_format.txt",
+					"settings":
+					{
+						"buffer_size": 465,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								464,
+								464
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/thirdparty/imgui_demo.cpp",
+					"settings":
+					{
+						"buffer_size": 119932,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2813,
+								2813
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/thirdparty/imgui.cpp",
+					"settings":
+					{
+						"buffer_size": 428252,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6996,
+								6996
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1323.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 7,
+					"file": "src/thirdparty/stb_image.h",
+					"settings":
+					{
+						"buffer_size": 232790,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20828,
+								20828
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6348.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/bg_editor.h",
+					"settings":
+					{
+						"buffer_size": 696,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								682,
+								695
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/thirdparty/imgui.h",
+					"settings":
+					{
+						"buffer_size": 122864,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76488,
+								76496
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 10450.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/bg_render.h",
+					"settings":
+					{
+						"buffer_size": 2213,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1405,
+								1405
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1372.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/bg_world.h",
+					"settings":
+					{
+						"buffer_size": 977,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1027,11 +1157,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.525797101449,
 			1.0
 		],
 		"rows":
@@ -1091,7 +1228,7 @@
 	},
 	"output.exec":
 	{
-		"height": 148.0
+		"height": 112.0
 	},
 	"output.git":
 	{
