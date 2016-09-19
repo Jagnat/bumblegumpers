@@ -5,16 +5,22 @@ void createWorld(World *world, int w, int h)
 	assert(world != 0);
 	world->width = w;
 	world->height = h;
-	// TODO: Make this be one combined allocation
-	world->collision = (TileCollision*)calloc(1, w * h * sizeof(TileCollision));
-	world->bTiles = (uint16*)calloc(1, w * h * sizeof(uint16));
-	world->mTiles = (uint16*)calloc(1, w * h * sizeof(uint16));
-	world->fTiles = (uint16*)calloc(1, w * h * sizeof(uint16));
+	uint8 *tmp = (uint8*)calloc(1, w * h * sizeof(TileCollision) +
+		3 * w * h * sizeof(uint16));
+	world->collision = (TileCollision*)tmp;
+	world->bTiles = (uint16*)&tmp[w * h * sizeof(TileCollision)];
+	world->mTiles = &world->bTiles[w * h];
+	world->fTiles = &world->mTiles[w * h];
 }
 
-int resizeWorldRight(World *wld, int amt)
+int resizeWorldLR(World *wld, int leftAmt, int rightAmt)
 {
-	int w = wld->width + amt;
+	if (!wld->collision || !wld->bTiles || !wld->mTiles || !wld->fTiles)
+		return 1;
+	// No resize necessary
+	if (!leftAmt && !rightAmt)
+		return 0;
+	int w = wld->width + leftAmt + rightAmt;
 	int h = wld->height;
 	if (w <= 0)
 		return 1;
@@ -27,14 +33,24 @@ int resizeWorldRight(World *wld, int amt)
 	uint16 *mt = &bt[w * h];
 	uint16 *ft = &mt[w * h];
 
+	int copyWidth = wld->width;
+	if (leftAmt < 0)
+		copyWidth += leftAmt;
+	if (rightAmt < 0)
+		copyWidth += rightAmt;
 
+	int sourceOffset = leftAmt < 0 ? -leftAmt : 0;
+	int destOffset = leftAmt >= 0 ? leftAmt : 0;
+
+	for (int y = 0; y < h; ++y)
+	{
+		for (int x = 0; x < copyWidth; ++x)
+		{
+
+		}
+	}
 
 	return 0;
-}
-
-void resizeWorldLeft(World *wld, int amt)
-{
-
 }
 
 void resizeWorldUp(World *wld, int amt)

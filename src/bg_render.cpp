@@ -5,6 +5,12 @@
 
 #include "thirdparty/imgui.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif //_WIN32
+
+#include <SDL_opengl.h>
+
 struct GlyphData
 {
 	uint8 id, x, y, w, h;
@@ -12,6 +18,44 @@ struct GlyphData
 };
 
 #include "questrial.h"
+
+#define GL_LIST \
+/* Begin gl funcs*/ \
+GLDEF(void, UseProgram, GLuint program) \
+GLDEF(GLint, GetUniformLocation, GLuint program, const GLchar *name) \
+GLDEF(void, GenBuffers, GLsizei n, GLuint *buffers) \
+GLDEF(void, BindBuffer, GLenum target, GLuint buffer) \
+GLDEF(void, GenVertexArrays, GLsizei n, GLuint *arrays) \
+GLDEF(void, BufferData, GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage) \
+GLDEF(void, BindVertexArray, GLuint array) \
+GLDEF(void, EnableVertexAttribArray, GLuint index) \
+GLDEF(void, VertexAttribPointer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) \
+GLDEF(void, UniformMatrix4fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) \
+GLDEF(void*, MapBuffer, GLenum target, GLenum access) \
+GLDEF(GLboolean, UnmapBuffer, GLenum target) \
+GLDEF(GLuint, CreateProgram, void) \
+GLDEF(void, AttachShader, GLuint program, GLuint shader) \
+GLDEF(void, LinkProgram, GLuint program) \
+GLDEF(void, GetProgramiv, GLuint program, GLenum pname, GLint *params) \
+GLDEF(void, GetProgramInfoLog, GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog) \
+GLDEF(GLuint, CreateShader, GLenum shaderType) \
+GLDEF(void, ShaderSource, GLuint shader, GLsizei count, const GLchar **string, const GLint *length) \
+GLDEF(void, CompileShader, GLuint shader) \
+GLDEF(void, GetShaderiv, GLuint shader, GLenum pname, GLint *params) \
+GLDEF(void, GetShaderInfoLog, GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog) \
+GLDEF(void, DeleteShader, GLuint shader) \
+/* End gl funcs */
+
+#ifdef _WIN32
+#define GLDECL APIENTRY
+#else
+#define GLDECL
+#endif
+
+#define GLDEF(retrn, name, ...) typedef retrn GLDECL name##proc(__VA_ARGS__); \
+static name##proc * gl##name;
+GL_LIST
+#undef GLDEF
 
 Renderer *renderer;
 
@@ -24,6 +68,13 @@ static void initTextures();
 void initRenderer(Renderer *r, int w, int h)
 {
 	renderer = r;
+
+#define GLDEF(ret, name, ...) gl##name = \
+	(name##proc *) SDL_GL_GetProcAddress("gl" #name);
+GL_LIST
+#undef GLDEF
+
+	assert(glBindBuffer);
 
 	if (!renderer->initialized)
 	{

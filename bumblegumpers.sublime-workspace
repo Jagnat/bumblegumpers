@@ -263,18 +263,15 @@
 			"file": "src/bg.cpp",
 			"settings":
 			{
-				"buffer_size": 9583,
+				"buffer_size": 9490,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "#include \"bg_editor.h\"\n\nEditor *editor;\n\nvoid editorSetWorld(World *world)\n{\n	editor->world = world;\n}\n\nvoid editorResize(int w, int h)\n{\n	editor->screenW = w;\n	editor->screenH = h;\n}\n\nvoid editorInit(Editor *e)\n{\n	editor = e;\n	editor->camPos = CreateVec(0, 0);\n}\n\nvoid editorUpdate(Input *input)\n{\n	beginRender();\n\n	World *world = editor->world;\n\n	imguiInput(&game->input);\n\n	ImGuiStyle *style = &ImGui::GetStyle();\n	style->Colors[ImGuiCol_WindowBg] = ImVec4(.467, .467, .467, .8);\n\n	ImGuiWindowFlags f = 0;\n	ImGui::Begin(\"Testing 124\");\n\n	ImGui::Text(\"Hello wurld\");\n	ImGui::Button(\"HIT THIS FOR NOOK\");\n\n	ImGui::End();\n\n	imguiRender();\n	endRender();\n}\n\n/*void editorInit(Editor *e)\n{\n	editor = e;\n	editor->panelW = 252;\n	editor->camPos = CreateVec(0, 0);\n	editor->editMode = MODE_COLLISION;\n}\n\nvoid editorClickWorld(int x, int y)\n{\n	Mat4 mV = renderer->viewMatrix;\n	Mat4 mP = renderer->projMatrix;\n\n	log_info(\"s to w - x:%d, y:%d\", x, y);\n\n	Mat4 inv = Mat4_Identity();\n	bool s = Mat4_Invert((mP * mV), &inv);\n\n	if (s)\n	{\n		float xT = (float)x / (float)editor->screenW;\n		float yT = (float)y / (float)editor->screenH;\n		xT = (xT * 2) - 1;\n		yT = -((yT * 2) - 1);\n		Vec4 ssP = CreateVec(xT, yT, 1, 1);\n		Vec4 res = Vec4_MMult(ssP, inv);\n		log_info(\"succeeded, x:%.3f, y:%.3f, w:%.3f\", res.x, res.y, res.w);\n	}\n	else\n		log_info(\"inverse failed\");\n\n}\n\nvoid editorUpdate(Input *input)\n{\n	editor->camPrev = editor->camPos;\n	if (input->left.down)\n		editor->camPos.x -= 0.1f;\n	if (input->right.down)\n		editor->camPos.x += 0.1f;\n	if (input->up.down)\n		editor->camPos.y += 0.1f;\n	if (input->down.down)\n		editor->camPos.y -= 0.1f;\n\n	if (input->leftMouse.released)\n	{\n		int x = input->mouseX, y = input->mouseY;\n\n		if (x <= editor->panelW)\n			editorClickPanel(x, y);\n		else if (x > editor->panelW && x <= editor->panelW + editor->scrollW)\n			editorClickScroll(y);\n		else\n			editorClickWorld(x, y);\n	}\n}\n\nvoid editorDrawGrid(int w, int h)\n{\n	// draw grid\n	setZ(DEPTH_GRID);\n	setColor(WithAlpha(COLOR_WHITE, 0.2f));\n	for (int x = 0; x <= w; ++x)\n		addSprite(CreateRect(x - .02f, 0, .04f, h));\n	for (int y = 0; y <= h; ++y)\n		addSprite(CreateRect(0, y - .02f, w, .04f));\n}\n\nstatic void editorChooseTileColor(int index)\n{\n	if (editor->editMode > index)\n		setColor(0xCCCCCCAA);\n	else if (editor->editMode < index)\n		setColor(0x444444AA);\n	else\n		setColor(0xFFFFFFFF);\n}\n\nstatic void editorDrawLayer(uint16 *layer, int w, int h)\n{\n	const float tr = 1.f / 32.f;\n	for (int x = 0; x < w; x++)\n	{\n		for (int y = 0; y < h; ++y)\n		{\n			uint16 t = layer[y * w + x];\n			if (t == 0)\n				continue;\n			t--;\n			Rect texPos = CreateRect((t % 32) * tr, (t / 32) * tr, tr, tr);\n			addSprite(CreateRect(x, y, 1, 1), texPos);\n		}\n	}\n}\n\nvoid editorDrawTiles(World *world)\n{\n	editorChooseTileColor(0);\n	setZ(DEPTH_BLAYER);\n	editorDrawLayer(world->bTiles, world->width, world->height);\n	editorChooseTileColor(1);\n	setZ(DEPTH_MLAYER);\n	editorDrawLayer(world->mTiles, world->width, world->height);\n	editorChooseTileColor(2);\n	setZ(DEPTH_FLAYER);\n	editorDrawLayer(world->fTiles, world->width, world->height);\n}\n\nvoid editorDrawCollision(World *world)\n{\n	setZ(DEPTH_CLAYER);\n	for (int x = 0; x < world->width; ++x)\n	{\n		for (int y = 0; y < world->height; ++y)\n		{\n			TileCollision c = getCollision(world, x, y);\n			switch(c)\n			{\n				case TC_SOLID:\n				{\n					setColor(0x77889980);\n					addSprite(CreateRect(x, y, 1, 1));\n				}\n				break;\n				case TC_LADDER:\n				{\n					setColor(0x69F9F980);\n					addSprite(CreateRect(x + .1f, y, 0.1f, 1));\n					addSprite(CreateRect(x + 0.8, y, 0.1f, 1));\n				}\n				break;\n				case TC_CORNER:\n				{\n					setColor(0xB9696980);\n					addSprite(CreateRect(x, y, .2f, .2f));\n					addSprite(CreateRect(x + .8f, y, .2f, .2f));\n					addSprite(CreateRect(x, y + .8f, .2f, .2f));\n					addSprite(CreateRect(x + .8f, y + .8f, .2f, .2f));\n				}\n				break;\n				case TC_PLATFORM:\n				{\n					setColor(0x69B96980);\n					addSprite(CreateRect(x, y + .7f, 1, .3f));\n				}\n				break;\n				case TC_EMPTY:\n				default:\n				break;\n			}\n		}\n	}\n}\n\nvoid editorDrawEditMode()\n{\n	int h = editor->screenH;\n	setZ(DEPTH_GUI_OVERLAY);\n	setColor(ECOLOR_EM_DESEL);\n	addSprite(CreateRect(40, 40, 20, 20));\n	addSprite(CreateRect(90, 40, 20, 20));\n	addSprite(CreateRect(140, 40, 20, 20));\n	setColor(ECOLOR_EM_SEL);\n	addSprite(CreateRect(190, 40, 20, 20));\n}\n\nvoid editorDrawScrollbar()\n{\n	setZ(DEPTH_GUI_BG);\n	setColor(ECOLOR_SCROLL_BG);\n	addSprite(CreateRect(editor->panelW, 0, editor->scrollW, editor->screenH));\n	setZ(DEPTH_GUI_OVERLAY);\n	setColor(ECOLOR_SCROLL_THUMB);\n	addSprite(CreateRect(editor->panelW, 0, editor->scrollW, 64));\n}\n\nvoid editorRender(double interval)\n{\n	setCamPos(Vec2_Lerp(editor->camPrev, editor->camPos, interval));\n\n	beginSpriteBatch(1, CAM_GAME);\n	{\n		editorDrawTiles(editor->world);\n	}\n	endSpriteBatch();\n\n	beginSpriteBatch(0, CAM_GAME);\n	{\n		if (editor->editMode == MODE_COLLISION)\n			editorDrawCollision(editor->world);\n		editorDrawGrid(editor->world->width, editor->world->height);\n	}\n	endSpriteBatch();\n\n	beginSpriteBatch(0, CAM_SCREEN);\n	{\n		// background\n		setColor(ECOLOR_MAIN);\n		setZ(DEPTH_GUI_BG);\n		addSprite(CreateRect(0, 0, editor->panelW, editor->screenH));\n		editorDrawScrollbar();\n		editorDrawEditMode();\n	}\n	endSpriteBatch();\n}*/\n",
 			"file": "src/bg_editor.cpp",
-			"file_size": 5485,
-			"file_write_time": 131181846878114342,
 			"settings":
 			{
-				"buffer_size": 5233,
+				"buffer_size": 8701,
 				"line_ending": "Windows"
 			}
 		},
@@ -282,7 +279,7 @@
 			"file": "src/bg_render.cpp",
 			"settings":
 			{
-				"buffer_size": 15034,
+				"buffer_size": 17415,
 				"line_ending": "Windows"
 			}
 		},
@@ -295,10 +292,21 @@
 			}
 		},
 		{
-			"file": "src/bg_editor.h",
+			"contents": "#include \"bg_world.h\"\n\nvoid createWorld(World *world, int w, int h)\n{\n	assert(world != 0);\n	world->width = w;\n	world->height = h;\n	uint8 *tmp = (uint8*)calloc(1, w * h * sizeof(TileCollision) +\n		3 * w * h * sizeof(uint16));\n	world->collision = (TileCollision*)tmp;\n	world->bTiles = (uint16*)&tmp[w * h * sizeof(TileCollision)];\n	world->mTiles = &world->bTiles[w * h];\n	world->fTiles = &world->mTiles[w * h];\n}\n\nint resizeWorldLR(World *wld, int leftAmt, int rightAmt)\n{\n	if (!wld->collision || !wld->bTiles || !wld->mTiles || !wld->fTiles)\n		return 1;\n	int w = wld->width + leftAmt + rightAmt;\n	int h = wld->height;\n	if (w <= 0)\n		return 1;\n\n	uint8 *tmp = (uint8*)calloc(1, (w * h * sizeof(TileCollision)) +\n		(3 * w * h * sizeof(uint16)));\n\n	TileCollision *tC = (TileCollision*)tmp;\n	uint16 *bt = (uint16*)&tmp[w * h * sizeof(TileCollision)];\n	uint16 *mt = &bt[w * h];\n	uint16 *ft = &mt[w * h];\n\n	for (int y = 0; y < h; ++y)\n	{\n\n	}\n\n	return 0;\n}\n\nvoid resizeWorldUp(World *wld, int amt)\n{\n\n}\n\nvoid resizeWorldDown(World *wld, int amt)\n{\n\n}\n\nbool validateWorldFile()\n{\n	\n	return true;\n}\n\nbool loadWorld(World *world, const char *filename)\n{\n	FILE *wf = fopen(filename, \"rb\");\n	if (!wf)\n	{\n		log_warning(\"Wasn't able to open worldfile: %s!\", filename);\n		return false;\n	}\n\n	fread(&world->width, sizeof(uint), 1, wf);\n	fread(&world->height, sizeof(uint), 1, wf);\n	log_info(\"Loading world %s, %dx%d\", filename, world->width, world->height);\n\n	createWorld(world, world->width, world->height);\n\n	fread(world->collision, sizeof(TileCollision) * world->width * world->height, 1, wf);\n\n	fread(world->bTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fread(world->mTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fread(world->fTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fclose(wf);\n	return true;\n}\n\nvoid saveWorld(World *world, const char *filename)\n{\n	assert(world);\n	FILE *wf = fopen(filename, \"wb\");\n	if (!wf)\n	{\n		log_warning(\"Wasn't able to create world file: %s!\", filename);\n		return;\n	}\n\n	fwrite(&world->width, sizeof(uint), 1, wf);\n	fwrite(&world->height, sizeof(uint), 1, wf);\n	\n	fwrite(world->collision, sizeof(TileCollision) * world->width * world->height, 1, wf);\n	log_info(\"sizeof(tilecollision): %d\", sizeof(TileCollision));\n\n	fwrite(world->bTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fwrite(world->mTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fwrite(world->fTiles, sizeof(uint16) * world->width * world->height, 1, wf);\n	fclose(wf);\n}\n\nvoid setCollision(World *world, int x, int y, TileCollision col)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->collision[y * world->width + x] = col;\n}\n\nTileCollision getCollision(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return TC_SOLID;\n	return world->collision[y * world->width + x];\n}\n\nvoid setB(World *world, int x, int y, uint16 val)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->bTiles[y * world->width + x] = val;\n}\nvoid setM(World *world, int x, int y, uint16 val)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->mTiles[y * world->width + x] = val;\n}\nvoid setF(World *world, int x, int y, uint16 val)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return;\n	world->fTiles[y * world->width + x] = val;\n}\n\nuint16 getB(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return 0;\n	return world->bTiles[y * world->width + x];\n}\nuint16 getM(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return 0;\n	return world->mTiles[y * world->width + x];\n}\nuint16 getF(World *world, int x, int y)\n{\n	if (x >= world->width || x < 0 || y >= world->height || y < 0)\n		return 0;\n	return world->fTiles[y * world->width + x];\n}\n\nvoid createTestWorld(World *world)\n{\n	loadWorld(world, \"testworld.bgw\");\n	/*createWorld(world, 16, 12);\n\n	for (int x = 0; x < world->width; x++)\n	{\n		for (int y = 0; y < world->height; y++)\n		{\n			setCollision(world, 0, y, TC_SOLID);\n			setCollision(world, x, 0, TC_SOLID);\n			setCollision(world, world->width - 1, y, TC_SOLID);\n			setCollision(world, x, world->height - 1, TC_SOLID);\n		}\n	}\n\n	setCollision(world, 3, 1, TC_SOLID);\n\n	setCollision(world, 7, 1, TC_SOLID);\n	setCollision(world, 8, 2, TC_SOLID);\n	setCollision(world, 9, 3, TC_SOLID);\n	for (int i = 0; i < 3; ++i)\n	{\n		setCollision(world, 11 + i, 3, TC_SOLID);\n		setCollision(world, 6 + i, 7, TC_SOLID);\n	}\n\n	for (int i = 0; i < 3; ++i)\n		setCollision(world, 14, 1 + i, TC_LADDER);\n	setCollision(world, 9, 6, TC_LADDER);\n	setCollision(world, 9, 7, TC_LADDER);\n\n	setCollision(world, 14, 10, TC_PLATFORM);\n	setCollision(world, 13, 10, TC_CORNER);\n\n	saveWorld(world, \"testworld.bgw\");*/\n}\n",
+			"file": "src/bg_world.cpp",
+			"file_size": 5050,
+			"file_write_time": 131185360073623528,
 			"settings":
 			{
-				"buffer_size": 470,
+				"buffer_size": 4874,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "win/build.bat",
+			"settings":
+			{
+				"buffer_size": 252,
 				"line_ending": "Windows"
 			}
 		},
@@ -307,30 +315,6 @@
 			"settings":
 			{
 				"buffer_size": 122864,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.h",
-			"settings":
-			{
-				"buffer_size": 1921,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.cpp",
-			"settings":
-			{
-				"buffer_size": 11686,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/main.cpp",
-			"settings":
-			{
-				"buffer_size": 3341,
 				"line_ending": "Unix"
 			}
 		},
@@ -346,7 +330,7 @@
 			"file": "src/bg_render.h",
 			"settings":
 			{
-				"buffer_size": 2162,
+				"buffer_size": 2213,
 				"line_ending": "Windows"
 			}
 		}
@@ -354,9 +338,13 @@
 	"build_system": "BG Build",
 	"command_palette":
 	{
-		"height": 58.0,
+		"height": 104.0,
 		"selected_items":
 		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
 			[
 				"debug",
 				"Build: Debug"
@@ -364,10 +352,6 @@
 			[
 				"clean",
 				"Build: Clean"
-			],
-			[
-				"install",
-				"Package Control: Install Package"
 			],
 			[
 				"debu",
@@ -467,6 +451,13 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/main.cpp",
+		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/imgui_demo.cpp",
+		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.h",
+		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.cpp",
+		"/C/Users/Jagannath/Documents/Programming/greg-master/src/greg.cpp",
+		"/C/Users/Jagannath/Documents/Programming/greg-master/README.md",
+		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/thirdparty/imgui_draw.cpp",
 		"/C/Users/Jagannath/Documents/Programming/Misc/goulder.html",
 		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/bg_debug_render.h",
 		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/bg_debug_render.cpp",
@@ -482,7 +473,6 @@
 		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/sdl_opengl3_example/imgui_impl_sdl_gl3.cpp",
 		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/primitives.h",
 		"/C/Users/Jagannath/Documents/Programming/bumblegumpers/src/bg_world.h",
-		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.h",
 		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/extra_fonts/binary_to_compressed_c.cpp",
 		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/imgui_draw.cpp",
 		"/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/stb_textedit.h",
@@ -588,13 +578,7 @@
 		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_data.h",
 		"/C/Users/Jagannath/Documents/Programming/obbg-master/src/obbg_funcs.h",
 		"/C/Users/Jagannath/Documents/Programming/game/src/stb_truetype.h",
-		"/src/old_snippets.cpp",
-		"/C/Users/Jagannath/Documents/Programming/game/src/primitives.h",
-		"/C/Users/Jagannath/Documents/Programming/game/src/log.cpp",
-		"/C/Windows/System32/drivers/etc/hosts",
-		"/C/Users/Jagannath/Documents/Programming/worldgen/jstb_image_write.h",
-		"/C/Users/Jagannath/Documents/Programming/Misc/stb_image_write.h",
-		"/C/Users/Jagannath/Documents/Programming/game/src/res/fragment.glsl"
+		"/src/old_snippets.cpp"
 	],
 	"find":
 	{
@@ -617,8 +601,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
-			"ImGuiStyle",
-			"ImGuiWindowFlags_",
+			"Begin",
 			"ImTextureID",
 			"ImDrawIdx",
 			"ImFontAtlas",
@@ -740,6 +723,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"_WIN32",
 			"a5c004b4-2d4b-494e-bf01-45fc492522c7",
 			"xor_x",
 			"",
@@ -776,7 +760,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -784,15 +768,15 @@
 					"file": "src/bg.cpp",
 					"settings":
 					{
-						"buffer_size": 9583,
+						"buffer_size": 9490,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3818,
-								3818
+								1417,
+								1419
 							]
 						],
 						"settings":
@@ -801,7 +785,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2121.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -811,15 +795,15 @@
 					"file": "src/bg_editor.cpp",
 					"settings":
 					{
-						"buffer_size": 5233,
+						"buffer_size": 8701,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								611,
-								610
+								775,
+								775
 							]
 						],
 						"settings":
@@ -828,7 +812,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 168.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -838,15 +822,15 @@
 					"file": "src/bg_render.cpp",
 					"settings":
 					{
-						"buffer_size": 15034,
+						"buffer_size": 17415,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11448,
-								11448
+								1960,
+								1965
 							]
 						],
 						"settings":
@@ -855,7 +839,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4082.0,
+						"translation.y": 7716.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -872,8 +856,8 @@
 						"selection":
 						[
 							[
-								48869,
-								48928
+								231153,
+								231153
 							]
 						],
 						"settings":
@@ -883,25 +867,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 8493.0,
+						"translation.y": 70233.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "src/bg_editor.h",
+					"file": "src/bg_world.cpp",
 					"settings":
 					{
-						"buffer_size": 470,
+						"buffer_size": 4874,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								232,
-								226
+								993,
+								993
 							]
 						],
 						"settings":
@@ -914,15 +898,35 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 4,
-			"sheets":
-			[
+				},
 				{
 					"buffer": 5,
+					"file": "win/build.bat",
+					"settings":
+					{
+						"buffer_size": 252,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								252,
+								252
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Batch File/Batch File.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
 					"file": "src/thirdparty/imgui.h",
 					"settings":
 					{
@@ -933,8 +937,8 @@
 						"selection":
 						[
 							[
-								49791,
-								49791
+								113612,
+								113618
 							]
 						],
 						"settings":
@@ -944,30 +948,31 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5678.0,
+						"translation.y": 17815.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.h",
+					"buffer": 7,
+					"file": "src/bg.h",
 					"settings":
 					{
-						"buffer_size": 1921,
+						"buffer_size": 1015,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1524,
-								1558
+								144,
+								144
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -976,11 +981,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/imgui_impl_glfw.cpp",
+					"buffer": 8,
+					"file": "src/bg_render.h",
 					"settings":
 					{
-						"buffer_size": 11686,
+						"buffer_size": 2213,
 						"regions":
 						{
 						},
@@ -994,93 +999,10 @@
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 733.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "/C/Users/Jagannath/Documents/Programming/libraries/imgui-master/examples/opengl2_example/main.cpp",
-					"settings":
-					{
-						"buffer_size": 3341,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1076,
-								1076
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/bg.h",
-					"settings":
-					{
-						"buffer_size": 1015,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								996,
-								1002
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 252.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/bg_render.h",
-					"settings":
-					{
-						"buffer_size": 2162,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1075,
-								1075
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 255.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1105,18 +1027,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.487826086956,
 			1.0
 		],
 		"rows":
@@ -1176,7 +1091,7 @@
 	},
 	"output.exec":
 	{
-		"height": 100.0
+		"height": 148.0
 	},
 	"output.git":
 	{

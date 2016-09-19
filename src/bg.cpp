@@ -1,7 +1,7 @@
 #include "bg.h"
 
 #include <SDL.h>
-#include <glew.h>
+// #include <glew.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -389,6 +389,9 @@ void initPlatform()
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		log_exit("Failed to init SDL!");
 
+	if (SDL_GL_LoadLibrary(0))
+		log_exit("Failed to load GL lib!");
+
 	platform->window = SDL_CreateWindow("?????",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		platform->width, platform->height,
@@ -400,8 +403,8 @@ void initPlatform()
 	if (!platform->glContext)
 		log_exit("Failed to create opengl context!");
 
-	if (glewInit() != GLEW_OK)
-		log_exit("Failed to init glew!");
+	// if (glewInit() != GLEW_OK)
+	// 	log_exit("Failed to init glew!");
 
 	SDL_GL_SetSwapInterval(1);
 

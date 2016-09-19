@@ -279,20 +279,20 @@ void editorUpdate(Input *input)
 		else
 			log_info("inverse failed");
 
-			if (input->leftMouse.down &&
-				res.x < world->width && res.x > 0 &&
-				res.y < world->height && res.y > 0)
+		if (input->leftMouse.down &&
+			res.x < world->width && res.x > 0 &&
+			res.y < world->height && res.y > 0)
+		{
+			if (editor->editMode == MODE_COLLISION)
 			{
-				if (editor->editMode == MODE_COLLISION)
-				{
-					setCollision(world, res.x, res.y, (TileCollision)editor->editId);
-				}
-				else
-				{
-					uint16 *arr[3] = { world->bTiles, world->mTiles, world->fTiles };
-					(arr[editor->editMode])[(int)floor(res.y) * world->width + (int)floor(res.x)] = editor->editId;
-				}
+				setCollision(world, res.x, res.y, (TileCollision)editor->editId);
 			}
+			else
+			{
+				uint16 *arr[3] = { world->bTiles, world->mTiles, world->fTiles };
+				(arr[editor->editMode])[(int)floor(res.y) * world->width + (int)floor(res.x)] = editor->editId;
+			}
+		}
 	}
 	editor->cursorPos = CreateVec(res.x, res.y);
 }

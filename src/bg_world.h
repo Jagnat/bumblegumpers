@@ -13,6 +13,14 @@ enum TileCollision : uint8
 
 #define NUM_TILES 64
 
+struct Tile
+{
+	TileCollision tc;
+	uint16 bt;
+	uint16 mt;
+	uint16 ft;
+};
+
 struct World
 {
 	uint width, height;
