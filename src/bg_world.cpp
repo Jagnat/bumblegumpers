@@ -63,6 +63,61 @@ int resizeWorldLR(World *wld, int leftAmt, int rightAmt)
 	return 0;
 }
 
+int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
+{
+	if (!wld->collision || !wld->bTiles || !wld->mTiles || !wld->fTiles)
+		return 1;
+	// No resize necessary
+	if (!leftAmt && !rightAmt && !upAmt && !downAmt)
+		return 0;
+	int w = wld->width + leftAmt + rightAmt;
+	int h = wld->height + upAmt + downAmt;
+	if (w <= 0 || h <= 0)
+		return 1;
+
+	uint8 *tmp = (uint8*)calloc(1, (w * h * sizeof(TileCollision)) +
+		(3 * w * h * sizeof(uint16)));
+
+	TileCollision *tc = (TileCollision*)tmp;
+	uint16 *bt = (uint16*)&tmp[w * h * sizeof(TileCollision)];
+	uint16 *mt = &bt[w * h];
+	uint16 *ft = &mt[w * h];
+
+	int cpyW = wld->width;
+	if (leftAmt < 0)
+		cpyW += leftAmt;
+	if (rightAmt < 0)
+		cpyW += rightAmt;
+	int cpyH = wld->height;
+	if (upAmt < 0)
+		cpyH += upAmt;
+	if (downAmt < 0)
+		cpyH += downAmt;
+
+	int srcWO = leftAmt < 0 ? -leftAmt : 0;
+	int dstWO = leftAmt >= 0 ? leftAmt : 0;
+
+	int srcHO = 
+
+	for (int y = 0; y < h; ++y)
+	{
+		memcpy(&tc[(y * w) + dstOffset], &wld->collision[(y * wld->width) + srcOffset], sizeof(TileCollision) * cpyW);
+		memcpy(&bt[(y * w) + dstOffset], &wld->bTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+		memcpy(&mt[(y * w) + dstOffset], &wld->mTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+		memcpy(&ft[(y * w) + dstOffset], &wld->fTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+	}
+
+	free(wld->collision);
+
+	wld->width = w;
+	wld->collision = tc;
+	wld->bTiles = bt;
+	wld->mTiles = mt;
+	wld->fTiles = ft;
+
+	return 0;
+}
+
 void resizeWorldUD(World *wld, int amt)
 {
 
