@@ -19,6 +19,8 @@ struct GlyphData
 
 #include "questrial.h"
 
+// Clever GL extension loading thanks to Rygorous
+
 #define GL_LIST \
 /* Begin gl funcs*/ \
 GLDEF(void, UseProgram, GLuint program) \
@@ -74,7 +76,11 @@ void initRenderer(Renderer *r, int w, int h)
 GL_LIST
 #undef GLDEF
 
-	assert(glBindBuffer);
+// Ensure functions have successfully loaded
+// TODO: something more robust for release mode
+#define GLDEF(retrn, name, ...) assert(gl##name);
+GL_LIST
+#undef GLDEF
 
 	if (!renderer->initialized)
 	{

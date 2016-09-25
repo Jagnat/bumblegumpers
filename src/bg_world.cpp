@@ -94,21 +94,34 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 	if (downAmt < 0)
 		cpyH += downAmt;
 
+	log_info("cpyW: %d, cpyH: %d", cpyW, cpyH);
+
+	// Source and Dest Offsets - how far forward or backward
+	// to index from the beginning of the array during the copy
 	int srcWO = leftAmt < 0 ? -leftAmt : 0;
 	int dstWO = leftAmt >= 0 ? leftAmt : 0;
 
-	int srcHO = 
+	int srcHO = upAmt < 0 ? -upAmt : 0;
+	int dstHO = upAmt >= 0 ? upAmt : 0;
 
-	for (int y = 0; y < h; ++y)
+	for (int x = 0; x < cpyW; ++x)
 	{
-		memcpy(&tc[(y * w) + dstOffset], &wld->collision[(y * wld->width) + srcOffset], sizeof(TileCollision) * cpyW);
-		memcpy(&bt[(y * w) + dstOffset], &wld->bTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-		memcpy(&mt[(y * w) + dstOffset], &wld->mTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-		memcpy(&ft[(y * w) + dstOffset], &wld->fTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+		// memcpy(&tc[(y * w) + dstOffset], &wld->collision[(y * wld->width) + srcOffset], sizeof(TileCollision) * cpyW);
+		// memcpy(&bt[(y * w) + dstOffset], &wld->bTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+		// memcpy(&mt[(y * w) + dstOffset], &wld->mTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+		// memcpy(&ft[(y * w) + dstOffset], &wld->fTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
+		for (int y = 0; y < cpyH; ++y)
+		{
+			// tc[((y + dstHO) * w) + ] = wld->collision[];
+			// bt[((y + dstHO) * w) + ] = wld->bTiles[];
+			// mt[((y + dstHO) * w) + ] = wld->mTiles[];
+			// ft[((y + dstHO) * w) + ] = wld->fTiles[];
+		}
 	}
 
 	free(wld->collision);
 
+	wld->height = h;
 	wld->width = w;
 	wld->collision = tc;
 	wld->bTiles = bt;

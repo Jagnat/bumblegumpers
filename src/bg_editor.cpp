@@ -154,6 +154,7 @@ void editorUpdate(Input *input)
 	if (ImGui::Button("Load"))
 	{
 		resizeWorldLR(editor->world, 0, -1);
+		// resizeWorld(editor->world, 0, 2, 0, 0);
 	}
 	ImGui::SameLine();
 	ImGui::Button("Resize");
