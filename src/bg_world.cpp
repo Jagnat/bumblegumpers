@@ -13,56 +13,6 @@ void createWorld(World *world, int w, int h)
 	world->fTiles = &world->mTiles[w * h];
 }
 
-int resizeWorldLR(World *wld, int leftAmt, int rightAmt)
-{
-	if (!wld->collision || !wld->bTiles || !wld->mTiles || !wld->fTiles)
-		return 1;
-	// No resize necessary
-	if (!leftAmt && !rightAmt)
-		return 0;
-	int w = wld->width + leftAmt + rightAmt;
-	int h = wld->height;
-	if (w <= 0)
-		return 1;
-
-	uint8 *tmp = (uint8*)calloc(1, (w * h * sizeof(TileCollision)) +
-		(3 * w * h * sizeof(uint16)));
-
-	TileCollision *tc = (TileCollision*)tmp;
-	uint16 *bt = (uint16*)&tmp[w * h * sizeof(TileCollision)];
-	uint16 *mt = &bt[w * h];
-	uint16 *ft = &mt[w * h];
-
-	int cpyW = wld->width;
-	if (leftAmt < 0)
-		cpyW += leftAmt;
-	if (rightAmt < 0)
-		cpyW += rightAmt;
-
-	int srcOffset = leftAmt < 0 ? -leftAmt : 0;
-	int dstOffset = leftAmt >= 0 ? leftAmt : 0;
-
-	for (int y = 0; y < h; ++y)
-	{
-		// NOTE: No inner loop needed, memory-aligned horizontally.
-		// dest, src, num_bytes
-		memcpy(&tc[(y * w) + dstOffset], &wld->collision[(y * wld->width) + srcOffset], sizeof(TileCollision) * cpyW);
-		memcpy(&bt[(y * w) + dstOffset], &wld->bTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-		memcpy(&mt[(y * w) + dstOffset], &wld->mTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-		memcpy(&ft[(y * w) + dstOffset], &wld->fTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-	}
-
-	free(wld->collision);
-
-	wld->width = w;
-	wld->collision = tc;
-	wld->bTiles = bt;
-	wld->mTiles = mt;
-	wld->fTiles = ft;
-
-	return 0;
-}
-
 int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 {
 	if (!wld->collision || !wld->bTiles || !wld->mTiles || !wld->fTiles)
@@ -112,10 +62,11 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 		// memcpy(&ft[(y * w) + dstOffset], &wld->fTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
 		for (int y = 0; y < cpyH; ++y)
 		{
-			// tc[((y + dstHO) * w) + ] = wld->collision[];
-			// bt[((y + dstHO) * w) + ] = wld->bTiles[];
-			// mt[((y + dstHO) * w) + ] = wld->mTiles[];
-			// ft[((y + dstHO) * w) + ] = wld->fTiles[];
+			int oW = wld->width;
+			tc[((y + dstHO) * w) + x + dstWO] = wld->collision[((y + srcHO) * oW) + x + srcWO];
+			bt[((y + dstHO) * w) +  x + dstWO] = wld->bTiles[((y + srcHO) * oW) + x + srcWO];
+			mt[((y + dstHO) * w) +  x + dstWO] = wld->mTiles[((y + srcHO) * oW) + x + srcWO];
+			ft[((y + dstHO) * w) +  x + dstWO] = wld->fTiles[((y + srcHO) * oW) + x + srcWO];
 		}
 	}
 
@@ -129,11 +80,6 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 	wld->fTiles = ft;
 
 	return 0;
-}
-
-void resizeWorldUD(World *wld, int amt)
-{
-
 }
 
 bool validateWorldFile()

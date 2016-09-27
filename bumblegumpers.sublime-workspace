@@ -300,42 +300,6 @@
 			}
 		},
 		{
-			"file": "/C/Users/Jagannath/Documents/Programming/_old/Trig/main.cpp",
-			"settings":
-			{
-				"buffer_size": 5844,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/Jagannath/Documents/Programming/_old/tilemapper/tilemapper.c",
-			"settings":
-			{
-				"buffer_size": 5450,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "#define JSTB_IMAGE_WRITE_IMPLEMENTATION\n#include \"jstb_image_write.h\"\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <math.h>\n#include <assert.h>\n#include <time.h>\n#include <stdint.h>\n\n// Struct definitions\ntypedef struct Params_\n{\n	int img_w, img_h;\n	double x, y, width;\n	int iterations;\n	char normalize;\n} Params;\n\ntypedef struct Vec2d_ { double x, y; } Vec2d;\n\n// Function declarations\ndouble lerp(double a, double b, double x) {return (1-x)*a + x*b;}\nstatic Params get_properties();\nstatic void screen_to_set(Params p, int x, int y, Vec2d *pos);\ndouble value_at(Vec2d pos, char normalize, int max_iterations);\ndouble convert_range(double old_min, double old_max, double new_min, double new_max, double val);\n\nvoid write_mandelbrot_image(char *path, Params p, void (*func)(jImage *img, Params par));\n\nvoid black_white(jImage *img, Params p);\nvoid linear(jImage *img, Params p);\nvoid histogram(jImage *img, Params p);\n\nvoid colorfunc_1(double input, unsigned char *r, unsigned char *g, unsigned char *b);\n\nint main(int argc, char **argv)\n{\n	Params p = get_properties();\n	//write_mandelbrot_image_bw(\"test.png\", p);\n	write_mandelbrot_image(\"test.png\", p, histogram);\n	//get_properties();\n	return 0;\n}\n\n// check if file exists\n// if exists, parse\n// else, generate\n// assign params, return\nParams get_properties()\n{\n	Params p = {1500, 1000, -0.75, 0.0, 3.5, 100, 1};\n\n	FILE *fp = NULL;\n	if ((fp = fopen(\"params.txt\", \"r\")) == NULL)\n	{\n		// create file\n		if ((fp = fopen(\"params.txt\", \"w\")) != NULL)\n		{\n			printf(\"No params.txt! Creating default...\\n\");\n			// write to file\n			fprintf(fp, \"IMG_W:1500\\nIMG_H:1000\\nX:-0.75\\nY:0.0\\nW:3.5\\nITERATIONS:100\\nNORMALIZE:1\\n\");\n			fclose(fp);\n		}\n		return p;\n	}\n	else\n	{\n		printf(\"Params file exists! Parsing...\\n\\n\");\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%d\", &p.img_w);\n		printf(\"img_w:%d\\n\", p.img_w);\n\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%d\", &p.img_h);\n		printf(\"img_h:%d\\n\", p.img_h);\n\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%lf\", &p.x);\n		printf(\"x:%f\\n\", p.x);\n\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%lf\", &p.y);\n		printf(\"y:%f\\n\", p.y);\n\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%lf\", &p.width);\n		printf(\"width:%f\\n\", p.width);\n\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%d\", &p.iterations);\n		printf(\"iterations:%d\\n\", p.iterations);\n\n		while (fgetc(fp) != ':');\n		fscanf(fp, \"%d\", &p.normalize);\n		printf(\"normalize:%d\\n\\n\", p.normalize);\n	}\n\n	return p;\n}\n\nint val_int(Vec2d pos, int max_iterations);\n\n// Creates a histogram of the amount of times\n// mandelbrot values appear, giving some insight\n// into how deep into the fractal we are.\nvoid histogram(jImage *img, Params p)\n{\n	int *histogram = calloc(p.iterations + 1, sizeof(int));\n	if (!histogram)\n		printf (\"Failed to allocate histogram!\\n\");\n\n	for (int x = 0; x < p.img_w; ++x)\n	{\n		for (int y = 0; y < p.img_h; ++y)\n		{\n			Vec2d v;\n			int val = 0;\n			screen_to_set(p, x, y, &v);\n			val = val_int(v, p.iterations);\n			histogram[val]++;\n		}\n	}\n\n	int total_px = p.img_w * p.img_h;\n\n	// Create histogram image\n	jImage hist = {0};\n	create_image(&hist, p.iterations + 1, 2000);\n	for (int x = 0; x < p.iterations + 1; ++x)\n	{\n		for (int y = 0; y < 2000; ++y)\n		{\n			if ((2000 - y) < histogram[x])\n				set_pixel(hist, x, y, 255, 255, 255);\n			else\n				set_pixel(hist, x, y, 0, 50, 0);\n		}\n	}\n	save_image(hist, \"hist.png\");\n	free_image(&hist);\n\n	double *perc = calloc(p.iterations + 1, sizeof(double));\n	for (int i = 0; i < p.iterations + 1; ++i)\n	{\n		perc[i] = (double)histogram[i] / (double)total_px;\n	}\n\n	for (int i = 0; i < p.iterations + 1; ++i)\n	{\n		if (i != 0)\n			perc[i] += perc[i - 1];\n	}\n\n	for (int x = 0; x < p.img_w; ++x)\n	{\n		for (int y = 0; y < p.img_h; ++y)\n		{\n			Vec2d v;\n			double val = 0;\n			screen_to_set(p, x, y, &v);\n			val = value_at(v, p.normalize, p.iterations);\n			double d0 = perc[(int)val];\n			double d1 = perc[(int)(val + 1 > p.iterations ? val : val + 1)];\n			double i = val - floor(val);\n			double a = lerp(d0, d1, i);\n			unsigned char r, g, b;\n			colorfunc_1(a, &r, &g, &b);\n			set_pixel(*img, x, y, r, g, b);\n		}\n	}\n}\n\nvoid linear(jImage *img, Params p)\n{\n	double minimum = 1000000, maximum = 0;\n	for (int x = 0; x < p.img_w; ++x)\n	{\n		for (int y = 0; y < p.img_h; ++y)\n		{\n			Vec2d v;\n			double val = 0;\n			screen_to_set(p, x, y, &v);\n			val = value_at(v, p.normalize, p.iterations);\n			if (val < minimum)\n				minimum = val;\n			if (val > maximum)\n				maximum = val;\n			unsigned char b = (unsigned char)((val / (double)p.iterations) * 255.0L);\n			set_pixel(*img, x, y, b, b, b);\n		}\n	}\n\n	minimum /= (double)p.iterations;\n	maximum /= (double)p.iterations;\n	printf(\"Minimum: %f\\nMaximum: %f\\n\", minimum, maximum);\n\n	for (int x = 0; x < p.img_w; ++x)\n	{\n		for (int y = 0; y < p.img_h; ++y)\n		{\n			unsigned char v;\n			get_pixel(*img, x, y, &v, 0, 0);\n			double a = (double)v / 255.0L;\n			a = convert_range(minimum, maximum, 0, 1, a);\n			unsigned char r, g, b;\n			colorfunc_1(a, &r, &g, &b);\n			set_pixel(*img, x, y, r, g, b);\n		}\n	}\n}\n\nvoid black_white(jImage *img, Params p)\n{\n	for (int x = 0; x < p.img_w; ++x)\n	{\n		for (int y = 0; y < p.img_h; ++y)\n		{\n			Vec2d v;\n			double val = 0;\n			screen_to_set(p, x, y, &v);\n			val = value_at(v, p.normalize, p.iterations);\n			// Set Data\n			unsigned char b = (unsigned char)((val / (double)p.iterations) * 255.0L);\n			set_pixel(*img, x, y, b, b, b);\n		}\n	}\n}\n\nvoid colorfunc_1(double input, unsigned char *r, unsigned char *g, unsigned char *b)\n{\n	const double p1 = 0.25f;\n	const double p2 = 0.5f;\n	const double p3 = 0.75f;\n	if (input < 0)\n		input = 0;\n	if (input > 0.99f)\n	{\n		*r = 0; *g = 0; *b = 0;\n		return;\n	}\n	if (input >= 0 && input < p1)\n	{\n		input /= p1;\n		*r = (unsigned char)(lerp(0.1, 0, input) * 255);\n		*g = (unsigned char)(lerp(0.1, 0, input) * 255);\n		*b = (unsigned char)(lerp(0.3, 1, input) * 255);\n	}\n	else if (input >= p1 && input < p2)\n	{\n		input -= p1;\n		input /= (p2 - p1);\n		*r = (unsigned char)(lerp(0, 0.3, input) * 255);\n		*g = (unsigned char)(lerp(0, 0.16, input) * 255);\n		*b = (unsigned char)(lerp(1, 0.51, input) * 255);\n	}\n	else if (input >= p2 && input < p3)\n	{\n		input -= p2;\n		input /= (p3 - p2);\n		*r = (unsigned char)(lerp(0.3, 0.59, input) * 255);\n		*g = (unsigned char)(lerp(0.16, 0, input) * 255);\n		*b = (unsigned char)(lerp(0.51, 0.09, input) * 255);\n	}\n	else\n	{\n		input -= p3;\n		input /= (1 - p3);\n		*r = (unsigned char)(lerp(0.59, 0, input) * 0);\n		*g = (unsigned char)(lerp(0, 0, input) * 0);\n		*b = (unsigned char)(lerp(0.09, 0, input) * 0);\n	}\n}\n\nvoid write_mandelbrot_image(char *path, Params p, void(*func)(jImage *img, Params par))\n{\n	clock_t start = clock(), diff;\n	jImage img = {0};\n	create_image(&img, p.img_w, p.img_h);\n\n	func(&img, p);\n\n	save_image(img, path);\n	diff = clock() - start;\n	printf(\"Done! It took %5.3f seconds.\\n\", (double)diff / (double)CLOCKS_PER_SEC);\n}\n\nint val_int(Vec2d pos, int max_iterations)\n{\n	double x = 0, y = 0;\n	int i = 0;\n	double smooth = 0;\n	while (x * x + y * y < (1 << 16) && i < max_iterations)\n	{\n		double x_temp = x * x - y * y + pos.x;\n		y = 2 * x * y + pos.y;\n		x = x_temp;\n		++i;\n	}\n	return i;\n}\n\ndouble value_at(Vec2d pos, char normalize, int max_iterations)\n{\n	double x = 0, y = 0;\n	int i = 0;\n	double smooth = 0;\n	while (x * x + y * y < (1 << 16) && i < max_iterations)\n	{\n		double x_temp = x * x - y * y + pos.x;\n		y = 2 * x * y + pos.y;\n		x = x_temp;\n		++i;\n	}\n\n	if (normalize && i < max_iterations)\n	{\n		double zn = sqrt(x * x + y * y);\n		double nu = log(log(zn) / 0.69314718056L) / 0.69314718056L;\n		smooth = i + 1 - nu;\n	}\n	else\n	{\n		smooth = i;\n	}\n\n	return smooth;\n}\n\nvoid screen_to_set(Params p, int x, int y, Vec2d *pos)\n{\n	pos->x = convert_range(0, p.img_w, p.x - p.width / 2,\n		p.x + p.width / 2, x);\n	pos->y = convert_range(0, p.img_h, -p.y - p.width / 2 / ((double)p.img_w / (double)p.img_h),\n		-p.y + p.width / 2 / ((double)p.img_w / (double)p.img_h), y);\n}\n\ndouble convert_range(double old_min, double old_max, double new_min, double new_max, double val)\n{\n	double old_range = old_max - old_min;\n	double new_range = new_max - new_min;\n	return old_range == 0 ?\n		new_min :\n		(((val - old_min) * new_range) / old_range) + new_min;\n}\n",
-			"file": "/D/Programming/fractal/fractal.c",
-			"file_size": 8342,
-			"file_write_time": 131191406080000000,
-			"settings":
-			{
-				"buffer_size": 8137,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/Jagannath/Desktop/script.py",
-			"settings":
-			{
-				"buffer_size": 859,
-				"line_ending": "Windows",
-				"name": "# This script re-organizes date-named (yyyy-mm-dd)"
-			}
-		},
-		{
 			"file": "src/primitives.cpp",
 			"settings":
 			{
@@ -372,14 +336,6 @@
 			"settings":
 			{
 				"buffer_size": 963,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/Jagannath/Documents/Programming/dualcontouring_test/dualcontouring.cpp",
-			"settings":
-			{
-				"buffer_size": 2897,
 				"line_ending": "Windows"
 			}
 		}
@@ -500,6 +456,11 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Jagannath/Documents/Programming/dualcontouring_test/dualcontouring.cpp",
+		"/C/Users/Jagannath/Documents/Programming/_old/Trig/main.cpp",
+		"/C/Users/Jagannath/Documents/Programming/_old/tilemapper/tilemapper.c",
+		"/D/Programming/fractal/fractal.c",
+		"/C/Users/Jagannath/Desktop/script.py",
 		"/C/Users/Jagannath/Documents/Programming/jpmtest/index.js",
 		"/C/Users/Jagannath/Documents/Programming/_old/fractal/fractal.c",
 		"/C/Users/Jagannath/Documents/Programming/_old/Trig/trigfuncs.cpp",
@@ -622,12 +583,7 @@
 		"/C/Users/Jagannath/Documents/Arduino/led_matrix/led_matrix.ino",
 		"/C/Users/Jagannath/Documents/Programming/rpi/blink/Makefile",
 		"/C/Users/Jagannath/Documents/Programming/rpi/blink/kernel.ld",
-		"/C/Users/Jagannath/Documents/Programming/rpi/template/Makefile",
-		"/C/Users/Jagannath/Documents/Programming/rpi/blink/main.s",
-		"/C/Users/Jagannath/Documents/Programming/rpi/template/kernel.ld",
-		"/C/Users/Jagannath/Documents/Programming/demotest/main.c",
-		"/C/Users/Jagannath/Documents/Programming/game/src/res/vertex.glsl",
-		"/C/Users/Jagannath/Documents/Programming/game/src/game_assets.cpp"
+		"/C/Users/Jagannath/Documents/Programming/rpi/template/Makefile"
 	],
 	"find":
 	{
@@ -809,7 +765,7 @@
 	"groups":
 	[
 		{
-			"selected": 8,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -933,8 +889,8 @@
 						"selection":
 						[
 							[
-								3880,
-								3880
+								3464,
+								3464
 							]
 						],
 						"settings":
@@ -943,122 +899,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1914.0,
+						"translation.y": 1135.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "/C/Users/Jagannath/Documents/Programming/_old/Trig/main.cpp",
-					"settings":
-					{
-						"buffer_size": 5844,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1448,
-								1448
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 550.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/C/Users/Jagannath/Documents/Programming/_old/tilemapper/tilemapper.c",
-					"settings":
-					{
-						"buffer_size": 5450,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2295,
-								2295
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 975.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/D/Programming/fractal/fractal.c",
-					"settings":
-					{
-						"buffer_size": 8137,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								295,
-								295
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "/C/Users/Jagannath/Desktop/script.py",
-					"settings":
-					{
-						"buffer_size": 859,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								507,
-								507
-							]
-						],
-						"settings":
-						{
-							"auto_name": "# This script re-organizes date-named (yyyy-mm-dd)",
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
 					"file": "src/primitives.cpp",
 					"settings":
 					{
@@ -1087,11 +934,11 @@
 			]
 		},
 		{
-			"selected": 4,
+			"selected": 3,
 			"sheets":
 			[
 				{
-					"buffer": 10,
+					"buffer": 6,
 					"file": "src/thirdparty/imgui.h",
 					"settings":
 					{
@@ -1119,7 +966,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 7,
 					"file": "src/bg.h",
 					"settings":
 					{
@@ -1146,7 +993,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 8,
 					"file": "src/bg_render.h",
 					"settings":
 					{
@@ -1173,7 +1020,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 9,
 					"file": "src/bg_world.h",
 					"settings":
 					{
@@ -1195,33 +1042,6 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "/C/Users/Jagannath/Documents/Programming/dualcontouring_test/dualcontouring.cpp",
-					"settings":
-					{
-						"buffer_size": 2897,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								352,
-								352
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1287.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

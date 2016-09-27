@@ -4,6 +4,8 @@ INFO: platform init'd
 INFO: Loading world testworld.bgw, 16x12
 INFO: Set editor mode to true!
 INFO: render sized to 1400x900
-INFO: cpyW: 16, cpyH: 12
-INFO: cpyW: 18, cpyH: 12
-INFO: cpyW: 20, cpyH: 12
+INFO: cpyW: 14, cpyH: 10
+INFO: cpyW: 12, cpyH: 8
+INFO: cpyW: 10, cpyH: 6
+INFO: cpyW: 8, cpyH: 4
+INFO: cpyW: 6, cpyH: 2
