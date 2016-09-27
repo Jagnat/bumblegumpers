@@ -234,8 +234,7 @@ Mat4 Mat4_Translate(float x, float y, float z)
 {
 	Mat4 r = Mat4_Identity();
 	r.m03 = x;
-	r.m13 = y;
-	r.m23 = z;
+	r.m13 = y;	r.m23 = z;
 	return r;
 }
 

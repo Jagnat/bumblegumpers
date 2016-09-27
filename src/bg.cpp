@@ -30,10 +30,13 @@ double elapsedMs();
 void progressPlayerState(Player *player, World *world)
 {
 	TileCollision under = getCollision(world, player->x, player->y - 1);
-	if (under == TC_SOLID || under == TC_LADDER)
+	TileCollision at = getCollision(world, player->x, player->y);
+	if (under == TC_SOLID || under == TC_LADDER || under == TC_PLATFORM)
 		player->state = PLAYER_ONGROUND;
-	if (getCollision(world, player->x, player->y) == TC_LADDER)
+	if (at == TC_LADDER)
 		player->state = PLAYER_CLIMBING;
+	if (at == TC_CORNER)
+		player->state = PLAYER_AIRWALKING;
 }
 
 void fallPlayer(Player *player, World *world)
@@ -42,7 +45,7 @@ void fallPlayer(Player *player, World *world)
 	{
 		TileCollision at = getCollision(world, player->x, player->y);
 		TileCollision under = getCollision(world, player->x, player->y - 1);
-		if (under == TC_LADDER || under == TC_SOLID || at == TC_LADDER)
+		if (under == TC_LADDER || under == TC_SOLID || at == TC_LADDER || at == TC_CORNER)
 			break;
 		player->y--;
 	}
@@ -97,6 +100,12 @@ void updatePlayer(Input *input, Player *player, World *world)
 		break;
 		case PLAYER_AIRWALKING:
 		{
+			if (input->up.pressed &&
+				getCollision(world, player->x, player->y) == TC_CORNER)
+			{
+				doPlayerUp(input, player, world);
+				fallPlayer(player, world);
+			}
 			if (input->down.pressed)
 				fallPlayer(player, world);
 			else if (doPlayerLR(input, player, world))
@@ -266,7 +275,7 @@ void initGame()
 
 	game->inEditor = false;
 	game->player.x = 1;
-	game->player.y = 1;
+	game->player.y = 4;
 	game->player.state = PLAYER_ONGROUND;
 	
 	createTestWorld(&game->world);

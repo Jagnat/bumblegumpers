@@ -28,7 +28,7 @@ void createTestWorld(World *world);
 bool loadWorld(World *world, const char *filename);
 void saveWorld(World *world, const char *filename);
 
-// int resizeWorldLR(World *wld, int leftAmt, int rightAmt);
+int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt);
 
 void setCollision(World *world, int x, int y, TileCollision col);
 TileCollision getCollision(World *world, int x, int y);

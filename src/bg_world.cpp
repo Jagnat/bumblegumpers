@@ -56,12 +56,9 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 
 	for (int x = 0; x < cpyW; ++x)
 	{
-		// memcpy(&tc[(y * w) + dstOffset], &wld->collision[(y * wld->width) + srcOffset], sizeof(TileCollision) * cpyW);
-		// memcpy(&bt[(y * w) + dstOffset], &wld->bTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-		// memcpy(&mt[(y * w) + dstOffset], &wld->mTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
-		// memcpy(&ft[(y * w) + dstOffset], &wld->fTiles[(y * wld->width) + srcOffset], sizeof(uint16) * cpyW);
 		for (int y = 0; y < cpyH; ++y)
 		{
+			// original width for 2d indexing
 			int oW = wld->width;
 			tc[((y + dstHO) * w) + x + dstWO] = wld->collision[((y + srcHO) * oW) + x + srcWO];
 			bt[((y + dstHO) * w) +  x + dstWO] = wld->bTiles[((y + srcHO) * oW) + x + srcWO];
