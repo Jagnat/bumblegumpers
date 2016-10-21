@@ -2,4 +2,4 @@
 
 Small weird turn-based platformer thing I'm building from scratch.
 
-Art by the wonderful Evan
+Art and gameplay and everything but code by the wonderful Evan
