@@ -140,8 +140,6 @@ void editorUpdate(Input *input)
 	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(.5, .5, .7, 1);
 	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(.7, .7, 1, 1);
 
-	ImGui::ShowTestWindow();
-
 	ImGui::Begin("Editor");
 	EditMode pastMode = editor->editMode;
 
