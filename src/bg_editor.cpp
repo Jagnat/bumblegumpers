@@ -148,7 +148,15 @@ void editorUpdate(Input *input)
 	{
 		char buff[128];
 		// saveWorld(editor->world, "savedworld.wld");
-		ImGui::InputText("labeL", buff, 128);
+		// ImGui::InputText("labeL", buff, 128);
+		ImGui::OpenPopup("save_as_popup");
+	}
+	if (ImGui::BeginPopup("save_as_popup"))
+	{
+		// TODO: Fix text input for imgui so this works
+		char buff[128];
+		ImGui::InputText("LabeL", buff, 128);
+		ImGui::EndPopup();
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Load"))
@@ -156,7 +164,18 @@ void editorUpdate(Input *input)
 		resizeWorld(editor->world, -1, -1, -1, -1);
 	}
 	ImGui::SameLine();
-	ImGui::Button("Resize");
+	static bool showResizeWindow = false;
+	if (ImGui::Button("Show/Hide Resize"))
+	{
+		showResizeWindow = !showResizeWindow;
+	}
+
+	if (showResizeWindow)
+	{
+		ImGui::Begin("Resize...");
+		ImGui::SetWindowSize(ImVec2(300, 300));
+		ImGui::End();
+	}
 
 	ImGui::Text("Edit Mode");
 	ImGui::RadioButton("background", (int*)&editor->editMode, (int)MODE_BACKGROUND);

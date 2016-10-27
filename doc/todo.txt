@@ -1,0 +1,7 @@
+In somewhat relevant order:
+- Add world resizing controls
+- Add world saving / loading to editor
+  - Add text input to imgui
+- Figure out what dynamic world data should look like
+- Lock down future-proof world format
+- Work more on gameplay and stuff
