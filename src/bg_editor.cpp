@@ -161,10 +161,10 @@ void editorUpdate(Input *input)
 	ImGui::SameLine();
 	if (ImGui::Button("Load"))
 	{
-		resizeWorld(editor->world, -1, -1, -1, -1);
+		// resizeWorld(editor->world, -1, -1, -1, -1);
 	}
 	ImGui::SameLine();
-	static bool showResizeWindow = false;
+	static bool showResizeWindow = true;
 	if (ImGui::Button("Show/Hide Resize"))
 	{
 		showResizeWindow = !showResizeWindow;
@@ -173,7 +173,6 @@ void editorUpdate(Input *input)
 	if (showResizeWindow)
 	{
 		ImGui::Begin("Resize...");
-		ImGui::SetWindowSize(ImVec2(300, 300));
 		ImGui::End();
 	}
 

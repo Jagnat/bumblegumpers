@@ -594,6 +594,9 @@ void imguiInit()
 {
 	ImGuiIO *io = &ImGui::GetIO();
 
+	// TEST: trying to fix mouse input with a lower delta
+	io->DeltaTime = 1.0f / 120.0f;
+
 	io->RenderDrawListsFn = imguiRenderCallback;
 
 	Texture *imfnt = &renderer->textures[3];

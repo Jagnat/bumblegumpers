@@ -389,7 +389,7 @@ void initPlatform()
 	platform = (Platform*)calloc(1, sizeof(Platform));
 	game = &platform->game;
 
-	platform->targetUpdateDelta = 1000.L / 60.L;
+	platform->targetUpdateDelta = 1000.L / 120.L;
 	platform->targetRenderDelta = 1000.L / 60.L;
 	platform->running = true;
 	platform->width = 768;
