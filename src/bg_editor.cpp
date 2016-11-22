@@ -121,7 +121,12 @@ void editorUpdate(Input *input)
 
 	World *world = editor->world;
 
-	imguiInput(&game->input);
+	ImGuiIO *io = &ImGui::GetIO();
+	io->MousePos = ImVec2(input->mouseX, input->mouseY);
+	io->MouseDown[0] = input->leftMouse.down;
+	io->MouseDown[1] = input->rightMouse.down;
+	io->MouseDown[2] = input->middleMouse.down;
+	ImGui::NewFrame();
 
 	ImGuiStyle *style = &ImGui::GetStyle();
 	style->Colors[ImGuiCol_WindowBg] = ImVec4(.9, .9, .9, .8);
@@ -317,6 +322,8 @@ void editorUpdate(Input *input)
 		}
 	}
 	editor->cursorPos = CreateVec(res.x, res.y);
+
+	ImGui::EndFrame();
 }
 
 void editorRender()

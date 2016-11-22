@@ -132,7 +132,6 @@ struct Input;
 
 void imguiInit();
 void imguiResize(int w, int h);
-void imguiInput(Input *input);
 void imguiRender();
 
 #endif

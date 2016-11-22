@@ -114,6 +114,7 @@ namespace ImGui
     IMGUI_API ImGuiStyle&   GetStyle();
     IMGUI_API ImDrawData*   GetDrawData();                              // same value as passed to your io.RenderDrawListsFn() function. valid after Render() and until the next call to NewFrame()
     IMGUI_API void          NewFrame();                                 // start a new ImGui frame, you can submit any command from this point until NewFrame()/Render().
+    IMGUI_API void          EndFrame();
     IMGUI_API void          Render();                                   // ends the ImGui frame, finalize rendering data, then call your io.RenderDrawListsFn() function if set.
     IMGUI_API void          Shutdown();
     IMGUI_API void          ShowUserGuide();                            // help block

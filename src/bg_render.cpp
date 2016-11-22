@@ -612,16 +612,6 @@ void imguiResize(int w, int h)
 	io->DisplaySize = ImVec2(w, h);
 }
 
-void imguiInput(Input *input)
-{
-	ImGuiIO *io = &ImGui::GetIO();
-	io->MousePos = ImVec2(input->mouseX, input->mouseY);
-	io->MouseDown[0] = input->leftMouse.down;
-	io->MouseDown[1] = input->rightMouse.down;
-	io->MouseDown[2] = input->middleMouse.down;
-	ImGui::NewFrame();
-}
-
 void imguiRender()
 {
 	ImGui::Render();
