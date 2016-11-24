@@ -116,9 +116,13 @@ void editorDrawCollisionMap(World *world)
 	}
 }
 
+ImVec4 __rgbaToIV4(uint8 r, uint8 g, uint8 b, float a = 1.0)
+{
+	return ImVec4(r / 255.0, g / 255.0, b / 255.0, a);
+}
+
 void editorUpdate(Input *input)
 {
-
 	World *world = editor->world;
 
 	ImGuiIO *io = &ImGui::GetIO();
@@ -144,6 +148,8 @@ void editorUpdate(Input *input)
 	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(.7, .7, .7, .8);
 	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(.5, .5, .7, 1);
 	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(.7, .7, 1, 1);
+	// style->Colors[ImGuiCol_Button] = __rgbaToIV4(129, 180, 202, 0.6);
+	style->Colors[ImGuiCol_Header] = __rgbaToIV4(105, 106, 181, 0.45);
 
 	ImGui::Begin("Editor");
 	EditMode pastMode = editor->editMode;
@@ -175,9 +181,28 @@ void editorUpdate(Input *input)
 		showResizeWindow = !showResizeWindow;
 	}
 
+	// Resize controls window
 	if (showResizeWindow)
 	{
-		ImGui::Begin("Resize...");
+		ImGui::Begin("Resize...", 0, ImGuiWindowFlags_NoResize);
+
+		/*ImGui::Dummy(ImVec2(30, 0)); ImGui::SameLine();
+		ImGui::Button("/\\###topGrow"); ImGui::SameLine();
+		ImGui::Button("\\/###topShrink"); ImGui::SameLine();
+		ImGui::Dummy(ImVec2(20, 0));
+
+		ImGui::Button("<###leftGrow"); ImGui::SameLine();
+		ImGui::Button(">###leftShrink"); ImGui::SameLine();
+		ImGui::Dummy(ImVec2(40, 0)); ImGui::SameLine();
+		ImGui::Button("<###rightShrink"); ImGui::SameLine();
+		ImGui::Button(">###rightGrow");*/
+		ImGui::Dummy(ImVec2(20, 0)); ImGui::SameLine();
+		char buff[128];
+		ImGui::InputText("test", buff, 128); ImGui::SameLine();
+		ImGui::Dummy(ImVec2(20, 0));
+
+		
+
 		ImGui::End();
 	}
 
@@ -255,11 +280,6 @@ void editorUpdate(Input *input)
 			ImGui::RadioButton("Corner", (int*)&editor->editId, 3);
 			ImGui::RadioButton("Platform", (int*)&editor->editId, 4);
 		}
-	}
-
-	if (ImGui::CollapsingHeader("Test"))
-	{
-		ImGui::Button("This is a test");
 	}
 
 	float cS = .2f;
