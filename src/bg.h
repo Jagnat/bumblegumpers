@@ -15,6 +15,17 @@ struct Button
 	bool down;
 };
 
+union ModState
+{
+	struct
+	{
+		bool control;
+		bool shift;
+		bool alt;
+	};
+	bool mods[3];
+};
+
 struct Input
 {
 	union
@@ -34,6 +45,8 @@ struct Input
 		#define NUM_BUTTONS 16
 		Button buttons[NUM_BUTTONS];
 	};
+	ModState modState;
+
 	int mouseX, mouseY;
 };
 

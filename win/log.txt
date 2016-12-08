@@ -2,5 +2,179 @@ INFO: render sized to 768x576
 INFO: init'd renderer
 INFO: platform init'd
 INFO: Loading world testworld.bgw, 16x12
-INFO: Set editor mode to true!
-INFO: render sized to 1400x900
+INFO: t
+INFO: h
+INFO: i
+INFO: s
+INFO:  
+INFO: i
+INFO: s
+INFO:  
+INFO: a
+INFO:  
+INFO: t
+INFO: e
+INFO: s
+INFO: t
+INFO:  
+INFO: o
+INFO: n
+INFO: e
+INFO:  
+INFO: t
+INFO: w
+INFO: h
+INFO: o
+INFO:  
+INFO: t
+INFO: h
+INFO: r
+INFO: e
+INFO: e
+INFO: e
+INFO: e
+INFO: e
+INFO: e
+INFO: e
+INFO:  
+INFO: a
+INFO: s
+INFO: d
+INFO: f
+INFO: j
+INFO: k
+INFO: l
+INFO: ;
+INFO: o
+INFO: n
+INFO: c
+INFO: e
+INFO:  
+INFO: u
+INFO: p
+INFO: o
+INFO: n
+INFO:  
+INFO: a
+INFO:  
+INFO: t
+INFO: i
+INFO: m
+INFO: e
+INFO: t
+INFO: e
+INFO: s
+INFO: t
+INFO: i
+INFO: n
+INFO: g
+INFO:  
+INFO: o
+INFO: n
+INFO: e
+INFO:  
+INFO: t
+INFO: w
+INFO: o
+INFO:  
+INFO: t
+INFO: h
+INFO: r
+INFO: e
+INFO: e
+INFO:  
+INFO: i
+INFO: n
+INFO: t
+INFO:  
+INFO: m
+INFO: a
+INFO: i
+INFO: n
+INFO:  
+INFO: (
+INFO: i
+INFO: n
+INFO:  
+INFO: t
+INFO: a
+INFO: r
+INFO: g
+INFO: c
+INFO: ,
+INFO:  
+INFO: c
+INFO: h
+INFO: a
+INFO: r
+INFO:  
+INFO: *
+INFO: *
+INFO: a
+INFO: r
+INFO: g
+INFO: v
+INFO: )
+INFO: ;
+INFO: {
+INFO: p
+INFO: r
+INFO: i
+INFO: n
+INFO: t
+INFO: f
+INFO: (
+INFO: "
+INFO: H
+INFO: e
+INFO: l
+INFO: l
+INFO: o
+INFO: ,
+INFO:  
+INFO: w
+INFO: o
+INFO: r
+INFO: l
+INFO: d
+INFO: !
+INFO: \
+INFO: n
+INFO: "
+INFO: )
+INFO: ;
+INFO: r
+INFO: e
+INFO: t
+INFO: u
+INFO: r
+INFO: n
+INFO:  
+INFO: 0
+INFO: ;
+INFO:  
+INFO: h
+INFO: e
+INFO: l
+INFO: l
+INFO: o
+INFO:  
+INFO: w
+INFO: o
+INFO: r
+INFO: l
+INFO: d
+INFO:  
+INFO: .
+INFO: /
+INFO: a
+INFO: s
+INFO: d
+INFO: f
+INFO: ;
+INFO: l
+INFO: k
+INFO: g
+INFO: j
+INFO: r
+INFO: a

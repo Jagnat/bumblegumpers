@@ -128,8 +128,6 @@ Vec2 getTextBounds(const char *text);
 Rect getTileRect(uint16 id);
 Rect getPlayerRect();
 
-struct Input;
-
 void imguiInit();
 void imguiResize(int w, int h);
 void imguiRender();

@@ -201,8 +201,6 @@ void editorUpdate(Input *input)
 		ImGui::InputText("test", buff, 128); ImGui::SameLine();
 		ImGui::Dummy(ImVec2(20, 0));
 
-		
-
 		ImGui::End();
 	}
 
@@ -215,7 +213,7 @@ void editorUpdate(Input *input)
 	ImGui::SameLine();
 	ImGui::RadioButton("collision", (int*)&editor->editMode, (int)MODE_COLLISION);
 	if (pastMode != editor->editMode)
-		editor->editId = 0;
+		editor->editId = 1;
 
 	if (editor->editMode == MODE_COLLISION)
 		editor->editText = &collisionText[0];
@@ -274,7 +272,6 @@ void editorUpdate(Input *input)
 		}
 		else
 		{
-			ImGui::RadioButton("Erase", (int*)&editor->editId, 0); ImGui::SameLine();
 			ImGui::RadioButton("Solid", (int*)&editor->editId, 1);
 			ImGui::RadioButton("Ladder", (int*)&editor->editId, 2); ImGui::SameLine();
 			ImGui::RadioButton("Corner", (int*)&editor->editId, 3);
@@ -326,13 +323,14 @@ void editorUpdate(Input *input)
 		else
 			log_info("inverse failed");
 
-		if (input->leftMouse.down &&
+		if ((input->leftMouse.down || input->rightMouse.down) &&
 			res.x < world->width && res.x > 0 &&
 			res.y < world->height && res.y > 0)
 		{
 			if (editor->editMode == MODE_COLLISION)
 			{
-				setCollision(world, res.x, res.y, (TileCollision)editor->editId);
+				TileCollision tc = input->leftMouse.down ? (TileCollision)editor->editId : TC_EMPTY;
+				setCollision(world, res.x, res.y, tc);
 			}
 			else
 			{

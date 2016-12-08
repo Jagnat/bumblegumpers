@@ -1,7 +1,6 @@
 #include "bg.h"
 
 #include <SDL.h>
-// #include <glew.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -148,7 +147,7 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity);
 
 void update()
 {
-	if (game->input.toggleEdit.pressed)
+	if (game->input.toggleEdit.pressed && game->input.modState.control)
 	{
 		game->inEditor = !game->inEditor;
 		log_info("Set editor mode to %s!", game->inEditor ? "true" : "false");
@@ -208,11 +207,9 @@ void render(double interval)
 {
 	World *world = &game->world;
 
-
 	if (game->inEditor)
 	{
 		editorRender();
-		SDL_GL_SwapWindow(platform->window);
 	}
 	else
 	{
@@ -227,8 +224,8 @@ void render(double interval)
 		}
 		endSpriteBatch();
 		endRender();
-		SDL_GL_SwapWindow(platform->window);
 	}
+	SDL_GL_SwapWindow(platform->window);
 }
 
 int main(int argc, char **argv)
@@ -281,7 +278,7 @@ void initGame()
 	createTestWorld(&game->world);
 }
 
-void processButtonPress(Button *button, uint8 state)
+void event_ProcessButtonPress(Button *button, uint8 state)
 {
 	if (state == SDL_PRESSED)
 	{
@@ -293,6 +290,18 @@ void processButtonPress(Button *button, uint8 state)
 		button->down = false;
 		button->released = true;
 	}
+}
+
+void event_UpdateModState(ModState *ms)
+{
+	memset(ms, 0, sizeof(ModState));
+	SDL_Keymod state = SDL_GetModState();
+	if (state & KMOD_LCTRL || state & KMOD_RCTRL)
+		ms->control = true;
+	if (state & KMOD_LSHIFT || state & KMOD_RSHIFT)
+		ms->shift = true;
+	if (state & KMOD_RALT || state & KMOD_LALT)
+		ms->alt = true;
 }
 
 void handleEvents()
@@ -316,21 +325,21 @@ void handleEvents()
 					switch(e.key.keysym.sym)
 					{
 						case SDLK_LEFT:
-							processButtonPress(&in->left, e.key.state); break;
+							event_ProcessButtonPress(&in->left, e.key.state); break;
 						case SDLK_RIGHT:
-							processButtonPress(&in->right, e.key.state); break;
+							event_ProcessButtonPress(&in->right, e.key.state); break;
 						case SDLK_UP:
-							processButtonPress(&in->up, e.key.state); break;
+							event_ProcessButtonPress(&in->up, e.key.state); break;
 						case SDLK_DOWN:
-							processButtonPress(&in->down, e.key.state); break;
+							event_ProcessButtonPress(&in->down, e.key.state); break;
 						case SDLK_z:
-							processButtonPress(&in->attack, e.key.state); break;
+							event_ProcessButtonPress(&in->attack, e.key.state); break;
 						case SDLK_x:
-							processButtonPress(&in->use, e.key.state); break;
+							event_ProcessButtonPress(&in->use, e.key.state); break;
 						case SDLK_c:
-							processButtonPress(&in->shield, e.key.state); break;
+							event_ProcessButtonPress(&in->shield, e.key.state); break;
 						case SDLK_e:
-							processButtonPress(&in->toggleEdit, e.key.state); break;
+							event_ProcessButtonPress(&in->toggleEdit, e.key.state); break;
 						// TODO: graceful exit
 						case SDLK_ESCAPE:
 						platform->running = false; break;
@@ -343,11 +352,11 @@ void handleEvents()
 				switch(e.button.button)
 				{
 					case SDL_BUTTON_LEFT:
-						processButtonPress(&in->leftMouse, e.button.state); break;
+						event_ProcessButtonPress(&in->leftMouse, e.button.state); break;
 					case SDL_BUTTON_RIGHT:
-						processButtonPress(&in->rightMouse, e.button.state); break;
+						event_ProcessButtonPress(&in->rightMouse, e.button.state); break;
 					case SDL_BUTTON_MIDDLE:
-						processButtonPress(&in->middleMouse, e.button.state); break;
+						event_ProcessButtonPress(&in->middleMouse, e.button.state); break;
 				}
 			}
 			break;
@@ -373,8 +382,14 @@ void handleEvents()
 				}
 			}
 			break;
+			case SDL_TEXTINPUT:
+			{
+				log_info("%s", e.text.text);
+			}
+			break;
 		}
 	}
+	event_UpdateModState(&in->modState);
 }
 
 double elapsedMs()
@@ -412,15 +427,11 @@ void initPlatform()
 	if (!platform->glContext)
 		log_exit("Failed to create opengl context!");
 
-	// if (glewInit() != GLEW_OK)
-	// 	log_exit("Failed to init glew!");
-
 	SDL_GL_SetSwapInterval(1);
 
 	platform->timerResolution = (double)SDL_GetPerformanceFrequency() / (double)1000.L;
 
 	initRenderer(&platform->renderer, platform->width, platform->height);
-
 
 	editorInit(&platform->editor);
 	log_info("platform init'd");
