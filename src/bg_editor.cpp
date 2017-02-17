@@ -130,6 +130,7 @@ void editorUpdate(Input *input)
 	io->MouseDown[0] = input->leftMouse.down;
 	io->MouseDown[1] = input->rightMouse.down;
 	io->MouseDown[2] = input->middleMouse.down;
+	io->AddInputCharactersUTF8(input->textBuffer);
 	ImGui::NewFrame();
 
 	ImGuiStyle *style = &ImGui::GetStyle();
@@ -197,7 +198,7 @@ void editorUpdate(Input *input)
 		ImGui::Button("<###rightShrink"); ImGui::SameLine();
 		ImGui::Button(">###rightGrow");*/
 		ImGui::Dummy(ImVec2(20, 0)); ImGui::SameLine();
-		char buff[128];
+		char buff[128] = {0};
 		ImGui::InputText("test", buff, 128); ImGui::SameLine();
 		ImGui::Dummy(ImVec2(20, 0));
 
@@ -394,3 +395,4 @@ void editorRender()
 	imguiRender();
 	endRender();
 }
+

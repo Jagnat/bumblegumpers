@@ -47,6 +47,10 @@ struct Input
 	};
 	ModState modState;
 
+	// TODO: expand this if we overflow
+	#define INPUT_TEXT_BUFFER_LENGTH 256
+	char textBuffer[INPUT_TEXT_BUFFER_LENGTH];
+
 	int mouseX, mouseY;
 };
 

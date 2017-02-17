@@ -181,6 +181,7 @@ void update()
 		game->input.buttons[i].pressed = false;
 		game->input.buttons[i].released = false;
 	}
+	memset(game->input.textBuffer, 0, INPUT_TEXT_BUFFER_LENGTH * sizeof(char));
 }
 
 void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
@@ -384,7 +385,8 @@ void handleEvents()
 			break;
 			case SDL_TEXTINPUT:
 			{
-				log_info("%s", e.text.text);
+				assert(strlen(in->textBuffer) + 1 < INPUT_TEXT_BUFFER_LENGTH);
+				strcat(in->textBuffer, e.text.text);
 			}
 			break;
 		}
