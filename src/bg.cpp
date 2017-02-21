@@ -322,6 +322,10 @@ void handleEvents()
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
 			{
+				// store in array for imgui
+				int key = e.key.keysym.sym & ~SDLK_SCANCODE_MASK;
+				in->keysDown[key] = (e.type == SDL_KEYDOWN);
+
 				if (!e.key.repeat)
 					switch(e.key.keysym.sym)
 					{

@@ -131,6 +131,7 @@ void editorUpdate(Input *input)
 	io->MouseDown[1] = input->rightMouse.down;
 	io->MouseDown[2] = input->middleMouse.down;
 	io->AddInputCharactersUTF8(input->textBuffer);
+	memcpy(io->KeysDown, input->keysDown, 512 * sizeof(bool));
 	ImGui::NewFrame();
 
 	ImGuiStyle *style = &ImGui::GetStyle();
