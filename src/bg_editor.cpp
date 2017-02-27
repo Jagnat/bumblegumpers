@@ -19,6 +19,9 @@ void editorInit(Editor *e)
 	editor->camPos = CreateVec(0, 0);
 	editor->editMode = MODE_FOREGROUND;
 	editor->editText = &blockText[0];
+
+	ImGuiIO *io = &ImGui::GetIO();
+	io->KeyMap[ImGuiKey_Backspace] = SDLK_BACKSPACE;
 }
 
 static void editorDrawLayer(uint16 *layer, int w, int h, float z = 0.5f)
