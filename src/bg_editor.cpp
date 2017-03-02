@@ -170,8 +170,12 @@ void editorUpdate(Input *input)
 	if (ImGui::BeginPopup("save_as_popup"))
 	{
 		// TODO: Fix text input for imgui so this works
-		char buff[128];
-		ImGui::InputText("LabeL", buff, 128);
+		char buff[128] = {0};
+		ImGui::InputText("World name...", buff, 128);
+		if (ImGui::Button("Save"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		ImGui::EndPopup();
 	}
 	ImGui::SameLine();
