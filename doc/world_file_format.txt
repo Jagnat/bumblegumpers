@@ -3,6 +3,9 @@ world file format
 Sections begin with a single byte section type id followed by
 uint16 specifying the section's length, not including id and length
 
+Section 1 is always the header with important info
+All other sections can be in any order
+
 Section 1: Header
 uint16: World's width
 uint16: World's height

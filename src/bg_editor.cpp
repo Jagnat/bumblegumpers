@@ -169,21 +169,35 @@ void editorUpdate(Input *input)
 	}
 	if (ImGui::BeginPopup("save_as_popup"))
 	{
-		// TODO: Fix text input for imgui so this works
-		char buff[128] = {0};
-		ImGui::InputText("World name...", buff, 128);
+		static char buff[256] = {0};
+		ImGui::InputText("World name...", buff, 256);
 		if (ImGui::Button("Save"))
+		{
+			saveWorld(world, buff);
+			memset(buff, 0, 256);
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load"))
+	{
+		// resizeWorld(editor->world, -1, -1, -1, -1);
+		ImGui::OpenPopup("load_popup");
+	}
+	if(ImGui::BeginPopup("load_popup"))
+	{
+		static char buff[256] = {0};
+		ImGui::InputText("Enter filename...", buff, 256);
+		if (ImGui::Button("Load"))
 		{
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Load"))
-	{
-		// resizeWorld(editor->world, -1, -1, -1, -1);
-	}
-	ImGui::SameLine();
+
 	static bool showResizeWindow = true;
 	if (ImGui::Button("Show/Hide Resize"))
 	{

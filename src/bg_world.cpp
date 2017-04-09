@@ -5,12 +5,27 @@ void createWorld(World *world, int w, int h)
 	assert(world != 0);
 	world->width = w;
 	world->height = h;
-	uint8 *tmp = (uint8*)calloc(1, w * h * sizeof(TileCollision) +
-		3 * w * h * sizeof(uint16));
-	world->collision = (TileCollision*)tmp;
-	world->bTiles = (uint16*)&tmp[w * h * sizeof(TileCollision)];
-	world->mTiles = &world->bTiles[w * h];
-	world->fTiles = &world->mTiles[w * h];
+	if (!world->collision)
+	{
+		uint8 *tmp = (uint8*)calloc(1, w * h * sizeof(TileCollision) +
+			3 * w * h * sizeof(uint16));
+		world->collision = (TileCollision*)tmp;
+		world->bTiles = (uint16*)&tmp[w * h * sizeof(TileCollision)];
+		world->mTiles = &world->bTiles[w * h];
+		world->fTiles = &world->mTiles[w * h];
+	}
+}
+
+void freeWorld(World *world)
+{
+	if (world && world->collision)
+	{
+		free(world->collision);
+		world->collision = 0;
+		world->bTiles = 0;
+		world->mTiles = 0;
+		world->fTiles = 0;
+	}
 }
 
 int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
@@ -77,12 +92,6 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 	wld->fTiles = ft;
 
 	return 0;
-}
-
-bool validateWorldFile()
-{
-	
-	return true;
 }
 
 bool loadWorld(World *world, const char *filename)
