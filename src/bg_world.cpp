@@ -105,7 +105,6 @@ bool loadWorld(World *world, const char *filename)
 
 	fread(&world->width, sizeof(uint), 1, wf);
 	fread(&world->height, sizeof(uint), 1, wf);
-	log_info("Loading world %s, %dx%d", filename, world->width, world->height);
 
 	createWorld(world, world->width, world->height);
 

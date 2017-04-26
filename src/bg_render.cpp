@@ -335,8 +335,8 @@ void setColor(float r, float g, float b, float a)
 
 void setColor(uint hex)
 {
-	Color32 c = {(hex >> 24) & 0xFF, (hex >> 16) & 0xFF,
-		(hex >> 8) & 0xFF, hex & 0xFF };
+	Color32 c = {(uint8)((hex >> 24) & 0xFF), (uint8)((hex >> 16) & 0xFF),
+		(uint8)((hex >> 8) & 0xFF), (uint8)(hex & 0xFF) };
 	setColor(c);
 }
 
@@ -394,7 +394,7 @@ int getCharIndex(char c)
 
 Vec2 getTextBounds(const char *text)
 {
-	Vec2 r = {0, questrialLineHeight};
+	Vec2 r = {0, (float)questrialLineHeight};
 	int sum = 0;
 	for (int k = 0; text[k] != '\0'; ++k)
 	{

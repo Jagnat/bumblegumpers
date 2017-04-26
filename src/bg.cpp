@@ -236,6 +236,7 @@ int main(int argc, char **argv)
 
 	double prevTime = elapsedMs();
 	double elapsedUpdate = 0, elapsedRender = 0;
+	log_info("Entering loop...");
 	while (platform->running)
 	{
 		handleEvents();
@@ -265,12 +266,13 @@ int main(int argc, char **argv)
 		}
 	}
 
+	log_info("exit complete!");
+
 	return 0;
 }
 
 void initGame()
 {
-
 	game->inEditor = false;
 	game->player.x = 1;
 	game->player.y = 4;
