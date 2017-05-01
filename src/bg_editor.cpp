@@ -242,6 +242,7 @@ void editorUpdate(Input *input)
 		editor->editText = &collisionText[0];
 	else
 		editor->editText = &blockText[0];
+	
 
 	if (ImGui::CollapsingHeader(editor->editText))
 	{
@@ -352,7 +353,8 @@ void editorUpdate(Input *input)
 		{
 			if (editor->editMode == MODE_COLLISION)
 			{
-				TileCollision tc = input->leftMouse.down ? (TileCollision)editor->editId : TC_EMPTY;
+				TileCollision tc = input->leftMouse.down ?
+					(TileCollision)editor->editId : TC_EMPTY;
 				setCollision(world, res.x, res.y, tc);
 			}
 			else

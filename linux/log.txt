@@ -1,23 +1,8 @@
-INFO: render sized to 2147483648x2327299696
+INFO: render sized to 2147483648x1455930528
 INFO: init'd renderer
 INFO: platform init'd
 INFO: Entering loop...
 INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: nc: 6925569 nr: 0
-INFO: x:0.000, y:0.000
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x2327299712
+INFO: render sized to 2147483648x1455930544
+INFO: sizeof(tilecollision): 192
 INFO: exit complete!
