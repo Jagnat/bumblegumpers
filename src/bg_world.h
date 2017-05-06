@@ -15,6 +15,7 @@ enum TileCollision : uint8
 
 struct World
 {
+	char id[64];
 	uint width, height;
 	TileCollision *collision;
 	uint16 *bTiles;
@@ -42,3 +43,4 @@ uint16 getM(World *world, int x, int y);
 uint16 getF(World *world, int x, int y);
 
 #endif
+

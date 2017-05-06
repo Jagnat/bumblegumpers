@@ -94,11 +94,25 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 	return 0;
 }
 
+bool loadWorldDev(World *world, const char *filename)
+{
+}
+
+void saveWorldDev(World *world, const char *filename)
+{
+	FILE *wf = fopen(filename, "r");
+	if (!wf)
+	{
+		return;
+	}
+}
+
 bool loadWorld(World *world, const char *filename)
 {
 	FILE *wf = fopen(filename, "rb");
 	if (!wf)
 	{
+		// TODO: handle gracefully
 		log_warning("Wasn't able to open worldfile: %s!", filename);
 		return false;
 	}
