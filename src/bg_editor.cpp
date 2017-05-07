@@ -1,4 +1,3 @@
-#include "bg_editor.h"
 
 Editor *editor;
 
@@ -255,6 +254,7 @@ void editorUpdate(Input *input)
 			int numRows = 0;
 			int numColumns = 0;
 			int yo = 10;
+#define NUM_TILES 64
 			for (int i = 0; i < NUM_TILES + 1;)
 			{
 				for (int xo = 0; 34 + (xo * 34) < w; xo++)

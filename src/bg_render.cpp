@@ -1,4 +1,3 @@
-#include "bg_render.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "thirdparty/stb_image.h"
@@ -15,6 +14,22 @@ struct GlyphData
 {
 	uint8 id, x, y, w, h;
 	int8 xo, yo, a;
+};
+
+union Vertex
+{
+	struct
+	{
+		float x, y, z;
+		uint8 r, g, b, a;
+		float u, v;
+	};
+	struct
+	{
+		Vec3 pos;
+		Color32 col;
+		Vec2 tex;
+	};
 };
 
 #include "questrial.h"

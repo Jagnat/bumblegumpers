@@ -1,4 +1,3 @@
-#include "bg_world.h"
 
 void createWorld(World *world, int w, int h)
 {
@@ -96,6 +95,7 @@ int resizeWorld(World *wld, int leftAmt, int rightAmt, int upAmt, int downAmt)
 
 bool loadWorldDev(World *world, const char *filename)
 {
+	return false;
 }
 
 void saveWorldDev(World *world, const char *filename)

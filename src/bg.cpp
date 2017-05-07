@@ -1,5 +1,3 @@
-#include "bg.h"
-
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,9 +10,8 @@
 
 #include "bg_util.h"
 #include "primitives.h"
-#include "bg_render.h"
-#include "bg_world.h"
-#include "bg_editor.h"
+#include "bg_data.h"
+#include "bg_funcs.h"
 
 #include "thirdparty/imgui.h"
 
