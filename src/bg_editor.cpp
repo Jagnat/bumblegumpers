@@ -1,4 +1,8 @@
 
+// In ImGui, ###label allows both text modes to have same ID
+static char collisionText[] = "Picker: Collision Mode###selector";
+static char blockText[] = "Picker: Block Mode###selector";
+
 Editor *editor;
 
 void editorSetWorld(World *world)
@@ -14,6 +18,7 @@ void editorResize(int w, int h)
 
 void editorInit(Editor *e)
 {
+
 	editor = e;
 	editor->camPos = CreateVec(0, 0);
 	editor->editMode = MODE_FOREGROUND;

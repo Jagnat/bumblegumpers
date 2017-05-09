@@ -226,48 +226,6 @@ void render(double interval)
 	SDL_GL_SwapWindow(platform->window);
 }
 
-int main(int argc, char **argv)
-{
-	initPlatform();
-	initGame();
-
-	double prevTime = elapsedMs();
-	double elapsedUpdate = 0, elapsedRender = 0;
-	log_info("Entering loop...");
-	while (platform->running)
-	{
-		handleEvents();
-
-		double currentTime = elapsedMs();
-		double elapsedTime = currentTime - prevTime;
-		prevTime = currentTime;
-		if (elapsedTime > 500)
-		{
-			log_warning("Long delay happened! window resize...?");
-			elapsedTime = 500;
-		}
-
-		elapsedUpdate += elapsedTime;
-		elapsedRender += elapsedTime;
-
-		while (elapsedUpdate >= platform->targetUpdateDelta)
-		{
-			update();
-			elapsedUpdate -= platform->targetUpdateDelta;
-		}
-
-		if (elapsedRender >= platform->targetRenderDelta)
-		{
-			render(elapsedUpdate / platform->targetUpdateDelta);
-			elapsedRender = 0;
-		}
-	}
-
-	log_info("exit complete!");
-
-	return 0;
-}
-
 void initGame()
 {
 	game->inEditor = false;
@@ -440,6 +398,48 @@ void initPlatform()
 
 	editorInit(&platform->editor);
 	log_info("platform init'd");
+}
+
+int main(int argc, char **argv)
+{
+	initPlatform();
+	initGame();
+
+	double prevTime = elapsedMs();
+	double elapsedUpdate = 0, elapsedRender = 0;
+	log_info("Entering loop...");
+	while (platform->running)
+	{
+		handleEvents();
+
+		double currentTime = elapsedMs();
+		double elapsedTime = currentTime - prevTime;
+		prevTime = currentTime;
+		if (elapsedTime > 500)
+		{
+			log_warning("Long delay happened! window resize...?");
+			elapsedTime = 500;
+		}
+
+		elapsedUpdate += elapsedTime;
+		elapsedRender += elapsedTime;
+
+		while (elapsedUpdate >= platform->targetUpdateDelta)
+		{
+			update();
+			elapsedUpdate -= platform->targetUpdateDelta;
+		}
+
+		if (elapsedRender >= platform->targetRenderDelta)
+		{
+			render(elapsedUpdate / platform->targetUpdateDelta);
+			elapsedRender = 0;
+		}
+	}
+
+	log_info("exit complete!");
+
+	return 0;
 }
 
 #include "log.cpp"

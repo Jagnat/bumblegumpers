@@ -141,6 +141,13 @@ struct Input
 	int mouseX, mouseY;
 };
 
+enum EntityType
+{
+	PLAYER,
+	CHANDELIER,
+	LEVER
+};
+
 enum PlayerState
 {
 	PLAYER_ONGROUND,
@@ -148,6 +155,22 @@ enum PlayerState
 	PLAYER_JUMPING,
 	PLAYER_CLIMBING,
 	PLAYER_FALLING
+};
+
+struct Entity
+{
+	EntityType type;
+
+	// TODO: put defines here
+	int flags;
+
+	union
+	{
+		struct { int x, y; };
+		int pos[2];
+	};
+
+	PlayerState state;
 };
 
 struct Player
@@ -175,6 +198,7 @@ struct World
 	uint16 *fTiles;
 };
 
+// Editor stuff
 enum EditMode : int
 {
 	MODE_BACKGROUND = 0,
@@ -183,9 +207,6 @@ enum EditMode : int
 	MODE_COLLISION = 3
 };
 
-// In ImGui, ###label allows both text modes to have same ID
-char blockText[] = "Picker: Block Mode###selector";
-char collisionText[] = "Picker: Collision Mode###selector";
 struct Editor
 {
 	World *world;
@@ -198,7 +219,6 @@ struct Editor
 
 	uint screenW, screenH;
 };
-
 
 struct Game
 {
