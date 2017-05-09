@@ -146,9 +146,12 @@ void update()
 {
 	if (game->input.toggleEdit.pressed && game->input.modState.control)
 	{
-		game->inEditor = !game->inEditor;
-		log_info("Set editor mode to %s!", game->inEditor ? "true" : "false");
-		if (game->inEditor)
+		// TODO: Replace all platform->editor.enabled calls with something nice!
+		// This feels pretty gross
+		platform->editor.enabled = !platform->editor.enabled;
+
+		log_info("Set editor mode to %s!", nEditor ? "true" : "false");
+		if (platform->editor.enabled)
 		{
 			SDL_SetWindowSize(platform->window, 1400, 900);
 			SDL_SetWindowPosition(platform->window,
@@ -165,7 +168,7 @@ void update()
 		}
 	}
 
-	if (!game->inEditor)
+	if (!platform->editor.enabled)
 		updatePlayer(&game->input, &game->player, &game->world);
 	else
 	{
@@ -205,7 +208,7 @@ void render(double interval)
 {
 	World *world = &game->world;
 
-	if (game->inEditor)
+	if (platform->editor.enabled)
 	{
 		editorRender();
 	}
@@ -228,7 +231,6 @@ void render(double interval)
 
 void initGame()
 {
-	game->inEditor = false;
 	game->player.x = 1;
 	game->player.y = 4;
 	game->player.state = PLAYER_ONGROUND;

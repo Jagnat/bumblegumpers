@@ -159,6 +159,7 @@ enum PlayerState
 
 struct Entity
 {
+	uint32 id;
 	EntityType type;
 
 	// TODO: put defines here
@@ -173,11 +174,13 @@ struct Entity
 	PlayerState state;
 };
 
+#if 0
 struct Player
 {
 	int x, y;
 	PlayerState state;
 };
+#endif
 
 enum TileCollision : uint8
 {
@@ -198,6 +201,18 @@ struct World
 	uint16 *fTiles;
 };
 
+#define NUM_ENTITIES 32
+struct Game
+{
+	bool inEditor;
+
+	World world;
+
+	Entity entities[NUM_ENTITIES];
+
+	Input input;
+};
+
 // Editor stuff
 enum EditMode : int
 {
@@ -209,6 +224,7 @@ enum EditMode : int
 
 struct Editor
 {
+	bool enabled;
 	World *world;
 	Vec2 camPos;
 	Vec2 cursorPos;
@@ -218,16 +234,6 @@ struct Editor
 	uint16 editId;
 
 	uint screenW, screenH;
-};
-
-struct Game
-{
-	bool inEditor;
-
-	World world;
-	Player player;
-
-	Input input;
 };
 
 struct Platform
