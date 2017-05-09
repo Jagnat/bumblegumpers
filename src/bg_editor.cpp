@@ -5,8 +5,6 @@ static char blockText[] = "Picker: Block Mode###selector";
 
 Editor *editor;
 
-bool editorEnabled() { return editor->enabled };
-
 void editorSetWorld(World *world)
 {
 	editor->world = world;

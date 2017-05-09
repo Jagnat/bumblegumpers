@@ -159,7 +159,7 @@ enum PlayerState
 
 struct Entity
 {
-	uint32 id;
+	uint id;
 	EntityType type;
 
 	// TODO: put defines here

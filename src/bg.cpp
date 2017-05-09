@@ -23,6 +23,7 @@ void initGame();
 void handleEvents();
 double elapsedMs();
 
+#if 0
 void progressPlayerState(Player *player, World *world)
 {
 	TileCollision under = getCollision(world, player->x, player->y - 1);
@@ -139,6 +140,7 @@ void updatePlayer(Input *input, Player *player, World *world)
 		break;
 	}
 }
+#endif // Comment out
 
 void renderLayer(int w, int h, uint16 *layer, float z, float opacity);
 
@@ -150,7 +152,7 @@ void update()
 		// This feels pretty gross
 		platform->editor.enabled = !platform->editor.enabled;
 
-		log_info("Set editor mode to %s!", nEditor ? "true" : "false");
+		log_info("Set editor mode to %s!", platform->editor.enabled ? "true" : "false");
 		if (platform->editor.enabled)
 		{
 			SDL_SetWindowSize(platform->window, 1400, 900);
@@ -168,8 +170,8 @@ void update()
 		}
 	}
 
-	if (!platform->editor.enabled)
-		updatePlayer(&game->input, &game->player, &game->world);
+	if (!platform->editor.enabled){}
+		//updatePlayer(&game->input, &game->player, &game->world);
 	else
 	{
 		editorUpdate(&game->input);
@@ -220,8 +222,8 @@ void render(double interval)
 			renderLayer(world->width, world->height, world->bTiles, 0.49f, 1.f);
 			renderLayer(world->width, world->height, world->mTiles, 0.50f, 1.f);
 			renderLayer(world->width, world->height, world->fTiles, 0.51f, 1.f);
-			addSprite(CreateRect(game->player.x, game->player.y, 1, 1),
-				getPlayerRect());
+			/*addSprite(CreateRect(game->player.x, game->player.y, 1, 1),
+				getPlayerRect());*/
 		}
 		endSpriteBatch();
 		endRender();
@@ -231,9 +233,11 @@ void render(double interval)
 
 void initGame()
 {
+#if 0
 	game->player.x = 1;
 	game->player.y = 4;
 	game->player.state = PLAYER_ONGROUND;
+#endif
 	
 	createTestWorld(&game->world);
 }
