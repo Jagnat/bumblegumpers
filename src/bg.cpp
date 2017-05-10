@@ -142,7 +142,34 @@ void updatePlayer(Input *input, Player *player, World *world)
 }
 #endif // Comment out
 
-void renderLayer(int w, int h, uint16 *layer, float z, float opacity);
+void updateEntities(Entity *entities, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		Entity *entity = &entities[i];
+		switch (entity->type)
+		{
+			case PLAYER:
+			{
+				
+				break;
+			}
+			case CHANDELIER:
+			{
+
+				break;
+			}
+			case LEVER:
+			{
+
+				break;
+			}
+			case EMPTY:
+			default:
+				continue;
+		}
+	}
+}
 
 void update()
 {
@@ -170,8 +197,10 @@ void update()
 		}
 	}
 
-	if (!platform->editor.enabled){}
+	if (!platform->editor.enabled)
+	{
 		//updatePlayer(&game->input, &game->player, &game->world);
+	}
 	else
 	{
 		editorUpdate(&game->input);
@@ -206,6 +235,10 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 	}
 }
 
+void renderEntities()
+{
+}
+
 void render(double interval)
 {
 	World *world = &game->world;
@@ -222,8 +255,8 @@ void render(double interval)
 			renderLayer(world->width, world->height, world->bTiles, 0.49f, 1.f);
 			renderLayer(world->width, world->height, world->mTiles, 0.50f, 1.f);
 			renderLayer(world->width, world->height, world->fTiles, 0.51f, 1.f);
-			/*addSprite(CreateRect(game->player.x, game->player.y, 1, 1),
-				getPlayerRect());*/
+			addSprite(CreateRect(game->entities[0].x, game->entities[0].y, 1, 1),
+				getPlayerRect());
 		}
 		endSpriteBatch();
 		endRender();
@@ -233,11 +266,11 @@ void render(double interval)
 
 void initGame()
 {
-#if 0
-	game->player.x = 1;
-	game->player.y = 4;
-	game->player.state = PLAYER_ONGROUND;
-#endif
+	memset(&game->entities[0], 0, sizeof(Entity) * NUM_ENTITIES);
+	game->entities[0].type = PLAYER;
+	game->entities[0].x = 1;
+	game->entities[0].y = 4;
+	game->entities[0].movement = ONGROUND;
 	
 	createTestWorld(&game->world);
 }

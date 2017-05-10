@@ -143,18 +143,19 @@ struct Input
 
 enum EntityType
 {
+	EMPTY,
 	PLAYER,
 	CHANDELIER,
 	LEVER
 };
 
-enum PlayerState
+enum MovementMode
 {
-	PLAYER_ONGROUND,
-	PLAYER_AIRWALKING,
-	PLAYER_JUMPING,
-	PLAYER_CLIMBING,
-	PLAYER_FALLING
+	ONGROUND,
+	AIRWALKING,
+	JUMPING,
+	CLIMBING,
+	FALLING
 };
 
 struct Entity
@@ -171,7 +172,7 @@ struct Entity
 		int pos[2];
 	};
 
-	PlayerState state;
+	MovementMode movement;
 };
 
 #if 0
@@ -204,8 +205,6 @@ struct World
 #define NUM_ENTITIES 32
 struct Game
 {
-	bool inEditor;
-
 	World world;
 
 	Entity entities[NUM_ENTITIES];
