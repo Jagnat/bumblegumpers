@@ -237,6 +237,9 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 
 void renderEntities()
 {
+	for (int i = 0; i < NUM_ENTITIES; i++)
+	{
+	}
 }
 
 void render(double interval)
@@ -255,8 +258,9 @@ void render(double interval)
 			renderLayer(world->width, world->height, world->bTiles, 0.49f, 1.f);
 			renderLayer(world->width, world->height, world->mTiles, 0.50f, 1.f);
 			renderLayer(world->width, world->height, world->fTiles, 0.51f, 1.f);
-			addSprite(CreateRect(game->entities[0].x, game->entities[0].y, 1, 1),
-				getPlayerRect());
+			/*addSprite(CreateRect(game->entities[0].x, game->entities[0].y, 1, 1),
+				getPlayerRect());*/
+			renderEntities();
 		}
 		endSpriteBatch();
 		endRender();
