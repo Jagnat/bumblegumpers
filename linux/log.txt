@@ -1,9 +1,5 @@
-INFO: render sized to 2147483648x87379088
+INFO: render sized to 2147483648x900216736
 INFO: init'd renderer
 INFO: platform init'd
 INFO: Entering loop...
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x87379104
-INFO: Set editor mode to !
-INFO: render sized to 2147483648x87379104
 INFO: exit complete!

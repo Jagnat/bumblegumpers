@@ -235,10 +235,22 @@ void renderLayer(int w, int h, uint16 *layer, float z, float opacity)
 	}
 }
 
-void renderEntities()
+void renderEntities(Entity *entities)
 {
 	for (int i = 0; i < NUM_ENTITIES; i++)
 	{
+		switch(entities[i].type)
+		{
+			case PLAYER:
+			{
+				addSprite(CreateRect(game->entities[i].x, game->entities[i].y, 1, 1),
+					getPlayerRect());
+			} break;
+
+			case EMPTY:
+			default:
+				continue;
+		}
 	}
 }
 
@@ -258,9 +270,7 @@ void render(double interval)
 			renderLayer(world->width, world->height, world->bTiles, 0.49f, 1.f);
 			renderLayer(world->width, world->height, world->mTiles, 0.50f, 1.f);
 			renderLayer(world->width, world->height, world->fTiles, 0.51f, 1.f);
-			/*addSprite(CreateRect(game->entities[0].x, game->entities[0].y, 1, 1),
-				getPlayerRect());*/
-			renderEntities();
+			renderEntities(game->entities);
 		}
 		endSpriteBatch();
 		endRender();
