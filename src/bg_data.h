@@ -173,15 +173,11 @@ struct Entity
 	};
 
 	MovementMode movement;
-};
 
-#if 0
-struct Player
-{
-	int x, y;
-	PlayerState state;
+	bool noTexture;
+	int textureId;
+	Rect uv;
 };
-#endif
 
 enum TileCollision : uint8
 {

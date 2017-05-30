@@ -10,6 +10,7 @@ void resizeRenderer(int w, int h);
 void beginRender();
 void endRender();
 void setCamPos(Vec2 pos);
+
 void beginSpriteBatch(int textureIndex, CameraMode mode);
 void endSpriteBatch();
 void setColor(Color32 color);
@@ -20,6 +21,7 @@ void setZ(float z);
 void addSprite(Rect quad, Rect tex);
 void addSprite(Rect quad);
 void addText(Vec2 pos, bool centerX, bool centerY, const char *text, ...);
+
 Vec2 getTextBounds(const char *text);
 Rect getTileRect(uint16 id);
 Rect getPlayerRect();

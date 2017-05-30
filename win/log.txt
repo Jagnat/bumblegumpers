@@ -1,5 +1,0 @@
-INFO: render sized to 768x576
-INFO: init'd renderer
-INFO: platform init'd
-INFO: Entering loop...
-INFO: exit complete!

@@ -23,20 +23,19 @@ void initGame();
 void handleEvents();
 double elapsedMs();
 
-#if 0
-void progressPlayerState(Player *player, World *world)
+void progressPlayerState(Entity *player, World *world)
 {
 	TileCollision under = getCollision(world, player->x, player->y - 1);
 	TileCollision at = getCollision(world, player->x, player->y);
 	if (under == TC_SOLID || under == TC_LADDER || under == TC_PLATFORM)
-		player->state = PLAYER_ONGROUND;
+		player->movement = ONGROUND;
 	if (at == TC_LADDER)
-		player->state = PLAYER_CLIMBING;
+		player->movement = CLIMBING;
 	if (at == TC_CORNER)
-		player->state = PLAYER_AIRWALKING;
+		player->movement = AIRWALKING;
 }
 
-void fallPlayer(Player *player, World *world)
+void fallPlayer(Entity *player, World *world)
 {
 	while (true)
 	{
@@ -48,7 +47,7 @@ void fallPlayer(Player *player, World *world)
 	}
 }
 
-bool doPlayerLR(Input *input, Player *player, World *world)
+bool doPlayerLR(Input *input, Entity *player, World *world)
 {
 	if (input->left.pressed && !input->right.pressed &&
 		getCollision(world, player->x - 1, player->y) != TC_SOLID)
@@ -65,7 +64,7 @@ bool doPlayerLR(Input *input, Player *player, World *world)
 	return false;
 }
 
-bool doPlayerUp(Input *input, Player *player, World *world)
+bool doPlayerUp(Input *input, Entity *player, World *world)
 {
 	if (input->up.pressed &&
 		getCollision(world, player->x, player->y + 1) != TC_SOLID)
@@ -76,26 +75,26 @@ bool doPlayerUp(Input *input, Player *player, World *world)
 	return false;
 }
 
-void updatePlayer(Input *input, Player *player, World *world)
+void updatePlayer(Input *input, Entity *player, World *world)
 {
-	switch(player->state)
+	switch(player->movement)
 	{
-		case PLAYER_ONGROUND:
+		case ONGROUND:
 		{
 			if (input->down.pressed &&
 				getCollision(world, player->x, player->y - 1) == TC_LADDER)
 				player->y--;
 			if (doPlayerUp(input, player, world))
-				player->state = PLAYER_JUMPING;
+				player->movement = JUMPING;
 			else
 			{
 				doPlayerLR(input, player, world);
-				player->state = PLAYER_AIRWALKING;
+				player->movement = AIRWALKING;
 			}
 			progressPlayerState(player, world);
-		}
-		break;
-		case PLAYER_AIRWALKING:
+		} break;
+
+		case AIRWALKING:
 		{
 			if (input->up.pressed &&
 				getCollision(world, player->x, player->y) == TC_CORNER)
@@ -108,9 +107,9 @@ void updatePlayer(Input *input, Player *player, World *world)
 			else if (doPlayerLR(input, player, world))
 				fallPlayer(player, world);
 			progressPlayerState(player, world);
-		}
-		break;
-		case PLAYER_JUMPING:
+		} break;
+
+		case JUMPING:
 		{
 			if (input->down.pressed)
 				fallPlayer(player, world);
@@ -119,9 +118,9 @@ void updatePlayer(Input *input, Player *player, World *world)
 			else if (doPlayerLR(input, player, world))
 				fallPlayer(player, world);
 			progressPlayerState(player, world);
-		}
-		break;
-		case PLAYER_CLIMBING:
+		} break;
+
+		case CLIMBING:
 		{
 			if (input->down.pressed)
 			{
@@ -132,15 +131,14 @@ void updatePlayer(Input *input, Player *player, World *world)
 			else if (doPlayerUp(input, player, world))
 				fallPlayer(player, world);
 			else if (doPlayerLR(input, player, world))
-				player->state = PLAYER_AIRWALKING;
+				player->movement = AIRWALKING;
 			progressPlayerState(player, world);
-		}
-		break;
+		} break;
+
 		default:
 		break;
 	}
 }
-#endif // Comment out
 
 void updateEntities(Entity *entities, int length)
 {
@@ -151,19 +149,19 @@ void updateEntities(Entity *entities, int length)
 		{
 			case PLAYER:
 			{
-				
-				break;
-			}
+				updatePlayer(&game->input, entity, &game->world);
+			} break;
+
 			case CHANDELIER:
 			{
 
-				break;
-			}
+			} break;
+
 			case LEVER:
 			{
 
-				break;
-			}
+			} break;
+			
 			case EMPTY:
 			default:
 				continue;
@@ -200,6 +198,7 @@ void update()
 	if (!platform->editor.enabled)
 	{
 		//updatePlayer(&game->input, &game->player, &game->world);
+		updateEntities(game->entities, NUM_ENTITIES);
 	}
 	else
 	{
@@ -247,6 +246,11 @@ void renderEntities(Entity *entities)
 					getPlayerRect());
 			} break;
 
+			case LEVER:
+			{
+
+			} break;
+
 			case EMPTY:
 			default:
 				continue;
@@ -280,11 +284,18 @@ void render(double interval)
 
 void initGame()
 {
+	//TODO: Get rid of me! We don't manually set entities anymore
 	memset(&game->entities[0], 0, sizeof(Entity) * NUM_ENTITIES);
+
 	game->entities[0].type = PLAYER;
 	game->entities[0].x = 1;
 	game->entities[0].y = 4;
 	game->entities[0].movement = ONGROUND;
+
+	game->entities[1].type = LEVER;
+	game->entities[1].x = 3;
+	game->entities[1].y = 4;
+	game->entities[1].textureId = 1;
 	
 	createTestWorld(&game->world);
 }
