@@ -3,6 +3,28 @@
 static char collisionText[] = "Picker: Collision Mode###selector";
 static char blockText[] = "Picker: Block Mode###selector";
 
+// Editor stuff
+enum EditMode : int
+{
+	MODE_BACKGROUND = 0,
+	MODE_MAIN = 1,
+	MODE_FOREGROUND = 2,
+	MODE_COLLISION = 3
+};
+
+struct Editor
+{
+	World *world;
+	Vec2 camPos;
+	Vec2 cursorPos;
+
+	EditMode editMode;
+	char *editText;
+	uint16 editId;
+
+	uint screenW, screenH;
+};
+
 Editor *editor;
 
 void editorSetWorld(World *world)
@@ -16,10 +38,9 @@ void editorResize(int w, int h)
 	editor->screenH = h;
 }
 
-void editorInit(Editor *e)
+void editorInit()
 {
-
-	editor = e;
+	editor = (Editor*)calloc(1, sizeof(editor));
 	editor->camPos = CreateVec(0, 0);
 	editor->editMode = MODE_FOREGROUND;
 	editor->editText = &blockText[0];
@@ -167,8 +188,6 @@ void editorUpdate(Input *input)
 	if (ImGui::Button("Save As"))
 	{
 		char buff[128];
-		// saveWorld(editor->world, "savedworld.wld");
-		// ImGui::InputText("labeL", buff, 128);
 		ImGui::OpenPopup("save_as_popup");
 	}
 	if (ImGui::BeginPopup("save_as_popup"))
@@ -187,7 +206,6 @@ void editorUpdate(Input *input)
 
 	if (ImGui::Button("Load"))
 	{
-		// resizeWorld(editor->world, -1, -1, -1, -1);
 		ImGui::OpenPopup("load_popup");
 	}
 	if(ImGui::BeginPopup("load_popup"))
@@ -421,7 +439,7 @@ void editorRender()
 	}
 	endSpriteBatch();
 
-	imguiRender();
+	ImGui::Render();
 	endRender();
 }
 

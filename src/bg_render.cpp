@@ -10,11 +10,14 @@
 
 #include <SDL_opengl.h>
 
+
 struct GlyphData
 {
 	uint8 id, x, y, w, h;
 	int8 xo, yo, a;
 };
+
+#include "questrial.h"
 
 union Vertex
 {
@@ -32,10 +35,60 @@ union Vertex
 	};
 };
 
-#include "questrial.h"
+struct SpriteBatch
+{
+	union
+	{
+		struct
+		{
+			uint vboId;
+			uint iboId;
+			uint vaoId;
+		};
+		uint ids[3];
+	};
+	uint totalVertices;
+	uint totalIndices;
+	uint populatedVertices;
+	Vertex *vertices;
+	float z;
+	Color32 col;
+};
+
+struct Texture
+{
+	uint glId;
+	int width, height;
+	int bytesPerPixel;
+	bool linearBlend;
+	uint8 *pixels;
+};
+
+struct Renderer
+{
+	bool initialized;
+	uint width, height;
+
+	Mat4 projMatrix;
+	Mat4 viewMatrix;
+	Mat4 screenMatrix;
+
+	float tilePixels;
+	float zoom;
+#define TEXTURE_EMPTY 0
+#define TEXTURE_TILESHEET 1
+#define TEXTURE_FONT 2
+	Texture textures[16];
+
+	uint programId;
+	int transformLocation;
+	int textureLocation;
+	SpriteBatch spritebatch;
+};
+
+Renderer *renderer;
 
 // Clever GL extension loading thanks to Rygorous
-
 #define GL_LIST \
 /* Begin gl funcs*/ \
 GLDEF(void, UseProgram, GLuint program) \
@@ -74,17 +127,15 @@ static name##proc * gl##name;
 GL_LIST
 #undef GLDEF
 
-Renderer *renderer;
-
 static uint createProgram(const char *vertShaderPath, const char *fragShaderPath);
 static char *loadShaderCode(const char *filepath);
 static uint createShader(const char *shaderCode, GLenum shaderType);
 static void initSpritebatch();
 static void initTextures();
 
-void initRenderer(Renderer *r, int w, int h)
+void initRenderer(int w, int h)
 {
-	renderer = r;
+	renderer = (Renderer*)calloc(1, sizeof(Renderer));
 
 #define GLDEF(ret, name, ...) gl##name = \
 	(name##proc *) SDL_GL_GetProcAddress("gl" #name);
@@ -132,6 +183,7 @@ GL_LIST
 		initSpritebatch();
 		initTextures();
 
+		void imguiInit();
 		imguiInit();
 
 		resizeRenderer(w, h);
@@ -209,6 +261,8 @@ void initTextures()
 
 	loadTexture(font);
 }
+
+void imguiResize(int w, int h);
 
 void resizeRenderer(int w, int h)
 {
@@ -627,7 +681,3 @@ void imguiResize(int w, int h)
 	io->DisplaySize = ImVec2(w, h);
 }
 
-void imguiRender()
-{
-	ImGui::Render();
-}

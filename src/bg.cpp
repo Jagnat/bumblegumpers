@@ -175,10 +175,10 @@ void update()
 	{
 		// TODO: Replace all platform->editor.enabled calls with something nice!
 		// This feels pretty gross
-		platform->editor.enabled = !platform->editor.enabled;
+		platform->editorEnabled = !platform->editorEnabled;
 
-		log_info("Set editor mode to %s!", platform->editor.enabled ? "true" : "false");
-		if (platform->editor.enabled)
+		log_info("Set editor mode to %s!", platform->editorEnabled ? "true" : "false");
+		if (platform->editorEnabled)
 		{
 			SDL_SetWindowSize(platform->window, 1400, 900);
 			SDL_SetWindowPosition(platform->window,
@@ -195,7 +195,7 @@ void update()
 		}
 	}
 
-	if (!platform->editor.enabled)
+	if (!platform->editorEnabled)
 	{
 		//updatePlayer(&game->input, &game->player, &game->world);
 		updateEntities(game->entities, NUM_ENTITIES);
@@ -262,7 +262,7 @@ void render(double interval)
 {
 	World *world = &game->world;
 
-	if (platform->editor.enabled)
+	if (platform->editorEnabled)
 	{
 		editorRender();
 	}
@@ -285,6 +285,7 @@ void render(double interval)
 void initGame()
 {
 	//TODO: Get rid of me! We don't manually set entities anymore
+	game = (Game*)calloc(1, sizeof(Game));
 	memset(&game->entities[0], 0, sizeof(Entity) * NUM_ENTITIES);
 
 	game->entities[0].type = PLAYER;
@@ -429,7 +430,6 @@ void initPlatform()
 {
 	log_init();
 	platform = (Platform*)calloc(1, sizeof(Platform));
-	game = &platform->game;
 
 	platform->targetUpdateDelta = 1000.L / 60.L;
 	platform->targetRenderDelta = 1000.L / 60.L;
@@ -458,9 +458,9 @@ void initPlatform()
 
 	platform->timerResolution = (double)SDL_GetPerformanceFrequency() / (double)1000.L;
 
-	initRenderer(&platform->renderer, platform->width, platform->height);
+	initRenderer(platform->width, platform->height);
 
-	editorInit(&platform->editor);
+	editorInit();
 	log_info("platform init'd");
 }
 

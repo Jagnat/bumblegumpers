@@ -5,7 +5,7 @@
 #include "bg_data.h"
 
 // Rendering API
-void initRenderer(Renderer *r, int w, int h);
+void initRenderer(int w, int h);
 void resizeRenderer(int w, int h);
 void beginRender();
 void endRender();
@@ -20,14 +20,11 @@ void setAlpha(float a);
 void setZ(float z);
 void addSprite(Rect quad, Rect tex);
 void addSprite(Rect quad);
-void addText(Vec2 pos, bool centerX, bool centerY, const char *text, ...);
 
+void addText(Vec2 pos, bool centerX, bool centerY, const char *text, ...);
 Vec2 getTextBounds(const char *text);
 Rect getTileRect(uint16 id);
 Rect getPlayerRect();
-void imguiInit();
-void imguiResize(int w, int h);
-void imguiRender();
 
 // World API
 void createWorld(World *world, int w, int h);
@@ -45,7 +42,7 @@ uint16 getM(World *world, int x, int y);
 uint16 getF(World *world, int x, int y);
 
 // Editor API
-void editorInit(Editor *e);
+void editorInit();
 void editorSetWorld(World *world);
 void editorUpdate(Input *input);
 void editorRender();

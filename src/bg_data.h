@@ -26,10 +26,10 @@ inline Color32 WithAlpha(Color32 c, float alpha)
 }
 
 static const Color32 COLOR_WHITE = {255, 255, 255, 255};
+static const Color32 COLOR_BLACK = {0, 0, 0, 255};
 static const Color32 COLOR_RED = {255, 0, 0, 255};
 static const Color32 COLOR_GREEN = {0, 255, 0, 255};
 static const Color32 COLOR_BLUE = {0, 0, 255, 255};
-static const Color32 COLOR_BLACK = {0, 0, 0, 255};
 
 enum CameraMode
 {
@@ -37,59 +37,16 @@ enum CameraMode
 	CAM_SCREEN
 };
 
-struct Texture
+struct Texture;
+
+struct Sprite
 {
-	uint glId;
-	int width, height;
-	int bytesPerPixel;
-	bool linearBlend;
-	uint8 *pixels;
+	Rect region;
+	Texture *texture;
 };
 
 union Vertex;
 struct SpriteBatch;
-
-struct SpriteBatch
-{
-	union
-	{
-		struct
-		{
-			uint vboId;
-			uint iboId;
-			uint vaoId;
-		};
-		uint ids[3];
-	};
-	uint totalVertices;
-	uint totalIndices;
-	uint populatedVertices;
-	Vertex *vertices;
-	float z;
-	Color32 col;
-};
-
-struct Renderer
-{
-	bool initialized;
-	uint width, height;
-
-	Mat4 projMatrix;
-	Mat4 viewMatrix;
-	Mat4 screenMatrix;
-
-	float tilePixels;
-	float zoom;
-#define TEXTURE_EMPTY 0
-#define TEXTURE_TILESHEET 1
-#define TEXTURE_FONT 2
-	Texture textures[16];
-
-	uint programId;
-	int transformLocation;
-	int textureLocation;
-	SpriteBatch spritebatch;
-};
 
 struct Button
 {
@@ -208,29 +165,6 @@ struct Game
 	Input input;
 };
 
-// Editor stuff
-enum EditMode : int
-{
-	MODE_BACKGROUND = 0,
-	MODE_MAIN = 1,
-	MODE_FOREGROUND = 2,
-	MODE_COLLISION = 3
-};
-
-struct Editor
-{
-	bool enabled;
-	World *world;
-	Vec2 camPos;
-	Vec2 cursorPos;
-
-	EditMode editMode;
-	char *editText;
-	uint16 editId;
-
-	uint screenW, screenH;
-};
-
 struct Platform
 {
 	SDL_Window *window;
@@ -240,9 +174,6 @@ struct Platform
 	double timerResolution;
 	uint width, height;
 	bool running;
-
-	Renderer renderer;
-	Game game;
-	Editor editor;
+	bool editorEnabled;
 };
 
