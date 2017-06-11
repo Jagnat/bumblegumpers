@@ -13,8 +13,6 @@
 #include "bg_data.h"
 #include "bg_funcs.h"
 
-#include "thirdparty/imgui.h"
-
 Platform *platform;
 Game *game;
 

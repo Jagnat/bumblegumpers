@@ -45,9 +45,6 @@ struct Sprite
 	Texture *texture;
 };
 
-union Vertex;
-struct SpriteBatch;
-
 struct Button
 {
 	bool pressed;
